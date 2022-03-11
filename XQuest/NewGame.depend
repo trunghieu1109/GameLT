@@ -1,0 +1,171 @@
+# depslib dependency file v1.0
+1646986642 source:c:\users\admin\desktop\baitapuet\xquest\button.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"button.h"
+	"constant_value.h"
+
+1646730341 c:\users\admin\desktop\baitapuet\xquest\texture.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<fstream>
+	<sstream>
+	<string>
+	"sdl_utils.h"
+	"constant_value.h"
+
+1646729126 c:\users\admin\desktop\baitapuet\xquest\sdl_utils.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+
+1646985260 c:\users\admin\desktop\baitapuet\xquest\constant_value.h
+	<iostream>
+	<string>
+
+1646986630 c:\users\admin\desktop\baitapuet\xquest\button.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+
+1646973122 source:c:\users\admin\desktop\baitapuet\xquest\character.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"sdl_utils.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+	"character.h"
+
+1646961736 c:\users\admin\desktop\baitapuet\xquest\tile.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"constant_value.h"
+	"sdl_utils.h"
+	"texture.h"
+
+1646837238 c:\users\admin\desktop\baitapuet\xquest\collision.h
+	<iostream>
+	<SDL.h>
+	"sdl_utils.h"
+	"tile.h"
+
+1646910422 c:\users\admin\desktop\baitapuet\xquest\character.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"sdl_utils.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+
+1646897330 source:c:\users\admin\desktop\baitapuet\xquest\collision.cpp
+	<iostream>
+	<SDL.h>
+	"sdl_utils.h"
+	"tile.h"
+	"collision.h"
+
+1646964899 source:c:\users\admin\desktop\baitapuet\xquest\diamond.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"character.h"
+	"collision.h"
+	"constant_value.h"
+	"diamond.h"
+
+1646960740 c:\users\admin\desktop\baitapuet\xquest\diamond.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1646986699 source:c:\users\admin\desktop\baitapuet\xquest\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<sstream>
+	<fstream>
+	<string>
+	<vector>
+	"sdl_utils.h"
+	"window.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+	"character.h"
+	"diamond.h"
+	"portal.h"
+	"button.h"
+
+1646729820 c:\users\admin\desktop\baitapuet\xquest\window.h
+	<iostream>
+	<SDL.h>
+
+1646965878 c:\users\admin\desktop\baitapuet\xquest\portal.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1646965879 source:c:\users\admin\desktop\baitapuet\xquest\portal.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"character.h"
+	"collision.h"
+	"constant_value.h"
+	"portal.h"
+
+1646898619 source:c:\users\admin\desktop\baitapuet\xquest\sdl_utils.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	"sdl_utils.h"
+
+1646909211 source:c:\users\admin\desktop\baitapuet\xquest\texture.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<fstream>
+	<sstream>
+	<string>
+	"constant_value.h"
+	"sdl_utils.h"
+	"texture.h"
+
+1646964999 source:c:\users\admin\desktop\baitapuet\xquest\tile.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"constant_value.h"
+	"sdl_utils.h"
+	"tile.h"
+	<fstream>
+	<sstream>
+
+1646729834 source:c:\users\admin\desktop\baitapuet\xquest\window.cpp
+	<iostream>
+	<SDL.h>
+	"window.h"
+	"constant_value.h"
+	"sdl_utils.h"
+
