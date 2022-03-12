@@ -21,9 +21,10 @@ class Character
     SDL_Rect mCollisionBox;
     int mDirection;
     int row;
+    int jumpCount;
     int frames;
     int down_vel, up_vel;
-    bool up, down, stay, dash, run, climb, fall, left, right, isDashed;
+    bool up, stay, dash, run, climb, fall, left, right, isDashed;
     bool win;
     Texture charSprite;
 public:

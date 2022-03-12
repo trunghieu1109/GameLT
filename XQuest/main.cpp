@@ -99,11 +99,12 @@ int main(int argc, char* argv[])
             SDL_Rect diaRect = {0, 0, DIAMOND_WIDTH, DIAMOND_HEIGHT};
             SDL_Rect portalRect = {0, 0, PORTAL_WIDTH, PORTAL_HEIGHT};
             por = new Portal(0, 120);
-            int fra = 0;
+            int fram = 0;
             int fr = 0;
             int r = 0;
             int ok = 0;
             int ck = 0;
+            int cnt = 0;
             while(!quit)
             {
                 while(SDL_PollEvent(&e) != 0)
@@ -145,7 +146,7 @@ int main(int argc, char* argv[])
                 int fra = x.getFrame();
                 currentFrame = {fra/heso * CHAR_WIDTH, x.getRow() * CHAR_HEIGHT, CHAR_WIDTH, CHAR_HEIGHT};
                 diaRect = {fr/heso * DIAMOND_WIDTH, r*DIAMOND_HEIGHT, DIAMOND_WIDTH, DIAMOND_HEIGHT};
-                if(!ok)portalRect = {fra/heso * PORTAL_WIDTH, 0, PORTAL_WIDTH, PORTAL_HEIGHT};
+                if(!ok)portalRect = {fram/heso * PORTAL_WIDTH, 0, PORTAL_WIDTH, PORTAL_HEIGHT};
                 x.render(camera, &currentFrame);
                 for(int i=0; i<TOTAL_DIAMONDS; i++)
                 {
@@ -162,11 +163,26 @@ int main(int argc, char* argv[])
                 pointTexture.render(0, 0, NULL);
                 if(x.getWin())
                 {
+                    cnt++;
                     x.setX(80);
                     x.setY(1760);
-                    SDL_Delay(1000);
                     setTile(tile, "map2.map");
                     setDiamondPos("diamondMap2.map");
+                    Uint32 startTime = SDL_GetTicks();
+                    SDL_Color textColor = {0xFF, 0, 0};
+                    if(cnt < TOTAL_ROUNDS)defaultText.loadTextureFromText("Loading next round", textColor);
+                    else
+                    {
+                        defaultText.loadTextureFromText("You win", textColor);
+                        quit = true;
+                    }
+                    while((SDL_GetTicks() - startTime)/1000.f < 1.5f)
+                    {
+                        SDL_SetRenderDrawColor(renderer, 0, 0xFF, 0xFF, 0);
+                        SDL_RenderClear(renderer);
+                        defaultText.render((SCREEN_WIDTH - defaultText.getWidth())/2, (SCREEN_HEIGHT - defaultText.getHeight())/2, NULL);
+                        SDL_RenderPresent(renderer);
+                    }
                     por->setPos(0, 670);
                     ck = 0;
                     x.setPoint(0);
@@ -195,9 +211,10 @@ int main(int argc, char* argv[])
                     r++;
                     if(r == 2)r = 0;
                 }
-                if(fra/heso >= 4)
+                fram++;
+                if(fram/heso >= 4)
                 {
-                    fra = 0;
+                    fram= 0;
                 }
                 x.setFrame(fra);
             }

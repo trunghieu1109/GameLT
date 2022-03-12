@@ -26,4 +26,5 @@ const int PORTAL_WIDTH = 80;
 const int TOTAL_DIAMONDS = 20;
 const int BUTTON_WIDTH = 90;
 const int BUTTON_HEIGHT = 90;
+const int TOTAL_ROUNDS = 2;
 #endif // CONSTANT_VALUE__H

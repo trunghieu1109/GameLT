@@ -22,9 +22,9 @@ Character::Character()
     mDirection = 1;
     down_vel = 10;
     up_vel = 10;
+    jumpCount = 0;
     mCollisionBox = {mPosX, mPosY, CHAR_WIDTH, CHAR_HEIGHT};
     up = false;
-    down = true;
     stay = false;
     climb = false;
     dash = false;
@@ -42,11 +42,10 @@ void Character::handleEvent(SDL_Event* e)
         switch((e->key).keysym.sym)
         {
         case SDLK_v:
-            if(!up)
+            if(!up && jumpCount < 2)
             {
                 frames = 0;
                 up = true;
-                down = false;
                 stay = false;
                 climb = false;
                 dash = false;
@@ -54,6 +53,7 @@ void Character::handleEvent(SDL_Event* e)
                 fall = false;
                 mPosX_bf = mPosX;
                 mPosY_bf = mPosY;
+                jumpCount++;
             }
             break;
         case SDLK_x:
@@ -61,7 +61,6 @@ void Character::handleEvent(SDL_Event* e)
             {
                 frames = 0;
                 up = false;
-                down = false;
                 stay = false;
                 climb = false;
                 dash = true;
@@ -125,6 +124,13 @@ void Character::move(Tile *tile[])
         mPosX -= mVelX;
         mCollisionBox.x = mPosX;
     }
+    SDL_Rect under = {mPosX, mPosY + CHAR_HEIGHT, CHAR_WIDTH, 10};
+    int index = checkCollisionTile(under, tile);
+    if(index == 31 || index == 28 || index == 2 || index == 3 || index == 20 || index == 21)
+    {
+        down_vel = 1;
+    }
+    else down_vel = 10;
     if(dash)
     {
         if(mDirection == 1)row = 2;
@@ -172,7 +178,6 @@ void Character::move(Tile *tile[])
                 run = false;
                 climb = false;
                 up = false;
-                down = false;
             }
             else
             {
@@ -184,7 +189,6 @@ void Character::move(Tile *tile[])
                 stay = false;
                 climb = false;
                 up = false;
-                down = false;
             }
         }
         if(!ok)return;
@@ -211,7 +215,6 @@ void Character::move(Tile *tile[])
                 climb = false;
                 run = false;
                 up = false;
-                down = false;
                 fall = true;
                 up_vel = 10;
                 mPosX_bf = 0;
@@ -234,7 +237,6 @@ void Character::move(Tile *tile[])
                 climb = false;
                 run = false;
                 up = false;
-                down = false;
                 fall = true;
                 up_vel = 10;
                 mPosX_bf = 0;
@@ -245,54 +247,30 @@ void Character::move(Tile *tile[])
     }
     if(fall)
     {
-        SDL_Rect under = {mPosX, mPosY + CHAR_HEIGHT, CHAR_WIDTH, 150};
+        SDL_Rect under = {mPosX, mPosY + CHAR_HEIGHT, CHAR_WIDTH, 1};
         if(checkCollisionTile(under, tile) != -1)
         {
-            frames = 0;
             stay = false;
             climb = false;
             run = false;
             up = false;
-            down = true;
             fall = false;
+            frames = 0;
         }
-        else
-        {
-            if(mDirection == 1)row = 13;
-            else row = 16;
-            mPosY += 10;
-            mCollisionBox.y = mPosY;
-        }
-    }
-    if(down)
-    {
-        if(mDirection == 1)row = 14;
-        else row = 17;
+        if(mDirection == 1)row = 13;
+        else row = 16;
         mPosY += down_vel;
         mCollisionBox.y = mPosY;
         if(checkCollisionTile(mCollisionBox, tile) != -1)
         {
             mPosY -= down_vel;
             mCollisionBox.y = mPosY;
-            if(down_vel == 10)
-            {
-                down_vel = 5;
-            }
-            else
-            {
-                if(down_vel == 5)down_vel = 1;
-                else
-                {
-                    frames = 0;
-                    climb = false;
-                    run = false;
-                    up = false;
-                    //stay
-                    down_vel = 10;
-                    down = false;
-                    fall = false;
-                }
-            }
+            frames = 0;
+            climb = false;
+            run = false;
+            up = false;
+            down_vel = 10;
+            fall = false;
         }
     }
     int ck = 0;
@@ -308,14 +286,13 @@ void Character::move(Tile *tile[])
         //  cout << BoxIndex << '\n';
         if(BoxIndex != -1)
         {
-            if(BoxIndex == 31 || BoxIndex == 28 || BoxIndex == 2)
+            if(BoxIndex == 31 || BoxIndex == 28 || BoxIndex == 2 || BoxIndex == 3 || BoxIndex == 20 || BoxIndex == 21)
             {
                 ck = 1;
                 stay = false;
                 climb = false;
                 run = true;
                 up = false;
-                down = false;
                 fall = false;
             }
         }
@@ -326,7 +303,6 @@ void Character::move(Tile *tile[])
             climb = true;
             run = false;
             up = false;
-            down = false;
             fall = false;
         }
     }
@@ -335,20 +311,19 @@ void Character::move(Tile *tile[])
         if(!up && !dash)
         {
             SDL_Rect under = {mPosX, mPosY + CHAR_HEIGHT, CHAR_WIDTH, 2};
-            if(!fall && !down)
+            if(!fall)
             {
                 stay = true;
                 dash = false;
                 isDashed = false;
             }
-            if(!down && !fall)
+            if(!fall)
             {
                 if(checkCollisionTile(under, tile) == -1)
                 {
                     stay = false;
                     run = false;
                     up = false;
-                    down = false;
                     fall = true;
                     climb = false;
                 }
@@ -357,6 +332,7 @@ void Character::move(Tile *tile[])
     }
     if(run)
     {
+        jumpCount = 0;
         if(ck)
         {
             dash = false;
@@ -364,9 +340,17 @@ void Character::move(Tile *tile[])
         }
         if(mDirection == 1)row = 8;
         else row = 9;
+        SDL_Rect under = {mPosX, mPosY, CHAR_WIDTH, CHAR_HEIGHT+2};
+        if(checkCollisionTile(under, tile) == -1)
+        {
+            run = false;
+            fall = true;
+            frames = 0;
+        }
     }
     if(climb)
     {
+        jumpCount = 0;
         if(mDirection == 1)row = 10;
         else row = 11;
         mPosY += 1;
@@ -378,7 +362,6 @@ void Character::move(Tile *tile[])
             stay = true;
             climb = false;
             up = false;
-            down = false;
             dash = false;
             run = false;
             isDashed = false;
@@ -396,7 +379,6 @@ void Character::move(Tile *tile[])
                 stay = false;
                 climb = false;
                 up = false;
-                down = false;
                 dash = false;
                 run = false;
                 isDashed = false;
@@ -406,6 +388,7 @@ void Character::move(Tile *tile[])
     }
     if(stay)
     {
+        jumpCount = 0;
         if(mDirection == 1)row = 0;
         else row = 1;
     }
