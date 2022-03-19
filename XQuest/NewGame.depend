@@ -169,3 +169,585 @@
 	"constant_value.h"
 	"sdl_utils.h"
 
+1646986642 source:c:\users\admin\desktop\baitapuet\new folder (2)\button.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"button.h"
+	"constant_value.h"
+
+1646730341 c:\users\admin\desktop\baitapuet\new folder (2)\texture.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<fstream>
+	<sstream>
+	<string>
+	"sdl_utils.h"
+	"constant_value.h"
+
+1646729126 c:\users\admin\desktop\baitapuet\new folder (2)\sdl_utils.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+
+1647229455 c:\users\admin\desktop\baitapuet\new folder (2)\constant_value.h
+	<iostream>
+	<string>
+
+1646986630 c:\users\admin\desktop\baitapuet\new folder (2)\button.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+
+1647228101 source:c:\users\admin\desktop\baitapuet\new folder (2)\collision.cpp
+	<iostream>
+	<SDL.h>
+	"sdl_utils.h"
+	"tile.h"
+	"collision.h"
+
+1647168325 c:\users\admin\desktop\baitapuet\new folder (2)\tile.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"constant_value.h"
+	"sdl_utils.h"
+	"texture.h"
+
+1646837238 c:\users\admin\desktop\baitapuet\new folder (2)\collision.h
+	<iostream>
+	<SDL.h>
+	"sdl_utils.h"
+	"tile.h"
+
+1646964899 source:c:\users\admin\desktop\baitapuet\new folder (2)\diamond.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"character.h"
+	"collision.h"
+	"constant_value.h"
+	"diamond.h"
+
+1647136409 c:\users\admin\desktop\baitapuet\new folder (2)\character.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"sdl_utils.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+
+1646960740 c:\users\admin\desktop\baitapuet\new folder (2)\diamond.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1646965879 source:c:\users\admin\desktop\baitapuet\new folder (2)\portal.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"character.h"
+	"collision.h"
+	"constant_value.h"
+	"portal.h"
+
+1646965878 c:\users\admin\desktop\baitapuet\new folder (2)\portal.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1646898619 source:c:\users\admin\desktop\baitapuet\new folder (2)\sdl_utils.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	"sdl_utils.h"
+
+1646909211 source:c:\users\admin\desktop\baitapuet\new folder (2)\texture.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<fstream>
+	<sstream>
+	<string>
+	"constant_value.h"
+	"sdl_utils.h"
+	"texture.h"
+
+1647227454 source:c:\users\admin\desktop\baitapuet\new folder (2)\tile.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"constant_value.h"
+	"sdl_utils.h"
+	"tile.h"
+	<fstream>
+	<sstream>
+
+1646729834 source:c:\users\admin\desktop\baitapuet\new folder (2)\window.cpp
+	<iostream>
+	<SDL.h>
+	"window.h"
+	"constant_value.h"
+	"sdl_utils.h"
+
+1646729820 c:\users\admin\desktop\baitapuet\new folder (2)\window.h
+	<iostream>
+	<SDL.h>
+
+1647228714 source:c:\users\admin\desktop\baitapuet\new folder (2)\character.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"sdl_utils.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+	"character.h"
+
+1647136831 source:c:\users\admin\desktop\baitapuet\new folder (2)\thorns.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+	"sdl_utils.h"
+	"thorns.h"
+	"collision.h"
+
+1647136850 c:\users\admin\desktop\baitapuet\new folder (2)\thorns.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1647252206 source:c:\users\admin\desktop\baitapuet\new folder (2)\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<sstream>
+	<fstream>
+	<string>
+	<vector>
+	"sdl_utils.h"
+	"window.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+	"character.h"
+	"diamond.h"
+	"portal.h"
+	"button.h"
+	"thorns.h"
+	"gun.h"
+	"bullet.h"
+	"fire.h"
+	"fire_turret.h"
+
+1647165555 source:c:\users\admin\desktop\baitapuet\new folder (2)\bullet.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"bullet.h"
+	"collision.h"
+	"constant_value.h"
+
+1647165322 c:\users\admin\desktop\baitapuet\new folder (2)\bullet.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1647230358 source:c:\users\admin\desktop\baitapuet\new folder (2)\gun.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"gun.h"
+	"constant_value.h"
+	"collision.h"
+
+1647164459 c:\users\admin\desktop\baitapuet\new folder (2)\gun.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"bullet.h"
+
+1647252393 source:c:\users\admin\desktop\baitapuet\new folder (2)\fire.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+	"sdl_utils.h"
+	"fire.h"
+
+1647233116 c:\users\admin\desktop\baitapuet\new folder (2)\fire.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+	"sdl_utils.h"
+
+1647232782 c:\users\admin\desktop\baitapuet\new folder (2)\fire_turret.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"sdl_utils.h"
+	"constant_value.h"
+	"fire.h"
+
+1647232875 source:c:\users\admin\desktop\baitapuet\new folder (2)\fire_turret.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+	"sdl_utils.h"
+	"fire_turret.h"
+	"collision.h"
+
+1647671267 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\bullet.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"bullet.h"
+	"collision.h"
+	"constant_value.h"
+
+1646730341 c:\users\admin\desktop\baitapuet\test\new folder (2)\texture.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<fstream>
+	<sstream>
+	<string>
+	"sdl_utils.h"
+	"constant_value.h"
+
+1646729126 c:\users\admin\desktop\baitapuet\test\new folder (2)\sdl_utils.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+
+1647669232 c:\users\admin\desktop\baitapuet\test\new folder (2)\constant_value.h
+	<iostream>
+	<string>
+
+1647671260 c:\users\admin\desktop\baitapuet\test\new folder (2)\bullet.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"tile.h"
+	<vector>
+
+1647669402 c:\users\admin\desktop\baitapuet\test\new folder (2)\collision.h
+	<iostream>
+	<SDL.h>
+	"sdl_utils.h"
+	"tile.h"
+	<vector>
+
+1647498397 c:\users\admin\desktop\baitapuet\test\new folder (2)\tile.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"constant_value.h"
+	"sdl_utils.h"
+	"texture.h"
+
+1646986642 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\button.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"button.h"
+	"constant_value.h"
+
+1646986630 c:\users\admin\desktop\baitapuet\test\new folder (2)\button.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+
+1647684744 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\character.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"sdl_utils.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+	"character.h"
+	"xbuster.h"
+	<iterator>
+
+1647670130 c:\users\admin\desktop\baitapuet\test\new folder (2)\character.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"sdl_utils.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+	"xbuster.h"
+	<deque>
+
+1647670399 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\collision.cpp
+	<iostream>
+	<SDL.h>
+	"sdl_utils.h"
+	"tile.h"
+	"collision.h"
+	"vector"
+
+1647352204 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\diamond.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"character.h"
+	"collision.h"
+	"constant_value.h"
+	"diamond.h"
+
+1647392132 c:\users\admin\desktop\baitapuet\test\new folder (2)\diamond.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1647418340 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\fire.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+	"sdl_utils.h"
+	"fire.h"
+
+1647417801 c:\users\admin\desktop\baitapuet\test\new folder (2)\fire.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+	"sdl_utils.h"
+
+1647417833 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\fire_turret.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+	"sdl_utils.h"
+	"fire_turret.h"
+	"collision.h"
+
+1647232782 c:\users\admin\desktop\baitapuet\test\new folder (2)\fire_turret.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"sdl_utils.h"
+	"constant_value.h"
+	"fire.h"
+
+1647671167 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\gun.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"gun.h"
+	"constant_value.h"
+	"collision.h"
+
+1647671109 c:\users\admin\desktop\baitapuet\test\new folder (2)\gun.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"bullet.h"
+
+1647684875 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<sstream>
+	<fstream>
+	<string>
+	<vector>
+	"sdl_utils.h"
+	"window.h"
+	"constant_value.h"
+	"texture.h"
+	"tile.h"
+	"collision.h"
+	"character.h"
+	"diamond.h"
+	"portal.h"
+	"button.h"
+	"thorns.h"
+	"gun.h"
+	"bullet.h"
+	"fire.h"
+	"fire_turret.h"
+	"xbuster.h"
+	"deque"
+	<utility>
+	"creep.h"
+	"creep_bullet.h"
+
+1646729820 c:\users\admin\desktop\baitapuet\test\new folder (2)\window.h
+	<iostream>
+	<SDL.h>
+
+1647392141 c:\users\admin\desktop\baitapuet\test\new folder (2)\portal.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1647136850 c:\users\admin\desktop\baitapuet\test\new folder (2)\thorns.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+
+1647392166 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\portal.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"character.h"
+	"collision.h"
+	"constant_value.h"
+	"portal.h"
+
+1646898619 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\sdl_utils.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	"sdl_utils.h"
+
+1646909211 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\texture.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<fstream>
+	<sstream>
+	<string>
+	"constant_value.h"
+	"sdl_utils.h"
+	"texture.h"
+
+1647136831 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\thorns.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"constant_value.h"
+	"sdl_utils.h"
+	"thorns.h"
+	"collision.h"
+
+1647498421 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\tile.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"constant_value.h"
+	"sdl_utils.h"
+	"tile.h"
+	<fstream>
+	<sstream>
+
+1646729834 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\window.cpp
+	<iostream>
+	<SDL.h>
+	"window.h"
+	"constant_value.h"
+	"sdl_utils.h"
+
+1647339340 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\map.cpp
+
+1647670322 c:\users\admin\desktop\baitapuet\test\new folder (2)\xbuster.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	<vector>
+	"tile.h"
+
+1647670271 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\xbuster.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"xbuster.h"
+	"collision.h"
+
+1647670817 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\creep.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"creep.h"
+	"collision.h"
+	<cmath>
+	"creep_bullet.h"
+
+1647670918 c:\users\admin\desktop\baitapuet\test\new folder (2)\creep.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"creep_bullet.h"
+
+1647670903 c:\users\admin\desktop\baitapuet\test\new folder (2)\creep_bullet.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	<vector>
+	"tile.h"
+
+1647685007 source:c:\users\admin\desktop\baitapuet\test\new folder (2)\creep_bullet.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"creep_bullet.h"
+	"collision.h"
+	"constant_value.h"
+	<cmath>
+

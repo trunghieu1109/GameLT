@@ -13,6 +13,7 @@ class Tile
 {
     SDL_Rect mBox;
     SDL_Rect mClip;
+    SDL_Rect mCollisionBox;
     int mType;
 public:
     static Texture tileSprite;
@@ -24,5 +25,5 @@ public:
     void setBox(SDL_Rect &rect);
     void setType(int type);
 };
-bool setTile(Tile* tiles[], string path);
+void setTileType(int index, int type);
 #endif // TILE__H

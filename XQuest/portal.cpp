@@ -11,6 +11,9 @@ using namespace std;
 Portal::Portal(int x, int y)
 {
     mBox = {x, y, PORTAL_WIDTH, PORTAL_HEIGHT};
+    frames = 0;
+    row = 0;
+    heso = 5;
 }
 void Portal::checkCollision(Character *crt)
 {
@@ -20,9 +23,15 @@ void Portal::checkCollision(Character *crt)
         if(poi == TOTAL_DIAMONDS)crt->setWin(true);
     }
 }
-void Portal::render(SDL_Rect &camera, SDL_Rect* clip)
+void Portal::render(SDL_Rect &camera)
 {
-    portalSprite.render(mBox.x - camera.x, mBox.y - camera.y, clip);
+    SDL_Rect portalRect = {frames/heso * PORTAL_WIDTH, 0, PORTAL_WIDTH, PORTAL_HEIGHT};
+    portalSprite.render(mBox.x - camera.x, mBox.y - camera.y, &portalRect);
+    frames++;
+    if(frames/heso >= 4)
+    {
+        frames = 0;
+    }
 }
 void Portal::setSprite(Texture &sprite)
 {

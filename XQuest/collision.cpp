@@ -3,6 +3,7 @@
 #include "sdl_utils.h"
 #include "tile.h"
 #include "collision.h"
+#include "vector"
 using namespace std;
 
 bool checkCollisionBox(SDL_Rect a, SDL_Rect b)
@@ -19,12 +20,12 @@ bool checkCollisionBox(SDL_Rect a, SDL_Rect b)
     if(topA >= bottomB || topB >= bottomA || leftA >= rightB || leftB >= rightA)return false;
     return true;
 }
-int checkCollisionTile( SDL_Rect box, Tile* tile[] )
+int checkCollisionTile( SDL_Rect box, vector <Tile*> &tile )
 {
     int BoxIndex = -1;
-    for( int i = TOTAL_TILES - 1; i >= 0; i-- )
+    for( int i = tile.size() - 1; i >= 0; i-- )
     {
-        if(tile[i]->getType() != 4)
+        if(tile[i]->getType() != 4 && tile[i]->getType() != 14)
         {
             if( checkCollisionBox( box, tile[ i ]->getBox() ) )
             {

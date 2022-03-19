@@ -11,13 +11,15 @@ class Diamond
 {
     SDL_Rect mBox;
     bool isShown;
+    int frames, row;
+    int heso;
 public:
     static Texture diamondSprite;
     Diamond(int x, int y);
     int getX();
     int getY();
     void checkCollision(Character *crt);
-    void render(SDL_Rect &camera, SDL_Rect* clip);
+    void render(SDL_Rect &camera);
     void setSprite(Texture &sprite);
     bool getShown();
 };

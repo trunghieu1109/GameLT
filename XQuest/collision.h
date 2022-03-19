@@ -5,10 +5,10 @@
 #include <SDL.h>
 #include "sdl_utils.h"
 #include "tile.h"
-
+#include <vector>
 using namespace std;
 
 bool checkCollisionBox(SDL_Rect a, SDL_Rect b);
-int checkCollisionTile(SDL_Rect a, Tile *tile[]);
+int checkCollisionTile(SDL_Rect a, vector <Tile*> &tile);
 
 #endif // COLLISION__H
