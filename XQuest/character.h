@@ -11,7 +11,8 @@
 #include "collision.h"
 #include "xbuster.h"
 #include <deque>
-
+#include "door_button.h"
+#include <vector>
 using namespace std;
 
 class Character
@@ -21,20 +22,27 @@ class Character
     int mVelX, mVelY;
     int mPosX_bf, mPosY_bf;
     SDL_Rect mCollisionBox;
+    SDL_Point pt;
     int mDirection;
+    int mDirection_bf;
     int row;
     int frames_charge;
     int jumpCount;
     int frames;
     int down_vel, up_vel;
-    bool up, stay, dash, run, climb, fall, left, right, isDashed;
+    bool up, stay, dash, run, climb, fall, left, right, isDashed, shortjump, doublejump, hurt, unhurtable, normal_hurt;
     bool win;
     bool shot, isCharging;
     Uint32 chargeTime;
     int heso;
+    Uint32 hurt_time;
     Texture charSprite;
     Texture chargingSprite;
+    Texture jumpDouble;
     deque < XBuster* > buster;
+    int frames_jumpdouble;
+    int cnt;
+    Uint32 time_normal_hurt;
 public:
     Character();
     void handleEvent(SDL_Event* e, vector <Tile*> &tile);
@@ -59,8 +67,13 @@ public:
     void setY(int y);
     void setHealth(int h);
     int getHealth();
-    int checkXBusterCollision(SDL_Rect &rect);
+    int checkXBusterCollision(SDL_Rect &rect,vector<DoorButton*> door);
     void setCharging(Texture &sprite);
+    void setDoubleJumpSprite(Texture &sprite);
+    bool getHurt();
+    void setHurt(bool h);
+    void setNormalHurt(bool nh);
+    int getDirection();
 };
 
 #endif // CHARACTER__H

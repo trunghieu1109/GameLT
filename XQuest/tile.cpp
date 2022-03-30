@@ -9,6 +9,15 @@
 
 using namespace std;
 
+Tile::Tile()
+{
+    mBox.x = 0;
+    mBox.y = 0;
+    mType = 0;
+    mBox.w = TILE_WIDTH;
+    mBox.h = TILE_HEIGHT;
+    mCollisionBox = mBox;
+}
 Tile::Tile(int x, int y, int type)
 {
     mBox.x = x;
@@ -20,13 +29,13 @@ Tile::Tile(int x, int y, int type)
     mClip = {0, 0, TILE_WIDTH, TILE_HEIGHT};
     if(mType == 35 || mType == 36 || mType == 50 || mType == 51)
     {
-        mCollisionBox.x = mCollisionBox.x + 5;
-        mCollisionBox.w = TILE_WIDTH - 10;
+        mCollisionBox.x = mCollisionBox.x + 20;
+        mCollisionBox.w = TILE_WIDTH - 40;
     }
     if(mType == 37 || mType == 38 || mType == 52 || mType == 53)
     {
-        mCollisionBox.y = mCollisionBox.y + 5;
-        mCollisionBox.h = TILE_HEIGHT - 10;
+        mCollisionBox.y = mCollisionBox.y + 20;
+        mCollisionBox.h = TILE_HEIGHT - 40;
     }
     if(mType == 45)
     {
@@ -70,6 +79,28 @@ void Tile::setBox(SDL_Rect &rect)
 void Tile::setType(int type)
 {
     mType = type;
+    int a = mType/5;
+    int b = mType%5;
+    mClip = {b*TILE_WIDTH, a*TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT};
+    if(mType == 56)
+    {
+        mCollisionBox.h = 20;
+    }
+    if(mType == 58)
+    {
+        mCollisionBox.y += 60;
+        mCollisionBox.h = 20;
+    }
+    if(mType == 61)
+    {
+        mCollisionBox.w = 20;
+    }
+    if(mType == 63)
+    {
+        mCollisionBox.x += 60;
+        mCollisionBox.w = 20;
+    }
+
 }
 void setTileType(int index, int type)
 {

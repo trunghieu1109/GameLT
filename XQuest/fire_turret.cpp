@@ -11,7 +11,7 @@ using namespace std;
 
 FireTurret::FireTurret(int pos, int type)
 {
-    mBox = {pos%16 * GUN_WIDTH, pos/16 * GUN_HEIGHT, GUN_WIDTH, GUN_HEIGHT};
+    mBox = {pos%64 * GUN_WIDTH, pos/64 * GUN_HEIGHT, GUN_WIDTH, GUN_HEIGHT};
     mType = type;
     mFire = new Fire(mBox.x, mBox.y, mType);
 }

@@ -26,6 +26,12 @@
 #include <utility>
 #include "creep.h"
 #include "creep_bullet.h"
+#include "lazergun.h"
+#include "door_button.h"
+#include "boss.h"
+#include "fire_ball.h"
+#include <time.h>
+#include <deque>
 using namespace std;
 
 bool loadMedia();
@@ -35,7 +41,11 @@ void render(SDL_Rect &camera, int &ck);
 void checkEnemiesHealth();
 void checkExplosion(SDL_Rect &camera);
 void setTileVector(SDL_Rect &camera, vector<Tile*> &tiles);
+void checkCharacterHealth(Character *crt);
 Texture spriteTile;
+Texture spriteLazerGun;
+Texture spriteLazer;
+Texture spriteLazerHead;
 Texture spriteButton;
 Texture spriteDiamond;
 Texture spritePortal;
@@ -52,6 +62,14 @@ Texture explosionSprite;
 Texture spriteCreep;
 Texture spriteCreepBullet;
 Texture spriteCharging;
+Texture spriteDoorButton;
+Texture spriteBoss;
+Texture spriteFireBall;
+Texture spriteMagicCircle;
+Texture spriteDoubleJump;
+Texture spriteFireFlow;
+Texture spriteDragonPortal;
+Texture spriteFirePillar;
 SDL_Renderer* renderer;
 Window window;
 Tile *tile[ TOTAL_TILES ];
@@ -67,15 +85,24 @@ Texture Gun::gunSprite = spriteGun;
 Texture XBuster::xBusterSprite = spriteXBuster;
 Texture Creep::creepSprite = spriteCreep;
 Texture CreepBullet::creepBulletSprite = spriteCreepBullet;
+Texture LazerGun::lazerGunSprite = spriteLazerGun;
+Texture LazerGun::lazerHeadSprite = spriteLazerHead;
+Texture LazerGun::lazerSprite = spriteLazer;
+Texture DoorButton::doorbuttonSprite = spriteDoorButton;
+Texture Boss::bossSprite = spriteBoss;
+Texture FireBall::fireBallSprite = spriteFireBall;
+Texture Boss::magicCircle = spriteMagicCircle;
+Texture Boss::fireFlowSprite = spriteFireFlow;
+Texture Boss::firePillarSprite = spriteFirePillar;
 Texture defaultText;
+Texture dragonHealthBar;
+Texture warningSprite;
 SDL_Color textColor = {0xFF, 0xFF, 0};
 TTF_Font* font;
 Texture pointTexture;
-Diamond *dia[ TOTAL_DIAMONDS ];
 Portal *por;
-int diaPos[TOTAL_DIAMONDS];
+int diaPos[1000];
 Button playButton;
-Thorns *thorn[ TOTAL_THORNS ];
 Gun *gun[ TOTAL_GUNS ];
 FireTurret* fireturret[ TOTAL_FIRE_TURRETS ];
 int hasGun = -1;
@@ -83,11 +110,28 @@ int hasThorn = -1;
 int hasPortal = -1;
 int hasFireTurret = -1;
 int hasDiamond = -1;
+int hasDoorButton = -1;
+int hasLazerGun = -1;
+int hasCreep = -1;
 deque < pair < SDL_Point, int > > p;
 Creep *cre, *cre2;
 vector <Tile*> vTile;
+vector <DoorButton*> door;
+vector <LazerGun*> laz;
+vector <Creep*> creep;
+vector < Diamond* > dia;
+vector < Thorns* > thorn;
+Boss *boss;
+bool bossAppearing = false;
+bool bossAppeared = false;
+int frames_portal = 30;
+SDL_Rect camera_bf = {0, 0, 0, 0};
+Uint32 warning = 0;
+int cnt = 0;
+int limX = 800;
 int main(int argc, char* argv[])
 {
+    srand(time(0));
     initSDL();
     if(!loadMedia())
     {
@@ -137,8 +181,7 @@ int main(int argc, char* argv[])
             int cnt = 0;
             int ck = 0;
             int startTime = 0;
-            cre = new Creep(258,1);
-            cre2 = new Creep(352, 0);
+            boss = new Boss(254);
             while(!quit)
             {
                 x.setCamera(camera);
@@ -158,29 +201,17 @@ int main(int argc, char* argv[])
                 x.move(vTile);
                 SDL_Rect r = x.getBox();
                 SDL_Point point = {r.x, r.y};
-                cre->Move(point);
-                cre2->Move(point);
 
-                //setTileCamera(camera, vTile);
-                if(hasDiamond)
+                if(hasCreep)
                 {
-                    for(int i=0; i<TOTAL_DIAMONDS; i++)
+                    for(int i=0; i<hasCreep; i++)
                     {
-                        if(i < 15)
-                        {
-                            dia[i]->checkCollision(&x);
-                        }
-                        else
-                        {
-                            if(ck)
-                            {
-                                dia[i]->checkCollision(&x);
-                            }
-                        }
+                        creep[i]->Move(point, vTile, camera);
                     }
                 }
-                por->checkCollision(&x);
-                //
+
+
+                checkCharacterHealth(&x);
                 collision(startTime);
                 if(x.getHealth() <= 0)
                 {
@@ -196,11 +227,8 @@ int main(int argc, char* argv[])
                     }
                     break;
                 }
-
-                render(camera, ck);
-                cre->render(camera, vTile);
-                cre2->render(camera, vTile);
                 checkEnemiesHealth();
+                render(camera, ck);
                 checkExplosion(camera);
                 SDL_RenderPresent(renderer);
                 if(x.getWin())
@@ -227,16 +255,6 @@ int main(int argc, char* argv[])
                     ck = 0;
                     x.setPoint(0);
                     x.setWin(false);
-                }
-                if(x.getPoint() == 15 && !ck)
-                {
-                    ck = 1;
-                    SDL_Rect rect = {4*TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT};
-                    for(int i=15; i<TOTAL_DIAMONDS; i++)
-                    {
-                        tile[diaPos[i]]->setBox(rect);
-                        tile[diaPos[i]]->setType(4);
-                    }
                 }
             }
             waitUntilKeyPress();
@@ -293,6 +311,33 @@ bool loadMedia()
     spriteCharging.setRenderer(renderer);
     if(!spriteCharging.loadTextureFromImage("charging.png"))logIMGError(cout, "Load charging", true);
     spriteCharging.setAlpha(180);
+    spriteLazer.setRenderer(renderer);
+    if(!spriteLazer.loadTextureFromImage("lazer.png"))logIMGError(cout, "Load lazer", true);
+    spriteLazerGun.setRenderer(renderer);
+    if(!spriteLazerGun.loadTextureFromImage("lazer_gun.png"))logIMGError(cout, "Load lazer gun", true);
+    spriteLazerHead.setRenderer(renderer);
+    if(!spriteLazerHead.loadTextureFromImage("lazer_head.png"))logIMGError(cout, "Load lazer head", true);
+    spriteDoorButton.setRenderer(renderer);
+    if(!spriteDoorButton.loadTextureFromImage("door_button.png"))logIMGError(cout, "Load door button", true);
+    spriteBoss.setRenderer(renderer);
+    if(!spriteBoss.loadTextureFromImage("dra.png"))logIMGError(cout, "Load boss", true);
+    spriteFireBall.setRenderer(renderer);
+    if(!spriteFireBall.loadTextureFromImage("fire_ball.png"))logIMGError(cout, "Load fire ball", true);
+    spriteMagicCircle.setRenderer(renderer);
+    if(!spriteMagicCircle.loadTextureFromImage("circle_.png"))logIMGError(cout, "Load magic circle", true);
+    dragonHealthBar.setRenderer(renderer);
+    if(!dragonHealthBar.loadTextureFromImage("dragon_health_bar.png"))logIMGError(cout, "Load dragon health _bar", true);
+    spriteDoubleJump.setRenderer(renderer);
+    if(!spriteDoubleJump.loadTextureFromImage("jumpdouble_.png"))logIMGError(cout, "Load double jump", true);
+    spriteFireFlow.setRenderer(renderer);
+    if(!spriteFireFlow.loadTextureFromImage("fired.png"))logIMGError(cout, "Load fire flow", true);
+    spriteDragonPortal.setRenderer(renderer);
+    if(!spriteDragonPortal.loadTextureFromImage("dragon_portal_appearance.png"))logIMGError(cout, "Load dragon portal", true);
+    warningSprite.setRenderer(renderer);
+    if(!warningSprite.loadTextureFromImage("warning.png"))logIMGError(cout, "Load warning", true);
+    spriteFirePillar.setRenderer(renderer);
+    if(!spriteFirePillar.loadTextureFromImage("fire_d.png"))logIMGError(cout, "Load fire pillar", true);
+    x.setDoubleJumpSprite(spriteDoubleJump);
     Tile *clone = new Tile(0, 0, 1);
     clone->setSprite(spriteTile);
     Diamond *clone2 = new Diamond(0, 0);
@@ -316,6 +361,21 @@ bool loadMedia()
     CreepBullet *clone11 = new CreepBullet(0, 0, 0,0.d, 0.d);
     clone11->setSprite(spriteCreepBullet);
     x.setCharging(spriteCharging);
+    LazerGun *clone12 = new LazerGun(0, 0, 0, 0);
+    clone12->setLazerGunSprite(spriteLazerGun);
+    clone12->setLazerHeadSprite(spriteLazerHead);
+    clone12->setLazerSprite(spriteLazer);
+    DoorButton *clone13 = new DoorButton(0, 0, tile[0], tile[1]);
+    clone13->setSprite(spriteDoorButton);
+    Boss *clone14 = new Boss(0);
+    clone14->setSprite(spriteBoss);
+    clone14->setMagicCircle(spriteMagicCircle);
+    clone14->setFireFlowSprite(spriteFireFlow);
+    clone14->setFirePillarSprite(spriteFirePillar);
+    FireBall *clone15 = new FireBall(0, 0, 0, 0, 0.f);
+    clone15->setSprite(spriteFireBall);
+    delete clone15;
+    delete clone14;
     delete clone;
     delete clone2;
     delete clone3;
@@ -327,6 +387,8 @@ bool loadMedia()
     delete clone9;
     delete clone10;
     delete clone11;
+    delete clone12;
+    delete clone13;
     return true;
 }
 bool touchCharacter(Thorns *thorns, Character *crt)
@@ -398,7 +460,7 @@ bool setMap(Tile *tiles[], string path)
     file >> hasThorn;
     if(hasThorn)
     {
-        for(int i=0; i<TOTAL_THORNS; i++)
+        for(int i=0; i<hasThorn; i++)
         {
             int pos = -1, type = -1;
             file >> pos >> type;
@@ -409,9 +471,11 @@ bool setMap(Tile *tiles[], string path)
             }
             if(pos >= 0 && pos <= TOTAL_TILES)
             {
-                thorn[i] = new Thorns(pos, type);
+                Thorns *thor = new Thorns(pos, type);
+                thorn.push_back(thor);
             }
         }
+        //hasThorn = 0;
     }
     //int hasPortal = -1;
     file >> hasPortal;
@@ -436,7 +500,7 @@ bool setMap(Tile *tiles[], string path)
     file >> hasDiamond;
     if(hasDiamond)
     {
-        for(int i=0; i<TOTAL_DIAMONDS; i++)
+        for(int i=0; i<hasDiamond; i++)
         {
             diaPos[i] = -1;
             file >> diaPos[i];
@@ -448,8 +512,42 @@ bool setMap(Tile *tiles[], string path)
             if(diaPos[i] >= 0 && diaPos[i] <= TOTAL_TILES)
             {
                 SDL_Rect box = tile[diaPos[i]]->getBox();
-                dia[i] = new Diamond(box.x + (TILE_WIDTH - DIAMOND_WIDTH)/2, box.y + (TILE_HEIGHT - DIAMOND_HEIGHT)/2);
+                Diamond *diamond = new Diamond(box.x + (TILE_WIDTH - DIAMOND_WIDTH)/2, box.y + (TILE_HEIGHT - DIAMOND_HEIGHT)/2);
+                dia.push_back(diamond);
             }
+        }
+    }
+    file >> hasDoorButton;
+    if(hasDoorButton)
+    {
+        for(int i = 0; i<hasDoorButton; i++)
+        {
+            int pos = -1, type = -1, index1 = -1, index2 = -1;
+            file >> pos >> type >> index1 >> index2;
+            DoorButton* doorr = new DoorButton(pos, type, tiles[index1], tiles[index2]);
+            door.push_back(doorr);
+        }
+    }
+    file >> hasLazerGun;
+    if(hasLazerGun)
+    {
+        for(int i=0; i<hasLazerGun; i++)
+        {
+            int pos = -1, lazerType = -1, headType = -1, typeGun = -1;
+            file >> pos >> typeGun >> lazerType >> headType;
+            LazerGun* lazer = new LazerGun(pos, typeGun, lazerType, headType);
+            laz.push_back(lazer);
+        }
+    }
+    file >> hasCreep;
+    if(hasCreep)
+    {
+        for(int i=0; i<hasCreep; i++)
+        {
+            int pos = -1, type = -1;
+            file >> pos >> type;
+            Creep* cre = new Creep(pos, type);
+            creep.push_back(cre);
         }
     }
     int X = -1, Y = -1;
@@ -463,18 +561,21 @@ bool collision(int &startTime)
 {
     if(hasThorn)
     {
-        for(int i=0; i<TOTAL_THORNS; i++)
+        for(int i=0; i<hasThorn; i++)
         {
             if(SDL_GetTicks() - startTime > 1000.f)
             {
                 if(checkCollisionBox(x.getBox(), thorn[i]->getBox()))
                 {
                     int h = x.getHealth();
-                    x.setHealth(h - 20);
+                    x.setHealth(h - 3);
+                    x.setHurt(true);
                     startTime = SDL_GetTicks();
+                    return true;
                 }
             }
         }
+
     }
     if(hasGun)
     {
@@ -486,8 +587,10 @@ bool collision(int &startTime)
                 if(checkCollisionBox(bullet->getBox(), x.getBox()))
                 {
                     int h = x.getHealth();
-                    x.setHealth(h - 20);
+                    x.setHealth(h - 3);
+                    x.setHurt(true);
                     startTime = SDL_GetTicks();
+                    return true;
                 }
             }
         }
@@ -502,20 +605,122 @@ bool collision(int &startTime)
                 if(checkCollisionBox(fire->getBox(), x.getBox()))
                 {
                     int h = x.getHealth();
-                    x.setHealth(h - 20);
+                    x.setHealth(h - 3);
+                    x.setHurt(true);
                     startTime = SDL_GetTicks();
+                    return true;
                 }
             }
         }
     }
+    if(hasLazerGun)
+    {
+        for(int i=0; i<hasLazerGun; i++)
+        {
+            if(SDL_GetTicks() - startTime > 1000.f)
+            {
+                SDL_Rect rect = laz[i]->getBox();
+                if(checkCollisionBox(rect, x.getBox()))
+                {
+                    //cout << 1 << '\n';
+                    int h = x.getHealth();
+                    x.setHealth(h - 3);
+                    x.setHurt(true);
+                    startTime = SDL_GetTicks();
+                    return true;
+                }
+            }
+        }
+    }
+    if(hasCreep)
+    {
+        for(int i=0; i<hasCreep; i++)
+        {
+            if(SDL_GetTicks() - startTime > 1000.f)
+            {
+
+                SDL_Rect rect = creep[i]->getBox();
+                if(checkCollisionBox(rect, x.getBox()))
+                {
+
+                    int h = x.getHealth();
+                    x.setHealth(h - 3);
+                    x.setHurt(true);
+                    startTime = SDL_GetTicks();
+                    return true;
+                }
+            }
+            if(SDL_GetTicks() - startTime > 1000.f)
+            {
+                for(int j=0; j<3; j++)
+                {
+                    SDL_Rect rect2 = creep[i]->getBox(j);
+                    if(checkCollisionBox(rect2, x.getBox()))
+                    {
+                       // cout << 1 << '\n';
+                        int h = x.getHealth();
+                        x.setHealth(h - 3);
+                        x.setHurt(true);
+                        startTime = SDL_GetTicks();
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    if(SDL_GetTicks() - startTime > 2000.f && boss->getHealth() > 0)
+    {
+        if(boss->attackType() == 0)
+        {
+            //cout << 1 << ' ';
+            SDL_Rect rect = boss->getBox2();
+            if(checkCollisionBox(rect, x.getBox()))
+            {
+                int h = x.getHealth();
+                x.setHealth(h - 20);
+                x.setHurt(true);
+                startTime = SDL_GetTicks();
+                return true;
+            }
+        }
+        if(boss->attackType() == 2)
+        {
+            SDL_Rect rect = x.getBox();
+            int cnt = boss->checkAttack2(rect);
+            int h = x.getHealth();
+            x.setHealth(h - 20);
+            x.setHurt(true);
+            startTime = SDL_GetTicks();
+            return true;
+        }
+        if(boss->attackType() == 3)
+        {
+            int h = x.getHealth();
+            SDL_Rect r =x.getBox();
+            int cnt = boss->checkAttack(r);
+            x.setHealth(h - cnt*20);
+            x.setHurt(true);
+            startTime = SDL_GetTicks();
+            return true;
+        }
+        if(checkCollisionBox(x.getBox(), boss->getBox()))
+        {
+            int h = x.getHealth();
+            x.setHealth(h - 20);
+            x.setHurt(true);
+            startTime = SDL_GetTicks();
+            return true;
+        }
+    }
+    return true;
 }
 void render(SDL_Rect &camera, int &ck)
 {
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(renderer);
-    for(int i=0; i<TOTAL_TILES; i++)
+    for(int i=0; i<vTile.size(); i++)
     {
-        tile[i]->render(camera);
+        vTile[i]->render(camera);
     }
     if(hasGun)
     {
@@ -526,7 +731,7 @@ void render(SDL_Rect &camera, int &ck)
     }
     if(hasThorn)
     {
-        for(int i=0; i<TOTAL_THORNS; i++)
+        for(int i=0; i<hasThorn; i++)
         {
             thorn[i]->render(camera);
         }
@@ -540,87 +745,190 @@ void render(SDL_Rect &camera, int &ck)
     }
     if(hasDiamond)
     {
-        for(int i=0; i<TOTAL_DIAMONDS; i++)
+        for(int i=0; i<hasDiamond; i++)
         {
-            if(i < 15)dia[i]->render(camera);
+            dia[i]->render(camera);
+        }
+    }
+    x.render(camera, vTile);
+    if(hasDoorButton)
+    {
+        for(int i=0; i<hasDoorButton; i++)
+        {
+            door[i]->render(camera);
+        }
+    }
+    if(hasLazerGun)
+    {
+        for(int i=0; i<hasLazerGun; i++)
+        {
+            laz[i]->render(camera, vTile);
+        }
+    }
+
+    if(hasCreep)
+    {
+        for(int i=0; i<hasCreep; i++)
+        {
+            creep[i]->render(camera, vTile);
+        }
+    }
+    //cout << warning << '\n';
+    if(x.getX() >= 4640 && x.getY() <= 560 && !bossAppeared && !bossAppearing && warning == 0)
+    {
+        warning = SDL_GetTicks();
+    }
+    if(SDL_GetTicks() - warning > 5000.f && !bossAppeared && warning != 0)
+    {
+        bossAppearing = true;
+    }
+    else
+    {
+        if(warning != 0 && !bossAppeared && SDL_GetTicks() - warning < 5000.f)
+        {
+            if(cnt)
+            {
+                SDL_Rect r = {0, 0, 800 - limX, 200};
+                warningSprite.render(0, 0, &r);
+            }
             else
             {
-                if(ck)dia[i]->render(camera);
+                SDL_Rect r = {0, 200, 800 - limX, 200};
+                warningSprite.render(0, 0, &r);
+            }
+            if(limX >= 10)limX -= 10;
+            cnt++;
+            cnt %= 2;
+            return;
+        }
+    }
+    if(!bossAppearing)
+    {
+        if(bossAppeared == true)
+        {
+            if(x.getX() >= 4160 && x.getY() <= 560 && boss->getHealth() > 0)
+            {
+                SDL_Rect r = x.getBox();
+                SDL_Point pt = {r.x, r.y};
+                boss->render(camera, pt, vTile, LEVEL_WIDTH);
+                SDL_SetRenderDrawColor(renderer, 244, 115, 32, 0xFF);
+                SDL_Rect heathBoss = { 800 - 450 - 8, 27, boss->getHealth(), 35};
+                SDL_RenderFillRect(renderer, &heathBoss);
+                dragonHealthBar.render(300, 0, NULL);
+            }
+            if(boss->getHealth() <= 0)
+            {
+                por->render(camera);
             }
         }
     }
-    por->render(camera);
-    x.render(camera, vTile);
+    else
+    {
+        boss->setTime2(SDL_GetTicks());
+        SDL_Rect r = x.getBox();
+        SDL_Point pt = {r.x, r.y};
+        SDL_Rect r1 = {frames_portal/5 * 52, 0, 52, 300};
+        SDL_Rect r2 = {frames_portal/5 * 52, 300, 52, 300};
+        spriteDragonPortal.render(4960 - camera.x, 240 - camera.y - 30, &r1);
+        boss->render(camera, pt, vTile, 4960 + 52);
+        spriteDragonPortal.render(4960 - camera.x + 52, 240 - camera.y - 30, &r2);
+        frames_portal--;
+        if(frames_portal < 0)
+        {
+            frames_portal = 30;
+        }
+        boss->setX(-0.25);
+        if(boss->getX() == 4640)
+        {
+            bossAppearing = false;
+            bossAppeared = true;
+        }
+        return;
+    }
     stringstream ss("");
     ss << "Point: " << x.getPoint();
     if(!pointTexture.loadTextureFromText(ss.str().c_str(), textColor))logTTFError(cout, "load point", true);
-    pointTexture.render(0, 50, NULL);
+    pointTexture.render(0, 77, NULL);
     SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0, 0);
-    SDL_Rect healthRect = {12, 6, x.getHealth(), HEALTH_HEIGHT};
+    SDL_Rect healthRect = {12, 33, x.getHealth(), HEALTH_HEIGHT};
     SDL_RenderFillRect(renderer, &healthRect);
-    healthbar.render(0, 0, NULL);
+    healthbar.render(0, 27, NULL);
 }
 void checkEnemiesHealth()
 {
-    for(int i=0; i<TOTAL_GUNS; i++)
+    if(hasGun)
     {
-        Uint32 time = gun[i]->getTime();
-        Bullet* bul = gun[i]->getBullet();
-        Uint32 timeBullet = bul->getTime();
-        if(SDL_GetTicks() - time >= 300.f && gun[i]->getHealth() > 0)
+        for(int i=0; i<TOTAL_GUNS; i++)
         {
-            SDL_Rect rect1 = gun[i]->getBox();
-            int cnt = x.checkXBusterCollision(rect1);
-            int health = gun[i]->getHealth();
-            gun[i]->setHealth(health - cnt*10);
-            if(health - cnt*10 <= 0)
+            Uint32 time = gun[i]->getTime();
+            Bullet* bul = gun[i]->getBullet();
+            Uint32 timeBullet = bul->getTime();
+            if(SDL_GetTicks() - time >= 300.f && gun[i]->getHealth() > 0)
             {
-                SDL_Point point = {rect1.x, rect1.y};
-                p.push_back({point, 0});
+                SDL_Rect rect1 = gun[i]->getBox();
+                int cnt = x.checkXBusterCollision(rect1, door);
+                int health = gun[i]->getHealth();
+                gun[i]->setHealth(health - cnt*3);
+                if(health - cnt*3 <= 0)
+                {
+                    SDL_Point point = {rect1.x, rect1.y};
+                    p.push_back({point, 0});
+                }
+                gun[i]->setTime(SDL_GetTicks());
             }
-            gun[i]->setTime(SDL_GetTicks());
-        }
-        if(SDL_GetTicks() - timeBullet >= 100.f && bul->getHealth() > 0)
-        {
-            SDL_Rect rect2 = bul->getBox();
-            int cnt2 = x.checkXBusterCollision(rect2);
-            int health2 = bul->getHealth();
-            bul->setHealth(health2 - cnt2*10);
-            if(health2 - cnt2*10 <= 0)
+            if(SDL_GetTicks() - timeBullet >= 100.f && bul->getHealth() > 0)
             {
-                SDL_Point point = {rect2.x, rect2.y};
-                p.push_back({point, 0});
+                SDL_Rect rect2 = bul->getBox();
+                int cnt2 = x.checkXBusterCollision(rect2, door);
+                int health2 = bul->getHealth();
+                bul->setHealth(health2 - cnt2*3);
+                if(health2 - cnt2*3 <= 0)
+                {
+                    SDL_Point point = {rect2.x, rect2.y};
+                    p.push_back({point, 0});
+                }
+                bul->setTime(SDL_GetTicks());
             }
-            bul->setTime(SDL_GetTicks());
         }
     }
-    Uint32 time = cre->getTime2();
-    if(SDL_GetTicks() - time >= 300.f && cre->getHealth() > 0)
+    if(hasCreep)
     {
-        SDL_Rect rect1 = cre->getBox();
-        int cnt = x.checkXBusterCollision(rect1);
-        int health = cre->getHealth();
-        cre->setHealth(health - cnt*10);
+        for(int i=0; i<hasCreep; i++)
+        {
+            Creep* cre = creep[i];
+            Uint32 time = cre->getTime2();
+            if(SDL_GetTicks() - time >= 300.f && cre->getHealth() > 0)
+            {
+                SDL_Rect rect1 = cre->getBox();
+                int cnt = x.checkXBusterCollision(rect1, door);
+                int health = cre->getHealth();
+                cre->setHealth(health - cnt*3);
+                if(health - cnt*3 <= 0)
+                {
+                    SDL_Point point = {rect1.x, rect1.y};
+                    p.push_back({point, 0});
+                }
+                cre->setTime2(SDL_GetTicks());
+            }
+        }
+    }
+    Uint32 t = boss->getTime();
+    if(SDL_GetTicks() - t >= 300.f && boss->getHealth() > 0)
+    {
+        SDL_Rect rect1 = boss->getBox();
+        int cnt = x.checkXBusterCollision(rect1, door);
+        int health = boss->getHealth();
+        boss->setHealth(health - cnt*10);
         if(health - cnt*10 <= 0)
         {
             SDL_Point point = {rect1.x, rect1.y};
+            SDL_Point point1 = {rect1.x + 30, rect1.y + 30};
+            SDL_Point point2 = {rect1.x + 20, rect1.y + 100};
             p.push_back({point, 0});
+            p.push_back({point1, 0});
+            p.push_back({point2, 0});
         }
-        cre->setTime2(SDL_GetTicks());
-    }
-    time = cre2->getTime2();
-    if(SDL_GetTicks() - time >= 300.f && cre2->getHealth() > 0)
-    {
-        SDL_Rect rect1 = cre2->getBox();
-        int cnt = x.checkXBusterCollision(rect1);
-        int health = cre2->getHealth();
-        cre2->setHealth(health - cnt*10);
-        if(health - cnt*10 <= 0)
-        {
-            SDL_Point point = {rect1.x, rect1.y};
-            p.push_back({point, 0});
-        }
-        cre2->setTime2(SDL_GetTicks());
+        boss->setTime(SDL_GetTicks());
     }
 }
 void checkExplosion(SDL_Rect &camera)
@@ -655,7 +963,9 @@ void checkExplosion(SDL_Rect &camera)
 void setTileVector(SDL_Rect &camera, vector < Tile* > &tiles)
 {
     int st_x = camera.x / 80;
+    st_x = max(st_x - 5, 0);
     int st_y = camera.y / 80;
+    st_y = max(st_y - 5, 0);
     int ed_x;
     int ed_y;
     int edx = min(camera.x + SCREEN_WIDTH, LEVEL_WIDTH);
@@ -670,12 +980,22 @@ void setTileVector(SDL_Rect &camera, vector < Tile* > &tiles)
         ed_y = (edy - 80) / 80;
     }
     else ed_y = edy / 80;
+    ed_x = min(ed_x + 5, 63);
+    ed_y = min(ed_y + 5, 47);
     tiles.clear();
     for(int i = st_x; i <= ed_x; i++)
     {
         for(int j = st_y; j <= ed_y; j ++)
         {
-            tiles.push_back(tile[j*16 + i]);
+            tiles.push_back(tile[j*64 + i]);
         }
     }
+}
+void checkCharacterHealth(Character* crt)
+{
+    for(int i=0; i<hasDiamond; i++)
+    {
+        dia[i]->checkCollision(crt);
+    }
+    por->checkCollision(crt);
 }

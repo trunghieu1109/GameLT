@@ -26,7 +26,7 @@ class Creep
 public:
     static Texture creepSprite;
     Creep(int pos, int type);
-    void Move(SDL_Point &point);
+    void Move(SDL_Point &point, vector <Tile*> &tile, SDL_Rect &camera);
     void render(SDL_Rect &camera, vector <Tile*> &tile);
     void setSprite(Texture &sprite);
     void shot(SDL_Point &point);
@@ -37,6 +37,7 @@ public:
     Uint32 getTime2();
     void setTime2(Uint32 t);
     SDL_Rect getBox();
+    SDL_Rect getBox(int index);
 };
 
 #endif // CREEP__H

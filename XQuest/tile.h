@@ -17,6 +17,7 @@ class Tile
     int mType;
 public:
     static Texture tileSprite;
+    Tile();
     Tile(int x, int y, int type);
     void render(SDL_Rect &camera);
     int getType();

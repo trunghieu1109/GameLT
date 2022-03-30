@@ -11,7 +11,7 @@ using namespace std;
 
 Thorns::Thorns(int pos, int type)
 {
-    mBox = {pos%16 * THORN_WIDTH, pos/16 * THORN_HEIGHT, THORN_WIDTH, THORN_HEIGHT};
+    mBox = {pos%64 * THORN_WIDTH, pos/64 * THORN_HEIGHT, THORN_WIDTH, THORN_HEIGHT};
     mType = type;
 }
 void Thorns::setSprite(Texture &sprite)

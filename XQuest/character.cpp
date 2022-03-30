@@ -13,7 +13,7 @@ using namespace std;
 
 Character::Character()
 {
-    mHealth = 400;
+    mHealth = 200;
     mPosX = (LEVEL_WIDTH - 80)/2;
     mPosY = 1760;
     mVelX = 0;
@@ -28,6 +28,7 @@ Character::Character()
     up_vel = 10;
     jumpCount = 0;
     chargeTime = 0;
+    cnt = 0;
     mCollisionBox = {mPosX, mPosY, CHAR_WIDTH, CHAR_HEIGHT};
     up = false;
     stay = false;
@@ -39,13 +40,22 @@ Character::Character()
     shot = false;
     left = false;
     right = false;
+    hurt = false;
     isDashed = false;
     win = false;
+    doublejump = false;
+    shortjump = false;
+    unhurtable = false;
+    normal_hurt = false;
     frames_charge = 0;
     buster.clear();
+    frames_jumpdouble = 0;
+    time_normal_hurt = 0;
+    pt = {0, 0};
 }
 void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
 {
+    // cout << left << ' ' << right << '\n';
     if(SDL_GetTicks() - chargeTime > 300.f && isCharging == false && shot)
     {
         isCharging = true;
@@ -55,9 +65,42 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
     {
         switch((e->key).keysym.sym)
         {
+        case SDLK_LEFT:
+            mDirection = -1;
+            left = true;
+            if((e->key).repeat == 0)
+            {
+                mVelX -= CHAR_VEL;
+            }
+            break;
+        case SDLK_RIGHT:
+            mDirection = 1;
+            right = true;
+            if((e->key).repeat == 0)
+            {
+                mVelX += CHAR_VEL;
+            }
+            break;
         case SDLK_v:
+            if((e->key).repeat == 0)
+            {
+                if(climb)
+                {
+                    shortjump = true;
+                    mPosX_bf = mPosX;
+                    mPosY_bf = mPosY;
+                    mDirection_bf = mDirection;
+                }
+            }
             if(!up && jumpCount < 2)
             {
+                if(jumpCount == 1)
+                {
+                    doublejump = true;
+                    frames_jumpdouble = 0;
+                    pt.x = mCollisionBox.x - 40;
+                    pt.y = mCollisionBox.y + 20;
+                }
                 frames = 0;
                 up = true;
                 stay = false;
@@ -92,29 +135,11 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
             }
             shot = true;
             break;
-        case SDLK_LEFT:
-            mDirection = -1;
-            left = true;
-            right = false;
-            if((e->key).repeat == 0)
-            {
-                mVelX -= CHAR_VEL;
-            }
-            break;
-        case SDLK_RIGHT:
-            mDirection = 1;
-            right = true;
-            left = false;
-            if((e->key).repeat == 0)
-            {
-                mVelX += CHAR_VEL;
-            }
-            break;
         }
     }
     else
     {
-        if((e->type == SDL_KEYUP) && (e->key).repeat == 0)
+        if((e->type == SDL_KEYUP))
         {
             switch((e->key).keysym.sym)
             {
@@ -197,6 +222,120 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
 
 void Character::move(vector <Tile*> &tile)
 {
+    if(unhurtable && SDL_GetTicks() - hurt_time > 1000.f)
+    {
+        unhurtable = false;
+    }
+    if(hurt == true)
+    {
+        cout << 1 << '\n';
+        if((frames + 1)/5 >= 7)
+        {
+            frames = 0;
+            up = false;
+            stay = false;
+            climb = false;
+            dash = false;
+            run = false;
+            fall = false;
+            isDashed = true;
+            if(mDirection == 1)
+            {
+                if(fall)row = 26;
+                else row = 0;
+            }
+            else
+            {
+                if(fall)row = 27;
+                else row = 1;
+            }
+            hurt = false;
+            unhurtable = true;
+            hurt_time = SDL_GetTicks();
+            return;
+        }
+        if(mDirection == 1)row = 30;
+        else row = 31;
+        up = false;
+        stay = false;
+        climb = false;
+        dash = false;
+        run = false;
+        fall = false;
+        isDashed = true;
+        normal_hurt = false;
+        return;
+    }
+    if(normal_hurt == true)
+    {
+        if((frames+1)/5 >= 11)
+        {
+            frames = 0;
+            normal_hurt = false;
+            charSprite.setAlpha(255);
+        }
+        else
+        {
+            if(cnt%2 == 0)charSprite.setAlpha(80);
+            else charSprite.setAlpha(255);
+            cnt++;
+        }
+    }
+    if(shortjump)
+    {
+        if(mDirection != mDirection_bf)
+        {
+            mPosX_bf = 0;
+            mPosY_bf = 0;
+            shortjump = 0;
+            return;
+        }
+        if(abs(mPosX - mPosX_bf) == 30)
+        {
+            mPosX_bf = 0;
+            mPosY_bf = 0;
+            shortjump = 0;
+            return;
+        }
+        if(mDirection == 1)
+        {
+            row = 12;
+            mPosX -= 5;
+            mCollisionBox.x = mPosX;
+            if(checkCollisionTile(mCollisionBox, tile) != -1)
+            {
+                mPosX += 5;
+                mCollisionBox.x = mPosX;
+            }
+            mPosY -= 5;
+            mCollisionBox.y = mPosY;
+            if(checkCollisionTile(mCollisionBox, tile) != -1)
+            {
+                mPosY += 5;
+                mCollisionBox.y = mPosY;
+            }
+        }
+        else
+        {
+            row = 15;
+            mPosX += 5;
+            mCollisionBox.x = mPosX;
+            if(checkCollisionTile(mCollisionBox, tile) != -1)
+            {
+                mPosX -= 5;
+                mCollisionBox.x = mPosX;
+            }
+            mPosY -= 5;
+            mCollisionBox.y = mPosY;
+            if(checkCollisionTile(mCollisionBox, tile) != -1)
+            {
+                mPosY += 5;
+                mCollisionBox.y = mPosY
+                                  ;
+            }
+        }
+        return;
+    }
     mPosX += mVelX;
     mCollisionBox.x = mPosX;
     if(mPosX < 0 || mPosX + CHAR_WIDTH > LEVEL_WIDTH)
@@ -211,11 +350,18 @@ void Character::move(vector <Tile*> &tile)
     }
     SDL_Rect under = {mPosX, mPosY + CHAR_HEIGHT, CHAR_WIDTH, 10};
     int index = checkCollisionTile(under, tile);
-    if(index == 31 || index == 28 || index == 2 || index == 3 || index == 20 || index == 21 || index == 40 || index == 42 || index == 06 || index == 12 || index == 13 || index == 45 || index == 46 || index == 47 || index == 48)
+    if(index == 31 || index == 28 || index == 2 || index == 3 || index == 20 || index == 21 || index == 40 || index == 42 || index == 06 || index == 12 || index == 13 || index == 45 || index == 46 || index == 47 || index == 48 || index == 37)
     {
         down_vel = 1;
     }
     else down_vel = 10;
+    if(!up && !climb && !dash)
+    {
+        if(index == -1)
+        {
+            fall = true;
+        }
+    }
     if(dash)
     {
         if(mDirection == 1)
@@ -304,44 +450,30 @@ void Character::move(vector <Tile*> &tile)
         {
             mPosY += up_vel;
             mCollisionBox.y = mPosY;
-            if(up_vel == 10)
-            {
-                up_vel = 5;
-            }
-            else
-            {
-                ok = 1;
-                stay = false;
-                climb = false;
-                run = false;
-                up = false;
-                fall = true;
-                up_vel = 10;
-                mPosX_bf = 0;
-                mPosY_bf = 0;
-            }
+            ok = 1;
+            stay = false;
+            climb = false;
+            run = false;
+            up = false;
+            fall = true;
+            up_vel = 10;
+            mPosX_bf = 0;
+            mPosY_bf = 0;
         }
         if(checkCollisionTile(mCollisionBox, tile) != -1)
         {
             mPosY += up_vel;
             mCollisionBox.y = mPosY;
-            if(up_vel == 10)
-            {
-                up_vel = 5;
-            }
-            else
-            {
-                frames = 0;
-                ok = 1;
-                stay = false;
-                climb = false;
-                run = false;
-                up = false;
-                fall = true;
-                up_vel = 10;
-                mPosX_bf = 0;
-                mPosY_bf = 0;
-            }
+            frames = 0;
+            ok = 1;
+            stay = false;
+            climb = false;
+            run = false;
+            up = false;
+            fall = true;
+            up_vel = 10;
+            mPosX_bf = 0;
+            mPosY_bf = 0;
         }
         return;
     }
@@ -393,7 +525,7 @@ void Character::move(vector <Tile*> &tile)
         int BoxIndex = checkCollisionTile(under, tile);
         if(BoxIndex != -1)
         {
-            if(BoxIndex == 31 || BoxIndex == 28 || BoxIndex == 2 || BoxIndex == 3 || BoxIndex == 20 || BoxIndex == 21 || BoxIndex == 42 || BoxIndex == 40 || BoxIndex == 06 || BoxIndex == 12 || BoxIndex == 13 || BoxIndex == 45 || BoxIndex == 46 || BoxIndex == 47 || BoxIndex == 48)
+            if(BoxIndex == 31 || BoxIndex == 28 || BoxIndex == 2 || BoxIndex == 3 || BoxIndex == 20 || BoxIndex == 21 || BoxIndex == 42 || BoxIndex == 40 || BoxIndex == 06 || BoxIndex == 12 || BoxIndex == 13 || BoxIndex == 45 || BoxIndex == 46 || BoxIndex == 47 || BoxIndex == 48 || BoxIndex == 37)
             {
                 ck = 1;
                 stay = false;
@@ -534,6 +666,18 @@ void Character::setCamera(SDL_Rect &camera)
 }
 void Character::render(SDL_Rect &camera, vector <Tile*> &tile)
 {
+    if(doublejump)
+    {
+        SDL_Rect rect = {frames_jumpdouble/7 * 140, 0, 140, 50};
+        jumpDouble.render(pt.x - camera.x, pt.y - camera.y, &rect);
+        frames_jumpdouble++;
+        if(frames_jumpdouble / 7 >= 5)
+        {
+            frames_jumpdouble = 0;
+            doublejump = false;
+        }
+
+    }
     if(frames_charge / 5 == 20 || frames_charge / 5 == 18)
     {
         SDL_Rect currentFrame = {frames/heso * CHAR_WIDTH, row * CHAR_HEIGHT, CHAR_WIDTH, CHAR_HEIGHT};
@@ -654,12 +798,16 @@ int Character::getHealth()
 {
     return mHealth;
 }
-int Character::checkXBusterCollision(SDL_Rect &rect)
+int Character::checkXBusterCollision(SDL_Rect &rect,vector <DoorButton*> door)
 {
     int cnt = 0;
     for(deque<XBuster*>::iterator it = buster.begin(); it != buster.end(); it++)
     {
         SDL_Rect rect1 = (*it)->getBox();
+        for(int j=0; j<door.size(); j++)
+        {
+            door[j]->checkCollision(rect1);
+        }
         int type = (*it)->getType();
         if(checkCollisionBox(rect1, rect))
         {
@@ -672,4 +820,24 @@ int Character::checkXBusterCollision(SDL_Rect &rect)
 void Character::setCharging(Texture &sprite)
 {
     chargingSprite = sprite;
+}
+void Character::setDoubleJumpSprite(Texture &sprite)
+{
+    jumpDouble = sprite;
+}
+bool Character::getHurt()
+{
+    return hurt;
+}
+void Character::setHurt(bool h)
+{
+    if(!unhurtable) hurt = h;
+}
+int Character::getDirection()
+{
+    return mDirection;
+}
+void Character::setNormalHurt(bool nh)
+{
+    normal_hurt = nh;
 }

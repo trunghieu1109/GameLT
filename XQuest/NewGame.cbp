@@ -32,6 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="boss.cpp" />
+		<Unit filename="boss.h" />
 		<Unit filename="bullet.cpp" />
 		<Unit filename="bullet.h" />
 		<Unit filename="button.cpp" />
@@ -47,12 +49,18 @@
 		<Unit filename="creep_bullet.h" />
 		<Unit filename="diamond.cpp" />
 		<Unit filename="diamond.h" />
+		<Unit filename="door_button.cpp" />
+		<Unit filename="door_button.h" />
 		<Unit filename="fire.cpp" />
 		<Unit filename="fire.h" />
+		<Unit filename="fire_ball.cpp" />
+		<Unit filename="fire_ball.h" />
 		<Unit filename="fire_turret.cpp" />
 		<Unit filename="fire_turret.h" />
 		<Unit filename="gun.cpp" />
 		<Unit filename="gun.h" />
+		<Unit filename="lazergun.cpp" />
+		<Unit filename="lazergun.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="map.cpp" />
 		<Unit filename="map.h" />

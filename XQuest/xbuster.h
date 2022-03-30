@@ -7,6 +7,7 @@
 #include "texture.h"
 #include <vector>
 #include "tile.h"
+#include "door_button.h"
 using namespace std;
 
 class XBuster

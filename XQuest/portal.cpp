@@ -17,11 +17,14 @@ Portal::Portal(int x, int y)
 }
 void Portal::checkCollision(Character *crt)
 {
+    SDL_Rect rect = crt->getBox();
+
     if(checkCollisionBox(mBox, crt->getBox()))
     {
         int poi = crt->getPoint();
-        if(poi == TOTAL_DIAMONDS)crt->setWin(true);
-    }
+        if(poi == 94)crt->setWin(true);
+    }//cout << rect.x << ' ' << rect.y << ' ' << rect.w << ' ' << rect.h << '\n';
+
 }
 void Portal::render(SDL_Rect &camera)
 {

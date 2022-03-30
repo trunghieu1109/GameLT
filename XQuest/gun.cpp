@@ -28,9 +28,9 @@ void Gun::render(SDL_Rect &camera, vector <Tile*> &tile)
     }
     if(checkCollisionBox(mBox, camera))
     {
+        mBullet->render(camera, tile);
         SDL_Rect rect = {mType * GUN_WIDTH, 0, GUN_WIDTH, GUN_HEIGHT};
         gunSprite.render(mBox.x - camera.x, mBox.y - camera.y, &rect);
-        mBullet->render(camera, tile);
     }
     else
     {
