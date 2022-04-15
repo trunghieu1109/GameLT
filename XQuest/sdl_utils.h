@@ -11,6 +11,7 @@ using namespace std;
 void logSDLError(ostream &os, const string &msg, bool fatal = false);
 void logIMGError(ostream &os, const string &msg, bool fatal = false);
 void logTTFError(ostream &os, const string &msg, bool fatal = false);
+void logMIXError(ostream &os, const string &msg, bool fatal = false);
 void initSDL();
 void quitSDL();
 void waitUntilKeyPress();

@@ -16,21 +16,49 @@ Bullet::Bullet(int x, int y, int type)
     else lim = min(LEVEL_WIDTH, x + 500);
     time = 0;
     mHealth = 10;
+    mTime = 0;
+    isDead = false;
 }
 void Bullet::setSprite(Texture &sprite)
 {
     bulletSprite = sprite;
 }
-void Bullet::render(SDL_Rect &camera, vector <Tile*> &tile)
+void Bullet::render(SDL_Rect &camera, vector <Tile*> &tile, SDL_Rect &rct)
 {
+    if(SDL_GetTicks() - mTime <= 1800.f)return;
+    else
+    {
+        if(checkCollisionBox(camera, rct))
+        {
+            if(mBox.x == mPosX)
+            {
+                Mix_PlayChannel(-1, gunShotChunk, 0);
+            }
+        }
+    }
     if(checkCollisionTile(mBox, tile) != -1)
     {
+        isDead = true;
         setDefault();
+        mTime = SDL_GetTicks();
         return;
     }
-    if(mHealth <= 0)setDefault();
+    if(mHealth <= 0)
+    {
+        isDead = true;
+        setDefault();
+        mTime = SDL_GetTicks();
+        return;
+    }
+    if(abs(mBox.x - mPosX) >= 1000)
+    {
+        isDead = true;
+        setDefault();
+        mTime = SDL_GetTicks();
+        return;
+    }
     SDL_Rect rect = {mType*BULLET_WIDTH, 0, BULLET_WIDTH, BULLET_HEIGHT};
-    bulletSprite.render(mBox.x - camera.x, mBox.y - camera.y, &rect);
+    if(checkCollisionBox(mBox, camera))bulletSprite.render(mBox.x - camera.x, mBox.y - camera.y, &rect);
     if(mType == 1)
     {
         mBox.x -= 6;
@@ -67,4 +95,12 @@ void Bullet::setHealth(int h)
 int Bullet::getHealth()
 {
     return mHealth;
+}
+bool Bullet::getDead()
+{
+    return isDead;
+}
+void Bullet::loadGunShotChunk(Mix_Chunk* gsc)
+{
+    gunShotChunk = gsc;
 }

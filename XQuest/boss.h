@@ -43,6 +43,10 @@ public:
     static Texture magicCircle;
     static Texture fireFlowSprite;
     static Texture firePillarSprite;
+    static Mix_Chunk* fireBallChunk;
+    static Mix_Chunk* fireFlowChunk;
+    static Mix_Chunk* firePillarChunk;
+    static Mix_Chunk* fireSpearChunk;
     Boss(int pos);
     void render(SDL_Rect &camera, SDL_Point &point, vector < Tile* > &tile, int limX);
     void setSprite(Texture &sprite);
@@ -64,5 +68,9 @@ public:
     void setTime2(Uint32 t);
     int attackType();
     bool checkAttack2(SDL_Rect &rect);
+    void loadFireBallChunk(Mix_Chunk* fbc);
+    void loadFireFlowChunk(Mix_Chunk* ffc);
+    void loadFirePillarChunk(Mix_Chunk* fpc);
+    void loadFireSpearChunk(Mix_Chunk* fsc);
 };
 #endif // BOSS__H

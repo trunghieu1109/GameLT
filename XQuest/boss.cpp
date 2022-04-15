@@ -59,6 +59,7 @@ void Boss::render(SDL_Rect &camera, SDL_Point &point, vector < Tile* > &tile, in
     if(frames / 10 == 7 && (row == 2 || row == 3))shot(point);
     if((row == 4 || row == 5))
     {
+        Mix_PlayChannel(-1, fireSpearChunk, 0);
         double x = mCollisionBox.x - mPosX_bf;
         double y = mCollisionBox.y - mPosY_bf;
         double lenn = sqrt(x*x + y*y);
@@ -111,6 +112,7 @@ void Boss::render(SDL_Rect &camera, SDL_Point &point, vector < Tile* > &tile, in
         }
         if(chose_attack == 3)
         {
+            Mix_PlayChannel(-1, firePillarChunk, 0);
             if(upp)
             {
                 for(int i=0; i<6; i++)
@@ -163,7 +165,7 @@ void Boss::render(SDL_Rect &camera, SDL_Point &point, vector < Tile* > &tile, in
     }
     if(SDL_GetTicks() - mTime > 3000.f)
     {
-        chose_attack = 0%4;
+        chose_attack = rand()%4;
         if(chose_attack == 0)
         {
             if(row == 1)row = 3;
@@ -243,7 +245,7 @@ void Boss::render(SDL_Rect &camera, SDL_Point &point, vector < Tile* > &tile, in
             {
                 if(row == 2)row = 0;
                 else row = 1;
-                chose_attack = -1;
+                //chose_attack = -1;
             }
 
         }
@@ -260,6 +262,7 @@ void Boss::render(SDL_Rect &camera, SDL_Point &point, vector < Tile* > &tile, in
             fireBall = nullptr;
             mPosX_bf = 0;
             mPosY_bf = 0;
+            chose_attack = -1;
         }
     }
 }
@@ -277,7 +280,7 @@ void Boss::shot(SDL_Point &point)
         if(vX > 0)
         {
             rect.x = mCollisionBox.x + 270;
-            rect.y = mCollisionBox .y+ (BOSS_HEIGHT - 80)/2 + 35;
+            rect.y = mCollisionBox.y+ (BOSS_HEIGHT - 80)/2 + 35;
             pt2 = {rect.x + 40, rect.y + 40};
             vvX = (point.x + 30 - pt2.x);
             vvY = (point.y + 30 - pt2.y);
@@ -287,6 +290,7 @@ void Boss::shot(SDL_Point &point)
         vvY /= len;
         double length = sqrt((point.x - rect.x)*(point.x - rect.x) + (point.y - rect.y)*(point.y - rect.y));
         fireBall = new FireBall(rect.x, rect.y, vvX, vvY, length);
+        Mix_PlayChannel(-1, fireBallChunk, 0);
     }
 }
 void Boss::setMagicCircle(Texture &sprite)
@@ -343,6 +347,7 @@ void Boss::fireflow(vector < Tile* > &tile, SDL_Rect &camera)
     {
         vel = 0;
     }
+    Mix_PlayChannel(-1, fireFlowChunk, 0);
     if(!fire.empty())
     {
         SDL_Rect rect = {frames_fire_flow/7*117, 0, 117, 165};
@@ -439,4 +444,20 @@ bool Boss::checkAttack2(SDL_Rect &rect)
         }
     }
     return false;
+}
+void Boss::loadFireBallChunk(Mix_Chunk* fbc)
+{
+    fireBallChunk = fbc;
+}
+void Boss::loadFireFlowChunk(Mix_Chunk* ffc)
+{
+    fireFlowChunk = ffc;
+}
+void Boss::loadFirePillarChunk(Mix_Chunk* fpc)
+{
+    firePillarChunk = fpc;
+}
+void Boss::loadFireSpearChunk(Mix_Chunk* fsc)
+{
+    fireSpearChunk = fsc;
 }

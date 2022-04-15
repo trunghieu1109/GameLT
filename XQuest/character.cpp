@@ -9,11 +9,12 @@
 #include "character.h"
 #include "xbuster.h"
 #include <iterator>
+#include <SDL_mixer.h>
 using namespace std;
 
 Character::Character()
 {
-    mHealth = 200;
+    mHealth = 230;
     mPosX = (LEVEL_WIDTH - 80)/2;
     mPosY = 1760;
     mVelX = 0;
@@ -29,6 +30,9 @@ Character::Character()
     jumpCount = 0;
     chargeTime = 0;
     cnt = 0;
+    frames_giga = 0;
+    giga_time = 0;
+    mana = 165;
     mCollisionBox = {mPosX, mPosY, CHAR_WIDTH, CHAR_HEIGHT};
     up = false;
     stay = false;
@@ -46,6 +50,7 @@ Character::Character()
     doublejump = false;
     shortjump = false;
     unhurtable = false;
+    gigaattack = false;
     normal_hurt = false;
     frames_charge = 0;
     buster.clear();
@@ -58,6 +63,7 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
     // cout << left << ' ' << right << '\n';
     if(SDL_GetTicks() - chargeTime > 300.f && isCharging == false && shot)
     {
+        Mix_PlayChannel(1, chargingChunk, 0);
         isCharging = true;
         frames_charge = 0;
     }
@@ -81,11 +87,25 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
                 mVelX += CHAR_VEL;
             }
             break;
+        case SDLK_z:
+            if(!gigaattack && mana >= 15&& SDL_GetTicks() - giga_time >= 1000.f)
+            {
+                gigaattack = true;
+                Mix_PlayChannel(-1, gigaChunk, 0);
+                mPosX_bf = mCollisionBox.x;
+                mPosY_bf = mCollisionBox.y;
+                mDirection_bf = mDirection;
+                mana -= 15;
+                giga_time = SDL_GetTicks();
+            }
+            break;
         case SDLK_v:
             if((e->key).repeat == 0)
             {
                 if(climb)
                 {
+                    cout << 1 << '\n';
+                    Mix_PlayChannel(-1, jumpClimbChunk, 0);
                     shortjump = true;
                     mPosX_bf = mPosX;
                     mPosY_bf = mPosY;
@@ -94,6 +114,7 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
             }
             if(!up && jumpCount < 2)
             {
+                Mix_PlayChannel(-1, jumpChunk, 0);
                 if(jumpCount == 1)
                 {
                     doublejump = true;
@@ -116,6 +137,7 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
         case SDLK_x:
             if(!dash && isDashed == false)
             {
+                Mix_PlayChannel(-1, dashChunk, 0);
                 frames = 0;
                 up = false;
                 stay = false;
@@ -154,6 +176,8 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
             case SDLK_c:
                 shot = false;
                 isCharging = false;
+                Mix_HaltChannel(1);
+                Mix_PlayChannel(-1, normal_attackChunk, 0);
                 if(SDL_GetTicks() - chargeTime > 1300.f)
                 {
                     XBuster* newBuster;
@@ -222,14 +246,38 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
 
 void Character::move(vector <Tile*> &tile)
 {
-    if(unhurtable && SDL_GetTicks() - hurt_time > 1000.f)
+    if(gigaattack)
+    {
+        mPosX += mDirection_bf*10;
+        mCollisionBox.x = mPosX;
+        if(checkCollisionTile(mCollisionBox, tile) != -1 || mPosX < 0 || mPosX + CHAR_WIDTH > LEVEL_WIDTH)
+        {
+            mPosX -= mDirection_bf*10;
+            mCollisionBox.x = mPosX;
+            gigaattack = false;
+            mPosX_bf = 0;
+            mPosY_bf = 0;
+            frames_giga = 0;
+            mDirection_bf = 0;
+        }
+        if(abs(mPosX - mPosX_bf) >= 400)
+        {
+            gigaattack = false;
+            mPosX_bf = 0;
+            mPosY_bf = 0;
+            frames_giga = 0;
+            mDirection_bf = 0;
+        }
+        return;
+    }
+    if(unhurtable && SDL_GetTicks() - hurt_time > 750.f)
     {
         unhurtable = false;
     }
     if(hurt == true)
     {
-        cout << 1 << '\n';
-        if((frames + 1)/5 >= 7)
+        //cout << 1 << '\n';
+        if((frames + 1)/5 >= 5)
         {
             frames = 0;
             up = false;
@@ -350,7 +398,7 @@ void Character::move(vector <Tile*> &tile)
     }
     SDL_Rect under = {mPosX, mPosY + CHAR_HEIGHT, CHAR_WIDTH, 10};
     int index = checkCollisionTile(under, tile);
-    if(index == 31 || index == 28 || index == 2 || index == 3 || index == 20 || index == 21 || index == 40 || index == 42 || index == 06 || index == 12 || index == 13 || index == 45 || index == 46 || index == 47 || index == 48 || index == 37)
+    if(index == 15 || index == 31 || index == 28 || index == 2 || index == 3 || index == 20 || index == 21 || index == 40 || index == 42 || index == 06 || index == 12 || index == 13 || index == 45 || index == 46 || index == 47 || index == 48 || index == 37)
     {
         down_vel = 1;
     }
@@ -525,7 +573,7 @@ void Character::move(vector <Tile*> &tile)
         int BoxIndex = checkCollisionTile(under, tile);
         if(BoxIndex != -1)
         {
-            if(BoxIndex == 31 || BoxIndex == 28 || BoxIndex == 2 || BoxIndex == 3 || BoxIndex == 20 || BoxIndex == 21 || BoxIndex == 42 || BoxIndex == 40 || BoxIndex == 06 || BoxIndex == 12 || BoxIndex == 13 || BoxIndex == 45 || BoxIndex == 46 || BoxIndex == 47 || BoxIndex == 48 || BoxIndex == 37)
+            if(BoxIndex == 15 || BoxIndex == 31 || BoxIndex == 28 || BoxIndex == 2 || BoxIndex == 3 || BoxIndex == 20 || BoxIndex == 21 || BoxIndex == 42 || BoxIndex == 40 || BoxIndex == 06 || BoxIndex == 12 || BoxIndex == 13 || BoxIndex == 45 || BoxIndex == 46 || BoxIndex == 47 || BoxIndex == 48 || BoxIndex == 37)
             {
                 ck = 1;
                 stay = false;
@@ -666,6 +714,31 @@ void Character::setCamera(SDL_Rect &camera)
 }
 void Character::render(SDL_Rect &camera, vector <Tile*> &tile)
 {
+    if(gigaattack)
+    {
+        SDL_Rect r = {frames_giga/5 * 63, 0, 63, 60};
+        if(frames_giga/5 == 7)
+        {
+            r = {frames_giga/5 * 63, 0, 123, 60};
+        }
+        if(mDirection_bf == -1)
+        {
+            gigaAttackSprite.render(mPosX - camera.x, mPosY - camera.y, &r);
+        }
+        else
+        {
+            gigaAttackSprite.render(mPosX - camera.x - 60, mPosY - camera.y, &r, 0, NULL, SDL_FLIP_HORIZONTAL);
+        }
+        frames_giga++;
+        if(frames_giga/5 >= 8)
+        {
+            frames_giga = 0;
+            gigaattack = false;
+            mPosX_bf = 0;
+            mPosY_bf = 0;
+            mDirection_bf = 0;
+        }
+    }
     if(doublejump)
     {
         SDL_Rect rect = {frames_jumpdouble/7 * 140, 0, 140, 50};
@@ -680,24 +753,27 @@ void Character::render(SDL_Rect &camera, vector <Tile*> &tile)
     }
     if(frames_charge / 5 == 20 || frames_charge / 5 == 18)
     {
-        SDL_Rect currentFrame = {frames/heso * CHAR_WIDTH, row * CHAR_HEIGHT, CHAR_WIDTH, CHAR_HEIGHT};
-        charSprite.render(mPosX - camera.x, mPosY - camera.y, &currentFrame);
-        if(isCharging)
+        if(!gigaattack)
         {
-            SDL_Rect rect = {frames_charge/5 * 120, 0, 120, 120};
-            SDL_Point pos = {mPosX - 30, mPosY -30};
-            chargingSprite.render(pos.x - camera.x, pos.y - camera.y, &rect);
-            frames_charge++;
-            if(frames_charge/5 >= 21)
+            SDL_Rect currentFrame = {frames/heso * CHAR_WIDTH, row * CHAR_HEIGHT, CHAR_WIDTH, CHAR_HEIGHT};
+            charSprite.render(mPosX - camera.x, mPosY - camera.y, &currentFrame);
+            if(isCharging)
             {
-                frames_charge = 5*19;
+                SDL_Rect rect = {frames_charge/5 * 120, 0, 120, 120};
+                SDL_Point pos = {mPosX - 30, mPosY -30};
+                chargingSprite.render(pos.x - camera.x, pos.y - camera.y, &rect);
+                frames_charge++;
+                if(frames_charge/5 >= 21)
+                {
+                    frames_charge = 5*19;
+                }
             }
         }
     }
     else
     {
 
-        if(isCharging)
+        if(isCharging && !gigaattack)
         {
             SDL_Rect rect = {frames_charge/5 * 120, 0, 120, 120};
             SDL_Point pos = {mPosX -30, mPosY -30};
@@ -708,8 +784,11 @@ void Character::render(SDL_Rect &camera, vector <Tile*> &tile)
                 frames_charge = 5*19;
             }
         }
-        SDL_Rect currentFrame = {frames/heso * CHAR_WIDTH, row * CHAR_HEIGHT, CHAR_WIDTH, CHAR_HEIGHT};
-        charSprite.render(mPosX - camera.x, mPosY - camera.y, &currentFrame);
+        if(!gigaattack)
+        {
+            SDL_Rect currentFrame = {frames/heso * CHAR_WIDTH, row * CHAR_HEIGHT, CHAR_WIDTH, CHAR_HEIGHT};
+            charSprite.render(mPosX - camera.x, mPosY - camera.y, &currentFrame);
+        }
     }
     for(deque<XBuster*>::iterator bi = buster.begin(); bi != buster.end(); bi++)
     {
@@ -840,4 +919,48 @@ int Character::getDirection()
 void Character::setNormalHurt(bool nh)
 {
     normal_hurt = nh;
+}
+bool Character::getGiga()
+{
+    return gigaattack;
+}
+void Character::setGigaAttackSprite(Texture &sprite)
+{
+    gigaAttackSprite = sprite;
+}
+void Character::setMana(int m)
+{
+    mana = m;
+}
+int Character::getMana()
+{
+    return mana;
+}
+void Character::loadJumpChunk(Mix_Chunk* jc)
+{
+    jumpChunk = jc;
+}
+void Character::loadDashChunk(Mix_Chunk* dc)
+{
+    dashChunk = dc;
+}
+void Character::loadNormalAttackChunk(Mix_Chunk* nac)
+{
+    normal_attackChunk = nac;
+}
+void Character::loadJumpClimbChunk(Mix_Chunk* jcc)
+{
+    jumpClimbChunk = jcc;
+}
+void Character::loadGigaChunk(Mix_Chunk* gc)
+{
+    gigaChunk = gc;
+}
+void Character::loadHurtChunk(Mix_Chunk* hc)
+{
+    hurtChunk = hc;
+}
+void Character::loadChargingChunk(Mix_Chunk* cc)
+{
+    chargingChunk = cc;
 }

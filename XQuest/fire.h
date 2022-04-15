@@ -16,6 +16,7 @@ class Fire
     int mType;
     int frames;
     int heso;
+    bool isDead;
     SDL_Rect mBoxx;
 public:
     static Texture fireSprite;
@@ -25,5 +26,7 @@ public:
     void nextFrame();
     SDL_Rect getBox();
     void setDefault();
+    bool getDead();
+    void setDead(bool d);
 };
 #endif // FIRE__H

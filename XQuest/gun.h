@@ -15,6 +15,7 @@ class Gun
     Bullet *mBullet;
     int mType;
     int mHealth;
+    Uint32 time2;
     Uint32 time;
 public:
     static Texture gunSprite;

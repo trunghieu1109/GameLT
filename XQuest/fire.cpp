@@ -5,6 +5,7 @@
 #include "constant_value.h"
 #include "sdl_utils.h"
 #include "fire.h"
+#include "collision.h"
 using namespace std;
 
 Fire::Fire(int x, int y, int type)
@@ -13,6 +14,7 @@ Fire::Fire(int x, int y, int type)
     mType = type;
     frames = 0;
     heso = 5;
+    isDead = false;
     if(type == 0)
     {
         mCollisionBox[0] = {x, y + FIRE_HEIGHT - 72, FIRE_WIDTH, 72};
@@ -51,9 +53,7 @@ Fire::Fire(int x, int y, int type)
     }
     if(type == 3)
     {
-        cout << x << ' ' << y << '\n';
         mCollisionBox[0] = {x - FIRE_HEIGHT + 72, y, 72, FIRE_WIDTH};
-        //cout << mCollisionBox[0].x << ' ' << mCollisionBox[0].y << ' ' << mCollisionBox[0].w << ' ' << mCollisionBox[0].h << '\n';
         mCollisionBox[1] = {x - FIRE_HEIGHT + 101, y, 101, FIRE_WIDTH};
         mCollisionBox[2] = {x - FIRE_HEIGHT + 119, y, 119, FIRE_WIDTH};
         mCollisionBox[3] = {x, y, FIRE_HEIGHT, FIRE_WIDTH};
@@ -90,7 +90,11 @@ void Fire::render(SDL_Rect &camera, SDL_Rect *pos)
     }
     fireSprite.render(box.x - camera.x,box.y - camera.y, &rect);
     frames ++;
-    if(frames / heso >= 9)frames = 0;
+    if(frames / heso >= 9)
+    {
+        frames = 0;
+        isDead = true;
+    }
 }
 void Fire::setSprite(Texture &sprite)
 {
@@ -108,4 +112,12 @@ SDL_Rect Fire::getBox()
 void Fire::setDefault()
 {
     frames = 0;
+}
+bool Fire::getDead()
+{
+    return isDead;
+}
+void Fire::setDead(bool d)
+{
+    isDead = d;
 }

@@ -39,8 +39,22 @@ Tile::Tile(int x, int y, int type)
     }
     if(mType == 45)
     {
-        mCollisionBox.y = mBox.y + 40;
-        mCollisionBox.h = TILE_HEIGHT/2;
+        mCollisionBox.y = mBox.y + 42;
+        mCollisionBox.h = 38;
+    }
+    if(mType == 46)
+    {
+        mCollisionBox.y = mBox.y;
+        mCollisionBox.h = 38;
+    }
+    if(mType == 47)
+    {
+        mCollisionBox.w = 38;
+    }
+    if(mType == 48)
+    {
+        mCollisionBox.x = mBox.x + 42;
+        mCollisionBox.w = 38;
     }
     if(mType == 46)mCollisionBox.w = TILE_HEIGHT/2;
     if(mType == 47)mCollisionBox.w = TILE_HEIGHT/2;

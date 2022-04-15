@@ -8,21 +8,22 @@
 #include "portal.h"
 using namespace std;
 
-Portal::Portal(int x, int y)
+Portal::Portal(int x, int y, string &round)
 {
     mBox = {x, y, PORTAL_WIDTH, PORTAL_HEIGHT};
     frames = 0;
     row = 0;
     heso = 5;
+    nextRound = round;
 }
-void Portal::checkCollision(Character *crt)
+void Portal::checkCollision(Character *crt, int numOfDiamond)
 {
     SDL_Rect rect = crt->getBox();
 
     if(checkCollisionBox(mBox, crt->getBox()))
     {
         int poi = crt->getPoint();
-        if(poi == 94)crt->setWin(true);
+        if(poi >= 50)crt->setWin(true);
     }//cout << rect.x << ' ' << rect.y << ' ' << rect.w << ' ' << rect.h << '\n';
 
 }
@@ -44,4 +45,8 @@ void Portal::setPos(int x, int y)
 {
     mBox.x = x;
     mBox.y = y;
+}
+string Portal::getNewRound()
+{
+    return nextRound;
 }

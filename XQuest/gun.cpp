@@ -9,11 +9,12 @@ using namespace std;
 
 Gun::Gun(int pos, int type, int bulletType)
 {
-    mBox = {pos%16 * GUN_WIDTH, pos/16 * GUN_HEIGHT, GUN_WIDTH, GUN_HEIGHT};
+    mBox = {pos%64 * GUN_WIDTH, pos/64 * GUN_HEIGHT, GUN_WIDTH, GUN_HEIGHT};
     mType = type;
     mBullet = new Bullet(mBox.x, mBox.y + (GUN_HEIGHT - BULLET_HEIGHT)/2, bulletType);
     mHealth = 20;
     time = 0;
+    time2 = 0;
 }
 void Gun::setSprite(Texture &sprite)
 {
@@ -26,15 +27,12 @@ void Gun::render(SDL_Rect &camera, vector <Tile*> &tile)
         mBox = {-500, -500, 0 ,0};
         mBullet = new Bullet(mBox.x, mBox.y + (GUN_HEIGHT - BULLET_HEIGHT)/2, 0);
     }
+    mBullet->render(camera, tile, mBox);
     if(checkCollisionBox(mBox, camera))
     {
-        mBullet->render(camera, tile);
+
         SDL_Rect rect = {mType * GUN_WIDTH, 0, GUN_WIDTH, GUN_HEIGHT};
         gunSprite.render(mBox.x - camera.x, mBox.y - camera.y, &rect);
-    }
-    else
-    {
-        mBullet->setDefault();
     }
 }
 Bullet* Gun::getBullet()

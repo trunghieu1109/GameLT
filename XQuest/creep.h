@@ -25,6 +25,7 @@ class Creep
     Uint32 time;
 public:
     static Texture creepSprite;
+    static Mix_Chunk* creepShotChunk;
     Creep(int pos, int type);
     void Move(SDL_Point &point, vector <Tile*> &tile, SDL_Rect &camera);
     void render(SDL_Rect &camera, vector <Tile*> &tile);
@@ -38,6 +39,7 @@ public:
     void setTime2(Uint32 t);
     SDL_Rect getBox();
     SDL_Rect getBox(int index);
+    void loadCreepShotChunk(Mix_Chunk* csc);
 };
 
 #endif // CREEP__H

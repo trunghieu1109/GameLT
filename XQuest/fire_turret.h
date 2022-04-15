@@ -15,6 +15,7 @@ class FireTurret
     SDL_Rect mBox;
     Fire *mFire;
     int mType;
+    Uint32 mTime;
 public:
     static Texture fireTurretSprite;
     FireTurret(int pos, int type);

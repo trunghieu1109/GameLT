@@ -13,15 +13,18 @@ class Diamond
     bool isShown;
     int frames, row;
     int heso;
+    int mType;
 public:
     static Texture diamondSprite;
-    Diamond(int x, int y);
+    static Mix_Chunk* diamondCollisionChunk;
+    Diamond(int x, int y, int type);
     int getX();
     int getY();
     void checkCollision(Character *crt);
     void render(SDL_Rect &camera);
     void setSprite(Texture &sprite);
     bool getShown();
+    void loadDiamondCollisionChunk(Mix_Chunk* dcc);
 };
 
 #endif // DIAMOND__H

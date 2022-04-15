@@ -65,6 +65,7 @@ bool Texture::loadTextureFromText( string textureText, SDL_Color textColor )
    // cout << textureText << '\n';
     if( textSurface == NULL )
     {
+        //cout << textColor.r << ' ' << textColor.g << ' ' << textColor.b << '\n';
         logTTFError(cout, "Load text", true);
     }
     else

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include "sdl_utils.h"
 #include "constant_value.h"
 #include "texture.h"
@@ -30,7 +31,7 @@ class Character
     int jumpCount;
     int frames;
     int down_vel, up_vel;
-    bool up, stay, dash, run, climb, fall, left, right, isDashed, shortjump, doublejump, hurt, unhurtable, normal_hurt;
+    bool up, stay, dash, run, climb, fall, left, right, isDashed, shortjump, doublejump, hurt, unhurtable, normal_hurt, gigaattack;
     bool win;
     bool shot, isCharging;
     Uint32 chargeTime;
@@ -39,11 +40,22 @@ class Character
     Texture charSprite;
     Texture chargingSprite;
     Texture jumpDouble;
+    Texture gigaAttackSprite;
     deque < XBuster* > buster;
     int frames_jumpdouble;
+    int frames_giga;
     int cnt;
+    Uint32 giga_time;
+    int mana;
     Uint32 time_normal_hurt;
 public:
+    static Mix_Chunk* dashChunk;
+    static Mix_Chunk* normal_attackChunk;
+    static Mix_Chunk* jumpChunk;
+    static Mix_Chunk* jumpClimbChunk;
+    static Mix_Chunk* hurtChunk;
+    static Mix_Chunk* gigaChunk;
+    static Mix_Chunk* chargingChunk;
     Character();
     void handleEvent(SDL_Event* e, vector <Tile*> &tile);
     void move(vector <Tile*> &tile);
@@ -70,10 +82,21 @@ public:
     int checkXBusterCollision(SDL_Rect &rect,vector<DoorButton*> door);
     void setCharging(Texture &sprite);
     void setDoubleJumpSprite(Texture &sprite);
+    void setGigaAttackSprite(Texture &sprite);
     bool getHurt();
     void setHurt(bool h);
     void setNormalHurt(bool nh);
     int getDirection();
+    bool getGiga();
+    void setMana(int m);
+    void loadJumpChunk(Mix_Chunk* jc);
+    void loadDashChunk(Mix_Chunk* dc);
+    void loadNormalAttackChunk(Mix_Chunk* nac);
+    void loadJumpClimbChunk(Mix_Chunk* jcc);
+    void loadGigaChunk(Mix_Chunk* gc);
+    void loadHurtChunk(Mix_Chunk* hc);
+    void loadChargingChunk(Mix_Chunk* cc);
+    int getMana();
 };
 
 #endif // CHARACTER__H

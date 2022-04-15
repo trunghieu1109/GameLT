@@ -208,11 +208,13 @@ void Creep::shot(SDL_Point &point)
             double len = sqrt(a*a + b*b);
             if(len == 0.d)
             {
+                Mix_PlayChannel(-1, creepShotChunk, 0);
                 cBullet[i] = new CreepBullet(pt2.x, pt2.y, 0, 0, 1);
                 return;
             }
             a /= len;
             b /= len;
+            Mix_PlayChannel(-1, creepShotChunk, 0);
             cBullet[i] = new CreepBullet(pt2.x, pt2.y, 0, a, b);
             return;
         }
@@ -251,4 +253,8 @@ SDL_Rect Creep::getBox(int index)
     SDL_Rect empty = {0, 0, 0, 0};
     if(cBullet[index] == nullptr)return empty;
     return (cBullet[index]->getBox());
+}
+void Creep::loadCreepShotChunk(Mix_Chunk* csc)
+{
+    creepShotChunk = csc;
 }

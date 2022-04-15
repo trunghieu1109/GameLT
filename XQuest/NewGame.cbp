@@ -32,6 +32,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Menu.cpp" />
 		<Unit filename="boss.cpp" />
 		<Unit filename="boss.h" />
 		<Unit filename="bullet.cpp" />
@@ -57,6 +58,10 @@
 		<Unit filename="fire_ball.h" />
 		<Unit filename="fire_turret.cpp" />
 		<Unit filename="fire_turret.h" />
+		<Unit filename="game.cpp" />
+		<Unit filename="game.h" />
+		<Unit filename="gamebutton.cpp" />
+		<Unit filename="gamebutton.h" />
 		<Unit filename="gun.cpp" />
 		<Unit filename="gun.h" />
 		<Unit filename="lazergun.cpp" />
@@ -64,8 +69,15 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="map.cpp" />
 		<Unit filename="map.h" />
+		<Unit filename="memu.h" />
+		<Unit filename="menu.h" />
+		<Unit filename="object.h" />
 		<Unit filename="portal.cpp" />
 		<Unit filename="portal.h" />
+		<Unit filename="robot1.cpp" />
+		<Unit filename="robot1.h" />
+		<Unit filename="saw.cpp" />
+		<Unit filename="saw.h" />
 		<Unit filename="sdl_utils.cpp" />
 		<Unit filename="sdl_utils.h" />
 		<Unit filename="texture.cpp" />

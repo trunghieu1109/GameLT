@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "sdl_utils.h"
 using namespace std;
 
@@ -38,6 +39,15 @@ void logTTFError(ostream &os, const string &msg, bool fatal)
         exit(1);
     }
 }
+void logMIXError(ostream &os, const string &msg, bool fatal)
+{
+    os << msg << " Error: " << Mix_GetError() << '\n';
+    if(fatal)
+    {
+        Mix_Quit();
+        exit(1);
+    }
+}
 void initSDL()
 {
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0)logSDLError(cout, "Init SDL", true);
@@ -46,6 +56,7 @@ void initSDL()
     imgflags = IMG_INIT_PNG;
     if(!(IMG_Init(imgflags) && imgflags))logIMGError(cout, "Init PNG", true);
     if(TTF_Init() != 0)logTTFError(cout, "Init TTF", true);
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)logMIXError(cout, "Open Audio", true);
 }
 void quitSDL()
 {

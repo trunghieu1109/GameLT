@@ -25,7 +25,7 @@ void FireBall::render(SDL_Rect &camera, SDL_Point &point, vector <Tile*> &tile)
     double x = mCollisionBox.x - mX_bf;
     double y = mCollisionBox.y - mY_bf;
     double l = sqrt(x*x + y*y);
-    if(l >= len)
+    if(l >= len + 300)
     {
         isDead = true;
         return;
@@ -34,7 +34,7 @@ void FireBall::render(SDL_Rect &camera, SDL_Point &point, vector <Tile*> &tile)
     fireBallSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &rect1);
     mCollisionBox.x += 5*vX;
     mCollisionBox.y += 5*vY;
-    if(sqrt((mCollisionBox.x - mX_bf)*(mCollisionBox.x - mX_bf) + (mCollisionBox.y - mY_bf)*(mCollisionBox.y - mY_bf)) > 1000)
+    if(sqrt((mCollisionBox.x - mX_bf)*(mCollisionBox.x - mX_bf) + (mCollisionBox.y - mY_bf)*(mCollisionBox.y - mY_bf)) > 2000)
     {
         isDead = true;
     }

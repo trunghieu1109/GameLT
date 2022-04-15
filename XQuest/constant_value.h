@@ -2,7 +2,7 @@
 #define CONSTANT_VALUE__H
 #include <iostream>
 #include <string>
-
+#include <SDL_mixer.h>
 using namespace std;
 
 const int LEVEL_HEIGHT = 3840;
