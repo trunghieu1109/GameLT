@@ -1,0 +1,14 @@
+currentMap
+tile
+gun
+thorn
+portal
+fireturret
+diamond
+dorrbutton
+lazergun
+creep
+saw
+magiccircle
+currentboss
+posarena
