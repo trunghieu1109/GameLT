@@ -37,6 +37,10 @@ class Character
     bool isFlying;
     double angle;
     bool shot, isCharging;
+    bool hasHealthStored;
+    int healthstored;
+    bool hasManaStored;
+    int manastored;
     Uint32 chargeTime;
     int heso;
     Uint32 hurt_time;
@@ -52,6 +56,8 @@ class Character
     int mana;
     Uint32 time_normal_hurt;
     bool winAll;
+    bool appearing;
+    int maxHealth;
 public:
     static Mix_Chunk* dashChunk;
     static Mix_Chunk* normal_attackChunk;
@@ -105,6 +111,18 @@ public:
     void setDefault();
     bool getWinAll();
     void setWinAll(bool b);
+    void setAppearing(bool a);
+    bool getAppearing();
+    bool getHasHealthStored();
+    void setHasHealthStored(bool h);
+    int getHealthStored();
+    void setHealthStored(int h);
+    bool getHasManaStored();
+    void setHasManaStored(bool h);
+    int getManaStored();
+    void setManaStored(int h);
+    int getMaxHealth();
+    void setMaxHealth(int h);
 };
 
 #endif // CHARACTER__H

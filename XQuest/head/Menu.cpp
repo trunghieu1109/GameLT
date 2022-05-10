@@ -13,6 +13,7 @@ Menu::Menu()
 }
 void Menu::render()
 {
+
     backGround.render(0, 0, NULL);
     if(!buttonGame.empty())
     {
@@ -29,9 +30,9 @@ string Menu::handleEvent(SDL_Event *e)
     {
         for(int i=0;i<buttonGame.size();i++)
         {
-            if(buttonGame[i]->EventHandle(e) != "a")
+            if(buttonGame[i]->handleEvent(e) != "a")
             {
-                return buttonGame[i]->EventHandle(e);
+                return buttonGame[i]->handleEvent(e);
             }
         }
     }

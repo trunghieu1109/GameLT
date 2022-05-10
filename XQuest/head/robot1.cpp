@@ -3,105 +3,607 @@
 #include "collision.h"
 #include <cmath>
 using namespace std;
-int cnt = 0;
-int cnt2 = 0;
-Robot1::Robot1(int pos)
+
+Robot1::Robot1(int posX, int posY)
 {
-    mCollisionBox = {pos % 64 * 80, pos / 64 * 80, 240, 160};
-    mCollisionBoxBullet = {mCollisionBox.x, mCollisionBox.y + 68, 60, 40};
-    mCollisionBoxCircleBullet = {mCollisionBox.x, mCollisionBox.y, 20, 20};
-    mCollisionBoxGatlingunBullet = {mCollisionBox.x, mCollisionBox.y, 45, 40};
+    mCollsionBox = {posX, posY, 240, 160};
     frames = 0;
-    frames_bullet = 0;
-    frames_circle_bullet = 0;
-    frames_lazer = 0;
+    frames_bullet1 = 0;
     row = 0;
-    mDirect = 0;
-    power = 0;
-    mX_bf = -1;
-    mY_bf = -1;
-    shot = false;
-    shoting = false;
-    shot2 = false;
-    shoting2 = false;
-    shot3 = false;
-    shoting3 = false;
-    attack = false;
-    attacking = false;
-    jumpOverHole = false;
-    dash_attack = false;
-    jumpWhenDash = false;
-    jump = false;
-    minY = mCollisionBox.y - 300;
-    mGoalDash = 0;
-    dashDirect = 1;
-    mTime2 = 0;
-    mTime = 0;
-    frames_explosion = 0;
-    isExplosion = false;
+    sX = posX;
+    sY = posY;
+    gX = -1;
+    gY = -1;
+    vX = 0;
+    vY = 0;
+    sX_bf = -1;
+    sY_bf = -1;
+    posBullet1X = -1;
+    posBullet1Y = -1;
+    attackType = -1;
+    mTime = SDL_GetTicks();
     mHealth = 450;
-    timeChangeStatus = 0;
-    status = 0;
-    jumpTime = 0;
-    lazerPos[0] = {80, 2560};
-    for(int i=1; i<18; i++)
-    {
-        lazerPos[i].x = lazerPos[i-1].x + 160;
-        lazerPos[i].y = lazerPos[i-1].y;
-    }
+    ready = false;
+    jump = false;
+    mDirection = -1;
+    mTimeBullet1 = SDL_GetTicks();
+    mTimeGatling = SDL_GetTicks();
+    mTimeChangeState = SDL_GetTicks();
+    X = 0, a = 0, Y = 0;
+    mDirection_attack = -1;
+    charging = 0;
+    frames_power = 0;
+    oddoreven = 0;
+    mAttackType_bf = -1;
+    attacking = false;
+    mTime2 = 0;
+    state = -1;
 }
-void Robot1::render(SDL_Rect &camera, vector <Tile*> &tile, SDL_Point &pt)
+void Robot1::render(SDL_Rect &camera, SDL_Point &pt)
 {
-    //cout << mCollisionBox.x << '\n';
-    int lenX = mCollisionBox.x + 120 - pt.x - 30;
-    int lenY = mCollisionBox.y + 80 - pt.y - 30;
-    double len = sqrt(lenX*lenX + lenY*lenY);
-    Attack(camera, tile, pt);
-    if(checkCollisionBox(camera, mCollisionBox))
+    //cout << gY << '\n';
+    if(mHealth <= 0)
+    {
+        sX = -1000;
+        sY = -1000;
+        mCollsionBox.x = sX;
+        mCollsionBox.y = sY;
+        return;
+    }
+    attack(pt);
+    if(checkCollisionBox(camera, mCollsionBox))
     {
         SDL_Rect r = {frames/5 * 240, row * 160, 240, 160};
-        if(row == 15)r.y = 14*160 + 200;
-        if(!attacking)
+        if(attackType == 4)
         {
-            if(lenX > 0)robotSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r, 0,NULL, SDL_FLIP_HORIZONTAL);
-            else robotSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r);
+            r.x = 240*7;
+        }
+        if(row != 15)
+        {
+            if(mDirection == 1)robotSprite.render(sX - camera.x, sY - camera.y, &r);
+            else robotSprite.render(sX - camera.x, sY - camera.y, &r, 0, nullptr, SDL_FLIP_HORIZONTAL);
         }
         else
         {
             r.h = 200;
-            if(lenX > 0)robotSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y - 40, &r, 0,NULL, SDL_FLIP_HORIZONTAL);
-            else robotSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y - 40, &r);
-        }
-    }
-    if(isExplosion)
-    {
-        if(checkCollisionBox(camera, mPosExplosion))
-        {
-            SDL_Rect r = {frames_explosion/5 * 80, 0, 80, 80};
-            explosionBulletSprite.render(mPosExplosion.x - camera.x, mPosExplosion.y - camera.y, &r);
-        }
-        frames_explosion++;
-        if(frames_explosion/5 >= 2)
-        {
-            frames_explosion = 0;
-            isExplosion = false;
+            if(mDirection == 1)robotSprite.render(sX - camera.x, sY - 40 - camera.y, &r);
+            else robotSprite.render(sX - camera.x, sY - 40 - camera.y, &r, 0, nullptr, SDL_FLIP_HORIZONTAL);
         }
     }
     frames++;
     if(frames/5 >= 8)
     {
-        frames = 0;;
-        if(row == 5)row = 0;
-        if(row == 4)row = 0;
-        if(row == 9)row = 0;
-        if(row == 14)
+        frames = 0;
+
+        if(attackType != 4)
         {
-            attack = false;
-            attacking = false;
-            row = 10;
-            mTime = SDL_GetTicks();
+            if(row <= 5)row = 0;
+            if(6 <= row && row <= 10)row = 6;
+            if(row > 10)
+            {
+                if(row != 13)
+                {
+                    if(row == 15)
+                    {
+                        charging |= (1<<attackType);
+                        mTime = SDL_GetTicks();
+                        vX = 0;
+                        vY = 0;
+                        gX = -1;
+                        gY = -1;
+                        attackType = -1;
+                    }
+                    row = 11;
+                }
+            }
         }
     }
+    if(jump)
+    {
+        if(row < 6)row = 3;
+        if(6 <= row && row <= 10)row = 10;
+        if(row > 10)row = 14;
+        int direction = (gY - sY);
+        direction /= abs(direction);
+        sY += direction*10;
+        if(sY == gY)
+        {
+            jump = false;
+            gY = -1;
+        }
+        mCollsionBox.y = sY;
+    }
+    if(posBullet1X != -1 && posBullet1Y != -1 && attackType == 0)
+    {
+        if(gX - sX < 0)posBullet1X -= 10;
+        else posBullet1X += 10;
+        SDL_Rect re = {posBullet1X, posBullet1Y, 60, 40};
+        if(checkCollisionBox(re, camera))
+        {
+            SDL_Rect rec = {(frames_bullet1/5) * 60, 0, 60, 40};
+            if(mDirection == 1)bullet2Sprite.render(posBullet1X - camera.x, posBullet1Y - camera.y, &rec);
+            else bullet2Sprite.render(posBullet1X - camera.x, posBullet1Y - camera.y, &rec, 0, nullptr, SDL_FLIP_HORIZONTAL);
+            frames_bullet1++;
+            if(frames_bullet1/5 >= 8)
+            {
+                frames_bullet1 = 0;
+            }
+        }
+        SDL_Rect ptr = {pt.x, pt.y, 60, 60};
+        if(SDL_GetTicks() - mTimeBullet1 > 1500.f)
+        {
+            charging |= (1<<attackType);
+            mTime = SDL_GetTicks();
+            frames = 0;
+            if(row <= 5)row = 0;
+            if(6 <= row && row <= 10)row = 6;
+            if(row > 10)row = 11;
+            attackType = -1;
+            posBullet1X = -1;
+            posBullet1Y = -1;
+            vX = 0;
+            vY = 0;
+            gX = -1;
+            gY = -1;
+        }
+    }
+    if(posBullet1X != -1 && posBullet1Y != -1 && attackType == 1)
+    {
+        //row = 4;
+        posBullet1X += vX;
+        posBullet1Y = ((posBullet1X - X)*(posBullet1X - X))/a + Y;
+        SDL_Rect re = {posBullet1X, posBullet1Y, 60, 40};
+        if(checkCollisionBox(re, camera))
+        {
+            SDL_Rect rec = {(frames_bullet1/5) * 40, 0, 40, 40};
+            if(mDirection == 1)bullet1Sprite.render(posBullet1X - camera.x, posBullet1Y - camera.y, &rec);
+            else bullet1Sprite.render(posBullet1X - camera.x, posBullet1Y - camera.y, &rec, 0, nullptr, SDL_FLIP_HORIZONTAL);
+            frames_bullet1++;
+            if(frames_bullet1/5 >= 8)
+            {
+                frames_bullet1 = 0;
+            }
+        }
+        SDL_Rect ptr = {pt.x, pt.y, 60, 60};
+        if(SDL_GetTicks() - mTimeBullet2 > 1500.f)
+        {
+            charging |= (1<<attackType);
+            mTime = SDL_GetTicks();
+            frames = 0;
+            if(row <= 5)row = 0;
+            if(6 <= row && row <= 10)row = 6;
+            if(row > 10)row = 11;
+            attackType = -1;
+            posBullet1X = -1;
+            posBullet1Y = -1;
+            vX = 0;
+            vY = 0;
+            gX = -1;
+            gY = -1;
+        }
+    }
+    if(posBullet1X != -1 && posBullet1Y != -1 && attackType == 2)
+    {
+        //row = 9;
+        if(gX - sX < 0)posBullet1X -= 10;
+        else posBullet1X += 10;
+        SDL_Rect re = {posBullet1X, posBullet1Y, 45, 40};
+        if(checkCollisionBox(re, camera))
+        {
+            SDL_Rect rec = {0, 0, 45, 40};
+            if(mDirection == 1)gatlingunBullet.render(posBullet1X - camera.x, posBullet1Y - camera.y, &rec);
+            else gatlingunBullet.render(posBullet1X - camera.x, posBullet1Y - camera.y, &rec, 0, nullptr, SDL_FLIP_HORIZONTAL);
+        }
+        SDL_Rect ptr = {pt.x, pt.y, 60, 60};
+        if(SDL_GetTicks() - mTimeGatling > 1500.f)
+        {
+            charging |= (1<<attackType);
+            mTime = SDL_GetTicks();
+            frames = 0;
+            if(row <= 5)row = 0;
+            if(6 <= row && row <= 10)row = 6;
+            if(row > 10)row = 11;
+            attackType = -1;
+            posBullet1X = -1;
+            posBullet1Y = -1;
+            vX = 0;
+            vY = 0;
+            gX = -1;
+            gY = -1;
+        }
+    }
+    if(attackType == 3)
+    {
+        SDL_Rect re = {sX, sY, 240, 160};
+        SDL_Rect ptr = {gX, sY, 60, 60};
+        if(vX != 0)
+        {
+            if(checkCollisionBox(re, ptr))
+            {
+                row = 15;
+                vX = 0;
+                frames = 0;
+            }
+            else
+            {
+                sX += vX;
+                mCollsionBox.x = sX;
+            }
+        }
+    }
+    if(attackType == 4)
+    {
+        if(!ready)
+        {
+            if(abs(sY - sY_bf) < 80)
+            {
+                sY -= 2;
+            }
+            else
+            {
+                ready = true;
+            }
+            mCollsionBox.y = sY;
+            return;
+        }
+        SDL_Rect r = {frames_power/8 * 80, 0, 80, 1200};
+        int st;
+        if(oddoreven == 0)
+        {
+            st = 80;
+        }
+        else
+        {
+            st = 160;
+        }
+        for(int i=0; i<18; i++)
+        {
+            SDL_Rect re = {80 + i*160, 2560, 80, 1200};
+            if(checkCollisionBox(re, camera))
+            {
+                superLazerSprite.render(st + i*160 - camera.x, 2560 - camera.y, &r);
+            }
+        }
+        frames_power++;
+        if(frames_power/8 >= 4)
+        {
+            frames_power = 0;
+            if(oddoreven == 0)oddoreven = 1;
+            else
+            {
+                //charging |= (1<<attackType);
+                mTime = SDL_GetTicks();
+                attackType = -1;
+                charging = 0;
+                oddoreven = 0;
+                ready = false;
+                sX = sX_bf;
+                sY = sY_bf;
+                mCollsionBox.x = sX;
+                mCollsionBox.y = sY;
+                sX_bf = -1;
+                sY_bf = -1;
+            }
+        }
+    }
+}
+
+void Robot1::attack(SDL_Point &pt)
+{
+
+    //cout << attackType << ' ' << gX << ' ' << gY << ' ' << vX << ' ' << vY << '\n';
+    if(charging == 15)
+    {
+        if(sX_bf == -1 && sY_bf == -1)
+        {
+            attackType = 4;
+            sX_bf = sX;
+            sY_bf = sY;
+            if(row < 6)row = 3;
+            if(6 <= row && row <= 10)row = 10;
+            if(row > 10)row = 14;
+        }
+        return;
+    }
+    int lenX = {pt.x + 30 - sX - 120};
+    int lenY = {pt.y + 30 - sY - 80};
+    if(attackType != -1)
+    {
+        if(lenX < 0)mDirection = -1;
+        else mDirection = 1;
+    }
+    if(attackType == -1)
+    {
+        if(SDL_GetTicks() - mTimeChangeState >= 15000.f)
+        {
+            state = rand()%3;
+            while(state == state_bf)
+            {
+                state = rand()%3;
+            }
+            state_bf = state;
+            mTimeChangeState = SDL_GetTicks();
+        }
+    }
+    if(SDL_GetTicks() - mTime > 1000.f)
+    {
+        if(attackType == -1)
+        {
+            if(state == 0)
+            {
+                attackType = rand()%2;
+                while(attackType == mAttackType_bf)
+                {
+                    attackType = rand()%2;
+                }
+            }
+            if(state == 1)attackType = 2;
+            if(state == 2)attackType = 3;
+            mAttackType_bf = attackType;
+            attacking = false;
+            if(charging == 15)
+            {
+                attackType = 4;
+            }
+            if(attackType == 0)
+            {
+                row = 5;
+                frames = 0;
+            }
+            if(attackType == 1)
+            {
+                row = 4;
+                frames = 0;
+            }
+            if(attackType == 2)
+            {
+                row = 9;
+                frames = 0;
+            }
+            if(attackType == 3)
+            {
+                row = 13;
+                frames = 0;
+            }
+        }
+    }
+    if(attackType == -1)
+    {
+        int x = (pt.y + 60 < 2960)*1 + (pt.y >= 2900)*(pt.y + 60 < 3440)*2 + (pt.y >= 3380)*3;
+        int y = (mCollsionBox.y + 160 < 2960)*1 + (mCollsionBox.y >= 2800)*(mCollsionBox.y + 160 < 3440)*2 + (mCollsionBox.y >= 3280)*3;
+        if(x != y)
+        {
+            jump = true;
+            gY = (x == 1)*2720 + (x == 2)*3200 + (x == 3)*3600;
+        }
+    }
+    if(jump)return;
+    if(attackType == 0 || attackType == 1 || attackType == 2)
+    {
+        if(abs(lenX) > 300 && posBullet1X == -1 && posBullet1Y == -1 && !attacking)
+        {
+            if(row < 6)row = 1;
+            if(6 <= row && row <= 10)row = 7;
+            if(row > 10)row = 12;
+            if(lenX < 0)
+            {
+                sX -= 2;
+            }
+            else
+            {
+                sX += 2;
+            }
+            mCollsionBox.x = sX;
+        }
+        else
+        {
+            attacking = true;
+            if(attackType == 0)
+            {
+                if(row != 5 && posBullet1X == -1 && posBullet1Y == -1)
+                {
+                    frames = 0;
+                    row = 5;
+                }
+                if(frames/5 == 4 && posBullet1X == -1 && posBullet1Y == -1)
+                {
+                    Mix_PlayChannel(-1, robotShot, 0);
+                    mTimeBullet1 = SDL_GetTicks();
+                    if(lenX < 0)
+                    {
+                        posBullet1X = sX;
+                        posBullet1Y = sY + 65;
+                    }
+                    else
+                    {
+                        posBullet1X = sX + 180;
+                        posBullet1Y = sY + 65;
+                    }
+                    gX = pt.x;
+                }
+            }
+            else
+            {
+                if(attackType == 1)
+                {
+                    if(row != 4 && posBullet1X == -1 && posBullet1Y == -1)
+                    {
+                        row = 4;
+                        frames = 0;
+                    }
+                    if(frames/5 == 4 && posBullet1X == -1 && posBullet1Y == -1)
+                    {
+                        Mix_PlayChannel(-1, robotShot, 0);
+                        mTimeBullet2 = SDL_GetTicks();
+                        gX = pt.x;
+                        gY = pt.y;
+                        if(gX - sX < 0)
+                        {
+                            posBullet1X = mCollsionBox.x + 39;
+                            posBullet1Y = mCollsionBox.y + 34;
+                        }
+                        else
+                        {
+                            posBullet1X = mCollsionBox.x + 190;
+                            posBullet1Y = mCollsionBox.y + 34;
+                        }
+                        Y = min(sY - 200, gY + 30 - 200);
+                        double stX = gX  + 30;
+                        double stY = gY + 30 - Y;
+                        double edX = posBullet1X;
+                        double edY = posBullet1Y - Y;
+                        double A = stY - edY;
+                        double B = -2*(edX*stY - stX*edY);
+                        double C = (stX*stX)*(stY - edY) + stY*(edX*edX - stX*stX);
+                        double delta = B*B - 4*A*C;
+                        delta = sqrt(delta);
+                        X = (-B - delta)/(2*A);
+                        if(stX > X || X > edX)
+                        {
+                            X = (-B + delta)/(2*A);
+                        }
+                        a = ((2*X - stX - edX)*(edX - stX))/(stY - edY);
+                        vX = (stX - edX)/28;
+                        mTimeBullet2 = SDL_GetTicks();
+                    }
+                }
+                else
+                {
+                    if(attackType == 2)
+                    {
+                        if(row != 9 && posBullet1X == -1 && posBullet1Y == -1)
+                        {
+                            row = 9;
+                            frames = 0;
+                        }
+                        if(frames/5 >= 4 && posBullet1X == -1 && posBullet1Y == -1)
+                        {
+                            Mix_PlayChannel(-1, robotGatlingShot, 0);
+                            mTimeGatling = SDL_GetTicks();
+                            gX = pt.x;
+                            if(gX - sX < 0)
+                            {
+                                posBullet1X = sX + 40;
+                                posBullet1Y = sY + 75;
+                            }
+                            else
+                            {
+                                posBullet1X = sX + 140;
+                                posBullet1Y = sY + 75;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(attackType == 3)
+    {
+        attacking = true;
+        if(gX == -1)
+        {
+            gX = pt.x;
+            vX = (gX - sX)/30;
+            frames = 0;
+        }
+    }
+}
+int Robot1::checkCollision(SDL_Point &pt)
+{
+    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    if(checkCollisionBox(r, mCollsionBox))
+    {
+        return 20;
+    }
+    if(posBullet1X != -1 && posBullet1Y != -1 && attackType == 0)
+    {
+        SDL_Rect re = {posBullet1X, posBullet1Y, 60, 40};
+        if(checkCollisionBox(r, re))
+        {
+            charging |= (1<<attackType);
+            mTime = SDL_GetTicks();
+            frames = 0;
+            if(row <= 5)row = 0;
+            if(6 <= row && row <= 10)row = 6;
+            if(row > 10)row = 11;
+            attackType = -1;
+            posBullet1X = -1;
+            posBullet1Y = -1;
+            vX = 0;
+            vY = 0;
+            gX = -1;
+            gY = -1;
+            return 10;
+        }
+    }
+    if(posBullet1X != -1 && posBullet1Y != -1 && attackType == 1)
+    {
+        SDL_Rect re = {posBullet1X, posBullet1Y, 40, 40};
+        if(checkCollisionBox(r, re))
+        {
+            charging |= (1<<attackType);
+            mTime = SDL_GetTicks();
+            frames = 0;
+            if(row <= 5)row = 0;
+            if(6 <= row && row <= 10)row = 6;
+            if(row > 10)row = 11;
+            attackType = -1;
+            posBullet1X = -1;
+            posBullet1Y = -1;
+            vX = 0;
+            vY = 0;
+            gX = -1;
+            gY = -1;
+            X = 0, a = 0, Y = 0;
+            return 10;
+        }
+    }
+    if(posBullet1X != -1 && posBullet1Y != -1 && attackType == 2)
+    {
+        SDL_Rect re = {posBullet1X, posBullet1Y, 45, 40};
+        if(checkCollisionBox(r, re))
+        {
+            charging |= (1<<attackType);
+            mTime = SDL_GetTicks();
+            frames = 0;
+            if(row <= 5)row = 0;
+            if(6 <= row && row <= 10)row = 6;
+            if(row > 10)row = 11;
+            attackType = -1;
+            posBullet1X = -1;
+            posBullet1Y = -1;
+            vX = 0;
+            vY = 0;
+            gX = -1;
+            gY = -1;
+            return 10;
+        }
+    }
+    if(attackType == 3)
+    {
+        SDL_Rect r = {pt.x, pt.y, 60, 60};
+        SDL_Rect re = {sX, sY + 40*(row == 15), 240, 160 + 40*(row == 15)};
+        if(checkCollisionBox(r, re))
+        {
+            return 15;
+        }
+    }
+    if(attackType == 4)
+    {
+        int st = 0;
+        if(!oddoreven)st = 80;
+        else
+        {
+            st = 160;
+        }
+        for(int i=0; i<18; i++)
+        {
+            SDL_Rect re = {st + i*160, 2560, 80, 1200};
+            if(checkCollisionBox(r, re))
+                return 20;
+        }
+    }
+    return 0;
 }
 void Robot1::setSprite(Texture &sprite)
 {
@@ -122,52 +624,13 @@ void Robot1::setExplosionBullet(Texture &sprite)
 void Robot1::setHealth(int h)
 {
     mHealth = h;
+    // cout << h << '\n';
 }
 int Robot1::getHealth()
 {
     return mHealth;
 }
-int Robot1::getAttackType()
-{
-    return attacktype;
-}
-SDL_Rect Robot1::getBullet()
-{
-    return mCollisionBoxBullet;
-}
-SDL_Rect Robot1::getCircleBullet()
-{
-    return mCollisionBoxCircleBullet;
-}
-SDL_Rect Robot1::getGatlingunBullet()
-{
-    return mCollisionBoxGatlingunBullet;
-}
-SDL_Rect Robot1::getLazerBox(int i)
-{
-    SDL_Rect r = {lazerPos[i].x, lazerPos[i].y, 80, 1200};
-    return r;
-}
-int Robot1::getPower()
-{
-    return power;
-}
-SDL_Rect Robot1::getBox()
-{
-    return mCollisionBox;
-}
-Uint32 Robot1::getTime()
-{
-    return mTime3;
-}
-void Robot1::setTime(Uint32 time)
-{
-    mTime3 = time;
-}
-void Robot1::setDefend(bool d)
-{
-    defend = d;
-}
+
 void Robot1::setGatlingunBullet(Texture &sprite)
 {
     gatlingunBullet = sprite;
@@ -176,831 +639,47 @@ void Robot1::setSuperLazer(Texture &sprite)
 {
     superLazerSprite = sprite;
 }
-SDL_Rect Robot1::getAttack()
+void Robot1::setShotChunk(Mix_Chunk* chunk)
 {
-    if(frames/5 <= 3)
-    {
-        mCollisionBoxAttack.x = mCollisionBox.x + 40;
-        mCollisionBoxAttack.y = mCollisionBox.y + 30;
-        mCollisionBoxAttack.w = 165;
-        mCollisionBoxAttack.h = 200;
-    }
-    else
-    {
-        mCollisionBoxAttack.y = mCollisionBox.y + 5;
-        mCollisionBoxAttack.x = mCollisionBox.x;
-        mCollisionBoxAttack.w = 240;
-        mCollisionBoxAttack.y = 155;
-    }
-    return mCollisionBoxAttack;
+    robotShot = chunk;
 }
-void Robot1::Attack(SDL_Rect &camera, vector <Tile*> &tile, SDL_Point &pt)
+void Robot1::setGatlingChunk(Mix_Chunk* chunk)
 {
-    int lenX = mCollisionBox.x + 120 - pt.x - 30;
-    int lenY = mCollisionBox.y + 80 - pt.y - 30;
-    double len = sqrt(lenX*lenX + lenY*lenY);
-    if(power == 1)
-    {
-        frames = 5*5;
-        if(status == 0)row = 3;
-        if(status == 1)row = 15;
-        if(status == 2)row = 13;
-        if(mDirect != 0)
-        {
-            if(mDirect < 0)
-            {
-                mCollisionBox.x -= 2;
-                mCollisionBox.y -= 2;
-            }
-            else
-            {
-                mCollisionBox.y -= 2;
-                mCollisionBox.x += 2;
-            }
-            if(abs(mCollisionBox.x - mX_bf) == 80 && abs(mCollisionBox.y - mY_bf) == 80)
-            {
-                mDirect = 0;
-            }
-            return;
-        }
-        for(int i=0; i<18; i++)
-        {
-            SDL_Rect re = {frames_lazer/12 * 80, 0, 80, 1200};
-            superLazerSprite.render(lazerPos[i].x - camera.x, lazerPos[i].y - camera.y, &re);
-        }
-        frames_lazer++;
-        if(frames_lazer/12 >= 4)
-        {
-            frames_lazer = 0;
-            if(cnt2 == 0)
-            {
-                for(int i=0; i<18; i++)
-                {
-                    lazerPos[i].x += 80;
-                }
-                cnt2++;
-            }
-            else
-            {
-                for(int i=0; i<18; i++)
-                {
-                    lazerPos[i].x -= 80;
-                }
-                cnt2++;
-                cnt2%=2;
-                power = 0;
-                frames = 0;
-                mCollisionBox.x = mX_bf;
-                mCollisionBox.y = mY_bf;
-            }
-        }
-        return;
-    }
-    if(!shot && !shot2 && !shot3 && !attack && !shoting && !shoting2 && !shoting3 && !attacking && SDL_GetTicks() - timeChangeStatus > 15000.f)
-    {
-        cnt |= (1<<status);
-        if(cnt == 7)
-        {
-            power = 1;
-            mX_bf = mCollisionBox.x;
-            mY_bf = mCollisionBox.y;
-            timeChangeStatus = 0;
-            cnt = 0;
-            if(lenX > 0)mDirect = -1;
-            else mDirect = 1;
-        }
-        else
-        {
-            if(status == 0)
-            {
-                int x = rand()%2;
-                if(x == 0)status = 1;
-                else status = 2;
-            }
-            else
-            {
-                if(status == 1)
-                {
-                    int x = rand()%2;
-                    if(x == 0)status = 2;
-                    else status = 0;
-                }
-                else
-                {
-                    if(status == 2)
-                    {
-                        int x = rand()%2;
-                        if(x == 0)status = 1;
-                        else status = 0;
-                    }
-                }
-            }
-            timeChangeStatus = SDL_GetTicks();
-        }
-    }
-    if(!jump && !shot && !shot2 && !shot3 && !attack && !shoting && !shoting2 && !shoting3 && !attacking && SDL_GetTicks() - jumpTime >= 1000.f)
-    {
-        if((mCollisionBox.x >= 480 && mCollisionBox.x + 240 <= 960) || (mCollisionBox.x >= 1280 && mCollisionBox.x + 240 <= 1760) || (mCollisionBox.x >= 2080 && mCollisionBox.x + 240 <= 2480))
-        {
-            mGoalX = mCollisionBox.x;
-        }
-        else
-        {
-            if(lenX > 0)
-            {
-                if(mCollisionBox.x <= 480)
-                {
-                    mGoalX = 480;
-                }
-                if(mCollisionBox.x >= 960 && mCollisionBox.x <= 1280)
-                {
-                    mGoalX = 720;
-                }
-                if(mCollisionBox.x >= 1760 && mCollisionBox.x<= 2080)
-                {
-                    mGoalX = 1520;
-                }
-                if(mCollisionBox.x >= 2480)
-                {
-                    mGoalX = 2320;
-                }
-            }
-            else
-            {
-                if(mCollisionBox.x + 240 <= 480)
-                {
-                    mGoalX = 480;
-                }
-                if(mCollisionBox.x >= 960 && mCollisionBox.x <= 1280)
-                {
-                    mGoalX = 1280;
-                }
-                if(mCollisionBox.x >= 1760 && mCollisionBox.x  + 240<= 2080)
-                {
-                    mGoalX = 2080;
-                }
-                if(mCollisionBox.x >= 2480)
-                {
-                    mGoalX = 2320;
-                }
-            }
-        }
-        if(pt.y + 60 <= 2960 && mCollisionBox.y >= 2960)
-        {
-            mGoalY = 2800;
-            if(!shoting && !shoting2 && !shoting3 && !attacking)
-            {
-                if(mGoalY != mCollisionBox.y)jump = true;
-                else jump = false;
-            }
-        }
-        else
-        {
-
-            if(pt.y + 60 <= 3360 && pt.y >= 3040 && (mCollisionBox.y <= 2960 || mCollisionBox.y >= 3360))
-            {
-                mGoalY = 3200;
-                if(!shoting && !shoting2 && !shoting3 && !attacking)
-                {
-                    if(mGoalY != mCollisionBox.y)jump = true;
-                    else jump = false;
-                }
-            }
-            else
-            {
-                if(pt.y >= 3440)
-                {
-                    if(mCollisionBox.y <= 3440)
-                    {
-                        mGoalY = 3600;
-                        if(!shoting && !shoting2 && !shoting3 && !attacking)
-                        {
-                            if(mGoalY != mCollisionBox.y)jump = true;
-                            else jump = false;
-                        }
-                    }
-                }
-            }
-        }
-        if(mGoalY > mCollisionBox.y)mGoalX = mCollisionBox.x;
-        if(mCollisionBox.y <= 3360 && ((mCollisionBox.y >= 3040 && pt.y >= 3040) || (mCollisionBox.y + 160 <= 2960 && pt.y + 60 <= 2960)))
-        {
-            if(lenX > 0)
-            {
-                if((mCollisionBox.x <= 1280 && mCollisionBox.x >= 1200) || (mCollisionBox.x <= 2080 && mCollisionBox.x >= 2000))
-                {
-                    jump = true;
-                    jumpOverHole = true;
-                    direct = -1;
-                    if(mCollisionBox.x <= 1280 && mCollisionBox.x >= 1200)
-                    {
-                        mGY = 3120;
-                        if(mCollisionBox.y + 160 <= 2960)mGY = 2720;
-                        mGX = 1040 + (mCollisionBox.x - 1280);
-                        aOverHole = (double)1/720;
-                    }
-                    else
-                    {
-                        mGY = 3120;
-                        if(mCollisionBox.y + 160 <= 2960)mGY = 2720;
-                        mGX = 1840 + (mCollisionBox.x - 2080);
-                        aOverHole = (double)1/720;
-                    }
-                }
-            }
-            else
-            {
-                if((mCollisionBox.x >= 800 && mCollisionBox.x <= 960)|| (mCollisionBox.x >= 1600 && mCollisionBox.x <= 1760))
-                {
-                    direct = 1;
-                    jump = true;
-                    jumpOverHole = true;
-                    if(mCollisionBox.x >= 800 && mCollisionBox.x <= 960)
-                    {
-                        mGY = 3120.f;
-                        if(mCollisionBox.y + 160 <= 2960)mGY = 2720;
-                        mGX = 1040.f + abs(mCollisionBox.x - 800);
-                        aOverHole = (double)1.f/720.f;
-                    }
-                    else
-                    {
-                        mGY = 3120.f;
-                        if(mCollisionBox.y + 160 <= 2960)mGY = 2720;
-                        mGX = 1840.f + abs(mCollisionBox.x - 1600);
-                        aOverHole = (double)1.f/720.f;
-                    }
-                }
-            }
-        }
-    }
-    if(!jump)
-    {
-        //status = 2;
-        if(status == 0)
-        {
-            if(abs(lenX) > 350)
-            {
-                if(!shoting && !shoting2 && !shot && !shot2)
-                {
-                    shot = false;
-                    shot2 = false;
-                    row = 1;
-                    if(lenX > 0)
-                    {
-                        mCollisionBox.x -= 2;
-                        if(checkCollisionTile(mCollisionBox, tile) != -1)
-                        {
-                            mCollisionBox.x += 2;
-                        }
-
-                    }
-                    else
-                    {
-                        mCollisionBox.x += 2;
-                        if(checkCollisionTile(mCollisionBox, tile) != -1)
-                        {
-                            mCollisionBox.x -= 2;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if(SDL_GetTicks() - mTime > 1000.f)
-                {
-                    if(!shot && !shot2)
-                    {
-                        attacktype = rand()%2;
-                    }
-                    if(!shot && !shoting && attacktype == 0 && !shoting2 && !shot2)
-                    {
-                        shot = true;
-                        if(lenX > 0)
-                        {
-                            mCollisionBoxBullet = {mCollisionBox.x, mCollisionBox.y + 68, 60, 40};
-                        }
-                        else
-                        {
-                            mCollisionBoxBullet = {mCollisionBox.x + 180, mCollisionBox.y + 68, 60, 40};
-                        }
-                        row = 5;
-                        frames = 0;
-                    }
-                    if(!shot2 && !shoting2 && attacktype == 1 && !shot && !shoting)
-                    {
-                        shot2 = true;
-                        if(lenX > 0)
-                        {
-                            mCollisionBoxCircleBullet = {mCollisionBox.x + 39, mCollisionBox.y + 34, 40, 40};
-                        }
-                        else
-                        {
-                            mCollisionBoxCircleBullet = {mCollisionBox.x + 190, mCollisionBox.y + 34, 40, 40};
-                        }
-                        Y = min(mCollisionBox.y - 200, pt.y + 30 - 200);
-                        double stX = pt.x  + 30;
-                        double stY = pt.y + 30 - Y;
-                        double edX = mCollisionBoxCircleBullet.x;
-                        double edY = mCollisionBoxCircleBullet.y - Y;
-                        double A = stY - edY;
-                        double B = -2*(edX*stY - stX*edY);
-                        double C = (stX*stX)*(stY - edY) + stY*(edX*edX - stX*stX);
-                        double delta = B*B - 4*A*C;
-                        delta = sqrt(delta);
-                        X = (-B - delta)/(2*A);
-                        if(stX > X || X > edX)
-                        {
-                            X = (-B + delta)/(2*A);
-                        }
-                        a = ((2*X - stX - edX)*(edX - stX))/(stY - edY);
-                        goal = pt;
-                        mVelX = abs(stX - edX)/28;
-                        mTime2 = SDL_GetTicks();
-                        row = 4;
-                        frames = 0;
-                    }
-                }
-                else
-                {
-                    row = 0;
-                }
-            }
-        }
-        if(status == 1)
-        {
-            if(abs(lenX) > 350)
-            {
-                if(!shoting3 && !shot3)
-                {
-                    shot3 = false;
-                    row = 7;
-                    if(lenX > 0)
-                    {
-                        mCollisionBox.x -= 2;
-                        if(checkCollisionTile(mCollisionBox, tile) != -1)
-                        {
-                            mCollisionBox.x += 2;
-                        }
-                    }
-                    else
-                    {
-                        mCollisionBox.x += 2;
-                        if(checkCollisionTile(mCollisionBox, tile) != -1)
-                        {
-                            mCollisionBox.x -= 2;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if(SDL_GetTicks() - mTime > 1000.f)
-                {
-                    if(!shot && !shot2 && !shot3 && !attack)
-                    {
-                        attacktype = 2;
-                    }
-                    if(attacktype == 2 && !shoting3 && !shot3)
-                    {
-                        shot3 = true;
-                        if(lenX > 0)
-                        {
-                            mCollisionBoxGatlingunBullet = {mCollisionBox.x+40, mCollisionBox.y + 75, 45, 40};
-                        }
-                        else
-                        {
-                            mCollisionBoxGatlingunBullet = {mCollisionBox.x + 140, mCollisionBox.y + 75, 45, 40};
-                        }
-                        row = 9;
-                        frames = 0;
-                    }
-                }
-                else
-                {
-                    row = 6;
-                }
-            }
-        }
-        if(status == 2)
-        {
-
-            if(SDL_GetTicks() - mTime > 1000.f)
-            {
-                if(!shot && !shot2 && !shot3 && !attack)
-                {
-                    attacktype = 3;
-                }
-                if(attacktype == 3 && !attack && !attacking)
-                {
-                    attack = true;
-                    mGoalDash = pt.x;
-                    if(pt.x > mCollisionBox.x)dashDirect = 1;
-                    else dashDirect = -1;
-                    if(abs(lenX) > 200)dash_attack = true;
-                    row = 14;
-                    frames = 0;
-                }
-            }
-            else
-            {
-                row = 10;
-            }
-        }
-        if(shot == true)
-        {
-            if(frames / 5 >= 5)
-            {
-                shoting = true;
-            }
-        }
-        if(shoting)
-        {
-            if(lenX > 0)
-            {
-                mCollisionBoxBullet.x -= 20;
-                if(checkCollisionTile(mCollisionBoxBullet, tile) != -1)
-                {
-                    mPosExplosion = {mCollisionBoxBullet.x, mCollisionBoxBullet.y - 30, 80, 80};
-                    mCollisionBoxBullet = {mCollisionBox.x, mCollisionBox.y + 63, 60, 40};
-                    frames_bullet = 0;
-                    shoting = false;
-                    shot = false;
-                    isExplosion = true;
-                    mTime = SDL_GetTicks();
-                }
-                frames_bullet++;
-                if(frames_bullet/5 >= 8)
-                {
-                    frames_bullet = 0;
-                    mCollisionBoxBullet = {mCollisionBox.x, mCollisionBox.y + 63, 60, 40};
-                    shoting = false;
-                    shot = false;
-                    mTime = SDL_GetTicks();
-                }
-                if(shoting)
-                {
-                    if(checkCollisionBox(camera, mCollisionBoxBullet))
-                    {
-                        SDL_Rect re= {frames_bullet/5 * 60, 0, 60, 40};
-                        bullet2Sprite.render(mCollisionBoxBullet.x - camera.x, mCollisionBoxBullet.y - camera.y, &re, 0, NULL, SDL_FLIP_HORIZONTAL);
-                    }
-                }
-            }
-            else
-            {
-                mCollisionBoxBullet.x += 20;
-                if(checkCollisionTile(mCollisionBoxBullet, tile) != -1)
-                {
-                    mPosExplosion = {mCollisionBoxBullet.x, mCollisionBoxBullet.y - 30, 80, 80};
-                    mCollisionBoxBullet = {mCollisionBox.x + 180, mCollisionBox.y + 68, 60, 40};
-                    frames_bullet = 0;
-                    shoting = false;
-                    shot = false;
-                    isExplosion = true;
-                    mTime = SDL_GetTicks();
-                }
-                frames_bullet++;
-                if(frames_bullet/5 >= 8)
-                {
-                    frames_bullet = 0;
-                    mCollisionBoxBullet = {mCollisionBox.x + 180, mCollisionBox.y + 68, 60, 40};
-                    shoting = false;
-                    shot = false;
-                    mTime = SDL_GetTicks();
-                }
-                if(shoting)
-                {
-                    if(checkCollisionBox(camera, mCollisionBoxBullet))
-                    {
-                        SDL_Rect re= {frames_bullet/5 * 60, 0, 60, 40};
-                        bullet2Sprite.render(mCollisionBoxBullet.x - camera.x, mCollisionBoxBullet.y - camera.y, &re);
-                    }
-                }
-            }
-        }
-        if(shot2)
-        {
-            if(frames/5 >= 5)
-            {
-                shoting2 = true;
-            }
-        }
-        if(shoting2)
-        {
-            if(lenX > 0)
-            {
-                mCollisionBoxCircleBullet.x -= mVelX;
-                mCollisionBoxCircleBullet.y = ((mCollisionBoxCircleBullet.x - X)*(mCollisionBoxCircleBullet.x - X))/a + Y;
-            }
-            else
-            {
-                mCollisionBoxCircleBullet.x += mVelX;
-                mCollisionBoxCircleBullet.y = ((mCollisionBoxCircleBullet.x - X)*(mCollisionBoxCircleBullet.x - X))/a + Y;
-            }
-            if(SDL_GetTicks() - mTime2 > 1000.f)
-            {
-                shot2 = false;
-                shoting2 = false;
-                mTime = SDL_GetTicks();
-            }
-            /*if(checkCollisionTile(mCollisionBoxCircleBullet, tile) != -1)
-            {
-                shot2 = false;
-                shoting2 = false;
-                isExplosion = true;
-                mPosExplosion = {mCollisionBoxCircleBullet.x-20, mCollisionBoxCircleBullet.y-20,80,80};
-                if(lenX > 0)
-                {
-                    mCollisionBoxCircleBullet = {mCollisionBox.x + 39, mCollisionBox.y + 34, 40, 40};
-                }
-                else
-                {
-                    mCollisionBoxCircleBullet = {mCollisionBox.x + 190, mCollisionBox.y + 34, 40, 40};
-                }
-                mTime = SDL_GetTicks();
-            }*/
-            if(shoting2)
-            {
-                if(checkCollisionBox(camera, mCollisionBoxCircleBullet))
-                {
-                    SDL_Rect r = {frames_circle_bullet/5*20, 0, 40, 40};
-                    bullet1Sprite.render(mCollisionBoxCircleBullet.x - camera.x, mCollisionBoxCircleBullet.y - camera.y, &r, 0, NULL, SDL_FLIP_HORIZONTAL);
-                }
-            }
-        }
-        if(shot3)
-        {
-            if(frames/5 == 5)
-            {
-                shoting3 = true;
-            }
-        }
-        if(shoting3)
-        {
-            if(lenX > 0)
-            {
-                mCollisionBoxGatlingunBullet.x -= 15;
-            }
-            else
-            {
-                mCollisionBoxGatlingunBullet.x += 15;
-            }
-            if(shoting3)
-            {
-                if(checkCollisionBox(camera, mCollisionBoxGatlingunBullet))
-                {
-                    if(lenX < 0)gatlingunBullet.render(mCollisionBoxGatlingunBullet.x - camera.x, mCollisionBoxGatlingunBullet.y - camera.y, NULL);
-                    else
-                    {
-                        gatlingunBullet.render(mCollisionBoxGatlingunBullet.x - camera.x, mCollisionBoxGatlingunBullet.y - camera.y, NULL, 0, NULL, SDL_FLIP_HORIZONTAL);
-                    }
-                }
-            }
-            frames_bullet++;
-            if(frames_bullet/5 >= 8)
-            {
-                frames_bullet = 0;
-                if(lenX > 0)
-                {
-                    mCollisionBoxGatlingunBullet = {mCollisionBox.x+40, mCollisionBox.y + 75, 45, 40};
-                }
-                else
-                {
-                    mCollisionBoxGatlingunBullet = {mCollisionBox.x + 140, mCollisionBox.y + 75, 45, 40};
-                }
-                shoting3 = false;
-                shot3 = false;
-                mTime = SDL_GetTicks();
-            }
-        }
-        if(attack)
-        {
-            if(mCollisionBox.y + 160 <= 3360)
-            {
-                if(!jumpWhenDash && SDL_GetTicks() - jumpTime >= 1000.f)
-                {
-                    if(lenX > 0)
-                    {
-                        if((mCollisionBox.x <= 1280 && mCollisionBox.x >= 1200) || (mCollisionBox.x <= 2080 && mCollisionBox.x >= 2000))
-                        {
-                            //jump = true;
-                            jumpWhenDash = true;
-                            direct = -1;
-                            if(mCollisionBox.x <= 1280 && mCollisionBox.x >= 1200)
-                            {
-                                mGY = 3120;
-                                if(mCollisionBox.y + 160 <= 2960)mGY = 2720;
-                                mGX = 1040 + (mCollisionBox.x - 1280);
-                                aOverHole = (double)1/720;
-                            }
-                            else
-                            {
-                                mGY = 3120;
-                                if(mCollisionBox.y + 160 <= 2960)mGY = 2720;
-                                mGX = 1840 + (mCollisionBox.x - 2080);
-                                aOverHole = (double)1/720;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if((mCollisionBox.x >= 800 && mCollisionBox.x <= 960)|| (mCollisionBox.x >= 1600 && mCollisionBox.x <= 1760))
-                        {
-                            direct = 1;
-                            //jump = true;
-                            jumpWhenDash = true;
-                            if(mCollisionBox.x >= 800 && mCollisionBox.x <= 960)
-                            {
-                                mGY = 3120.f;
-                                if(mCollisionBox.y + 160 <= 2960)mGY = 2720;
-                                mGX = 1040.f + abs(mCollisionBox.x - 800);
-                                aOverHole = (double)1.f/720.f;
-                            }
-                            else
-                            {
-                                mGY = 3120.f;
-                                if(mCollisionBox.y + 160 <= 2960)mGY = 2720;
-                                mGX = 1840.f + abs(mCollisionBox.x - 1600);
-                                aOverHole = (double)1.f/720.f;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if(jumpWhenDash)
-            {
-                //cout << "Break" << '\n';
-                if(direct == -1)
-                {
-                    mCollisionBox.x -= 5;
-                    double XX = (mCollisionBox.x - mGX);
-                    XX = XX*XX;
-                    double YY = XX/720.f;
-                    mCollisionBox.y = mGY + YY;
-                }
-                else
-                {
-                    mCollisionBox.x += 5;
-                    double XX = (mCollisionBox.x - mGX);
-                    XX = XX*XX;
-                    double YY = XX/720.f;
-                    mCollisionBox.y = mGY + YY;
-                }
-                row = 12;
-                if(mCollisionBox.y == 3200 || mCollisionBox.y == 2800)
-                {
-                    jumpWhenDash = false;
-                    row = 10;
-                    jumpTime = SDL_GetTicks();
-                }
-
-                return;
-            }
-            //cout << "continue" << '\n';
-            if(!dash_attack)
-            {
-                if(mGoalDash - mCollisionBox.x < 0)
-                {
-                    mCollisionBox.x -= 2;
-                    if(checkCollisionTile(mCollisionBox, tile) != -1)
-                    {
-                        mCollisionBox.x += 2;
-                        attacking = true;
-                        attack = false;
-                        dash_attack = false;
-                        frames = 0;
-                        row = 11;
-                    }
-                    row = 11;
-                }
-                else
-                {
-                    mCollisionBox.x += 2;
-                    if(checkCollisionTile(mCollisionBox, tile) != -1)
-                    {
-                        mCollisionBox.x -= 2;
-                        attacking = true;
-                        attack = false;
-                        dash_attack = false;
-                        frames = 0;
-                        row = 11;
-                    }
-                    row = 11;
-                }
-            }
-            else
-            {
-                if(mGoalDash - mCollisionBox.x < 0)
-                {
-                    mCollisionBox.x -= 20;
-                    if(checkCollisionTile(mCollisionBox, tile) != -1)
-                    {
-                        mCollisionBox.x += 20;
-                        attacking = true;
-                        attack = false;
-                        dash_attack = false;
-                        frames = 0;
-                        row = 14;
-                    }
-                    row = 12;
-                }
-                else
-                {
-                    mCollisionBox.x += 20;
-                    if(checkCollisionTile(mCollisionBox, tile) != -1)
-                    {
-                        mCollisionBox.x -= 20;
-                        attacking = true;
-                        attack = false;
-                        dash_attack = false;
-                        frames = 0;
-                        row = 14;
-                    }
-                    row = 12;
-                }
-            }
-            if((dashDirect == 1 && mCollisionBox.x >= mGoalDash - 20) || (dashDirect == -1 && mCollisionBox.x <= mGoalDash + 20))
-            {
-                attacking = true;
-                attack = false;
-                dash_attack = false;
-                frames = 0;
-                mGoalDash = 0;
-                row = 14;
-            }
-        }
-    }
-    else
-    {
-        if(jumpOverHole)
-        {
-            if(direct == -1)
-            {
-                mCollisionBox.x -= 5;
-                double XX = mCollisionBox.x - mGX;
-                XX = XX*XX;
-                double YY = XX/720.f;
-                mCollisionBox.y = mGY + YY;
-                if(mCollisionBox.y == 3200.f || mCollisionBox.y == 2800.f)
-                {
-                    jumpOverHole = false;
-                    jump = false;
-                    jumpTime = SDL_GetTicks();
-                }
-            }
-            else
-            {
-                mCollisionBox.x += 5;
-                double XX = mCollisionBox.x - mGX;
-                XX = XX*XX;
-                double YY = XX/720.f;
-                mCollisionBox.y = mGY + YY;
-                if(mCollisionBox.y == 3200.f || mCollisionBox.y == 2800.f)
-                {
-                    jumpOverHole = false;
-                    jump = false;
-                    jumpTime = SDL_GetTicks();
-                }
-            }
-            return;
-        }
-        if(jump)
-        {
-            if(mCollisionBox.y == mGoalY && abs(mCollisionBox.x - mGoalX) < 4)
-            {
-                jump = false;
-                jumpTime = SDL_GetTicks();
-                if(status == 0)row = 0;
-                if(status == 1)row = 6;
-                if(status == 2)row = 10;
-                return;
-            }
-            if(mCollisionBox.y > mGoalY)
-            {
-                mCollisionBox.y -= 10;
-            }
-            if(mCollisionBox.y < mGoalY)
-            {
-                mCollisionBox.y += 10;
-            }
-            if(mCollisionBox.x < mGoalX)
-            {
-                mCollisionBox.x += 4;
-            }
-            if(mCollisionBox.x > mGoalX)
-            {
-                mCollisionBox.x -= 4;
-            }
-            if(0 <= row && row <= 5)row = 3;
-            if(row > 5 && row <= 9)row = 15;
-            if(row >= 10 && row <= 14)row = 13;
-        }
-        else
-        {
-            if(status == 0)row = 0;
-            if(status == 1)row = 6;
-            if(status == 2)row = 10;
-        }
-    }
+    robotGatlingShot = chunk;
+}
+void Robot1::setSawAttackChunk(Mix_Chunk *chunk)
+{
+    robotSawAttack = chunk;
+}
+void Robot1::setChargingPowerChunk(Mix_Chunk *chunk)
+{
+    robotChargingPower = chunk;
+}
+void Robot1::setPowerChunk(Mix_Chunk *chunk)
+{
+    robotPower = chunk;
+}
+void Robot1::setWalkChunk(Mix_Chunk* chunk)
+{
+    robotWalk = chunk;
+}
+void Robot1::setDashChunk(Mix_Chunk* chunk)
+{
+    robotDash = chunk;
+}
+void Robot1::setJumpChunk(Mix_Chunk* chunk)
+{
+    robotJump = chunk;
+}
+void Robot1::setTime(Uint32 t)
+{
+    mTime2 = t;
+}
+Uint32 Robot1::getTime()
+{
+    return mTime2;
+}
+SDL_Rect Robot1::getBox()
+{
+    return mCollsionBox;
 }

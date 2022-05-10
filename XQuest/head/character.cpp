@@ -17,7 +17,8 @@ int yy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
 Character::Character()
 {
-    mHealth = 230;
+    mHealth = 150;
+    maxHealth = 150;
     mPosX = (LEVEL_WIDTH - 80)/2;
     mPosY = 1760;
     mVelX = 0;
@@ -64,9 +65,16 @@ Character::Character()
     frames_jumpdouble = 0;
     time_normal_hurt = 0;
     pt = {0, 0};
+    appearing = false;
+    hasHealthStored = false;
+    healthstored = 0;
+    hasManaStored = false;
+    manastored = 0;
 }
 void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
 {
+
+    if(appearing)return;
     if(SDL_GetTicks() - chargeTime > 300.f && isCharging == false && shot)
     {
         Mix_PlayChannel(1, chargingChunk, 0);
@@ -281,7 +289,7 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
 
 void Character::move(vector <Tile*> &tile)
 {
-    //cout << climb << ' ' << fall << '\n';
+    if(appearing)return;
     if(fly_up)
     {
         gigaattack = true;
@@ -452,7 +460,7 @@ void Character::move(vector <Tile*> &tile)
     }
     SDL_Rect under = {mPosX, mPosY + CHAR_HEIGHT, CHAR_WIDTH, 10};
     int index = checkCollisionTile(under, tile);
-    if(index == 8 || index == 15 || index == 31 || index == 28 || index == 2 || index == 3 || index == 20 || index == 21 || index == 40 || index == 42 || index == 06 || index == 12 || index == 13 || index == 45 || index == 46 || index == 47 || index == 48 || index == 37)
+    if(index == 17 || index == 8 || index == 15 || index == 31 || index == 28 || index == 2 || index == 3 || index == 20 || index == 21 || index == 40 || index == 42 || index == 06 || index == 12 || index == 13 || index == 45 || index == 46 || index == 47 || index == 48 || index == 37)
     {
         down_vel = 1;
     }
@@ -627,7 +635,7 @@ void Character::move(vector <Tile*> &tile)
         int BoxIndex = checkCollisionTile(under, tile);
         if(BoxIndex != -1)
         {
-            if(BoxIndex == 8 || BoxIndex == 15 || BoxIndex == 31 || BoxIndex == 28 || BoxIndex == 2 || BoxIndex == 3 || BoxIndex == 20 || BoxIndex == 21 || BoxIndex == 42 || BoxIndex == 40 || BoxIndex == 06 || BoxIndex == 12 || BoxIndex == 13 || BoxIndex == 45 || BoxIndex == 46 || BoxIndex == 47 || BoxIndex == 48 || BoxIndex == 37)
+            if(BoxIndex == 17 || BoxIndex == 8 || BoxIndex == 15 || BoxIndex == 31 || BoxIndex == 28 || BoxIndex == 2 || BoxIndex == 3 || BoxIndex == 20 || BoxIndex == 21 || BoxIndex == 42 || BoxIndex == 40 || BoxIndex == 06 || BoxIndex == 12 || BoxIndex == 13 || BoxIndex == 45 || BoxIndex == 46 || BoxIndex == 47 || BoxIndex == 48 || BoxIndex == 37)
             {
                 ck = 1;
                 stay = false;
@@ -773,6 +781,7 @@ void Character::setCamera(SDL_Rect &camera, SDL_Rect &rect)
 }
 void Character::render(SDL_Rect &camera, vector <Tile*> &tile)
 {
+    //cout << maxHealth << '\n';
     if(gigaattack)
     {
         SDL_Rect r = {frames_giga/5 * 63, 0, 63, 60};
@@ -867,7 +876,15 @@ void Character::render(SDL_Rect &camera, vector <Tile*> &tile)
         else break;
     }
     frames ++;
-    if(frames/heso >= 11)frames = 0;
+    if(frames/heso >= 11)
+    {
+        frames = 0;
+        if(row == 32)
+        {
+            appearing = false;
+            row = 0;
+        }
+    }
 }
 SDL_Rect Character::getBox()
 {
@@ -1042,7 +1059,7 @@ void Character::setDegree(double add)
 }
 void Character::setDefault()
 {
-    mHealth = 230;
+    mHealth = maxHealth;
     mPosX = (LEVEL_WIDTH - 80)/2;
     mPosY = 1760;
     mVelX = 0;
@@ -1083,11 +1100,16 @@ void Character::setDefault()
     unhurtable = false;
     gigaattack = false;
     normal_hurt = false;
+    //hasHealthStored = false;
+    //healthstored = 0;
+    //hasManaStored = false;
+    //manastored = 0;
     frames_charge = 0;
     buster.clear();
     frames_jumpdouble = 0;
     time_normal_hurt = 0;
     pt = {0, 0};
+    appearing = false;
 }
 bool Character::getWinAll()
 {
@@ -1096,4 +1118,55 @@ bool Character::getWinAll()
 void Character::setWinAll(bool b)
 {
     winAll = b;
+}
+void Character::setAppearing(bool a)
+{
+    appearing = a;
+}
+bool Character::getAppearing()
+{
+    return appearing;
+}
+void Character::setHasHealthStored(bool h)
+{
+    hasHealthStored = h;
+}
+bool Character::getHasHealthStored()
+{
+    return hasHealthStored;
+}
+void Character::setHealthStored(int h)
+{
+    healthstored += h;
+    healthstored = min(healthstored, maxHealth);
+}
+int Character::getHealthStored()
+{
+    return healthstored;
+}
+
+void Character::setHasManaStored(bool m)
+{
+    hasManaStored = m;
+}
+bool Character::getHasManaStored()
+{
+    return hasManaStored;
+}
+void Character::setManaStored(int h)
+{
+    manastored += h;
+    manastored = min(manastored, 165);
+}
+int Character::getManaStored()
+{
+    return manastored;
+}
+void Character::setMaxHealth(int h)
+{
+    maxHealth = h;
+}
+int Character::getMaxHealth()
+{
+    return maxHealth;
 }

@@ -7,67 +7,100 @@
 #include "texture.h"
 #include "sdl_utils.h"
 #include "constant_value.h"
-#include "fire_ball.h"
 #include "tile.h"
 #include <deque>
+#include <vector>
 
 using namespace std;
+
+class FirePillar
+{
+    SDL_Rect mCollisionBox;
+    int frames;
+    int mType;
+    bool isDead;
+public:
+    static Texture firePillarSprite;
+    FirePillar(int posX, int posY, int type);
+    void render(SDL_Rect &camera, SDL_Point &pt);
+    bool checkCollision(SDL_Point &pt);
+    void setSprite(Texture &sprite);
+    bool getDead();
+};
+
+class FireFlow
+{
+    SDL_Rect mCollisionBox;
+    int frames;
+public:
+    static Texture fireFlowSprite;
+    static int stable;
+    static int direction;
+    FireFlow(int posX,int posY);
+    void render(SDL_Rect &camera, SDL_Point &pt);
+    bool checkCollision(SDL_Point &pt);
+    void setSprite(Texture &sprite);
+};
+
+class FireBall
+{
+    double vX, vY;
+    double goalX, goalY;
+    double stX, stY;
+    int frames;
+    SDL_Rect mCollisionBox;
+    bool isDead;
+public:
+    static Texture fireBallSprite;
+    FireBall(int posX, int posY, int gX, int gY);
+    void render(SDL_Rect &camera);
+    void setSprite(Texture &sprite);
+    bool getDead();
+    bool checkCollision(SDL_Point &pt);
+};
 
 class Boss
 {
     SDL_Rect mCollisionBox;
-    SDL_Rect fireHitBox;
-    SDL_Point up[6];
-    SDL_Point down[6];
+    double sX, sY;
+    int health;
+    Uint32 mTime;
+    int attackType;
     int frames;
     int row;
-    FireBall* fireBall;
-    Uint32 mTime;
-    int mHealth;
-    bool upp;
-    Uint32 time;
-    int mPosX_bf;
-    int mPosY_bf;
-    double velX, velY;
-    int chose_attack;
-    int frames_fire_flow;
-    int frames_fire_pillar;
-    deque <SDL_Point> fire;
     int mDirection;
-    int ok;
-    int vel;
-    double len_spear;
-    Uint32 startTimeFireFlow;
+    double goalY, goalX;
+    double velX, velY;
+    FireBall *fireBall;
+    deque < FireFlow* > fireFlow;
+    deque < FirePillar* > firePillar;
+    Uint32 timeForFireFlow;
+    int posFirePillar;
+    int phaseFire;
+    Uint32 timeForFirePillar;
+    Uint32 mTimeBeHurt;
 public:
     static Texture bossSprite;
-    static Texture magicCircle;
-    static Texture fireFlowSprite;
-    static Texture firePillarSprite;
     static Mix_Chunk* fireBallChunk;
     static Mix_Chunk* fireFlowChunk;
     static Mix_Chunk* firePillarChunk;
     static Mix_Chunk* fireSpearChunk;
-    Boss(int pos);
-    void render(SDL_Rect &camera, SDL_Point &point, vector < Tile* > &tile, int limX);
-    void setSprite(Texture &sprite);
-    void shot(SDL_Point &point);
-    void setMagicCircle(Texture &sprite);
-    void setFireFlowSprite(Texture &sprite);
-    void setFirePillarSprite(Texture &sprite);
+    Boss(double posX, double posY);
+    void render(SDL_Rect &camera, SDL_Point &pt, int isAppear);
+    void attack(SDL_Point &pt);
+    int checkCollision(SDL_Point &pt);
+    //getter, setter
     int getHealth();
     void setHealth(int h);
-    Uint32 getTime();
-    void setTime(Uint32 stime);
-    void fireflow(vector < Tile* > &tile, SDL_Rect &camera);
-    SDL_Rect getBox();
-    SDL_Rect getBox2();
-    SDL_Rect getBox3();
-    bool checkAttack(SDL_Rect &crt);
-    void setX(double n);
     int getX();
-    void setTime2(Uint32 t);
-    int attackType();
-    bool checkAttack2(SDL_Rect &rect);
+    int getY();
+    void setX(double x);
+    void setY(double y);
+    Uint32 getTime();
+    void setTime(Uint32 t);
+    SDL_Rect getBox();
+    //Set sprite, mix chunk
+    void setSprite(Texture &sprite);
     void loadFireBallChunk(Mix_Chunk* fbc);
     void loadFireFlowChunk(Mix_Chunk* ffc);
     void loadFirePillarChunk(Mix_Chunk* fpc);

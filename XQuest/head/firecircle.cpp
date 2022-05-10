@@ -15,7 +15,6 @@ FireCircle::FireCircle(int posX, int posY)
 }
 void FireCircle::render(SDL_Rect &camera, SDL_Point &pt)
 {
-    //if(SDL_GetTicks() - mTime >= 5000.f)isDead = true;
     if(checkCollisionBox(mCollisionBox, camera))
     {
         SDL_Rect r = {frames/7 * 200, 0, 200, 200};
@@ -32,7 +31,6 @@ void FireCircle::render(SDL_Rect &camera, SDL_Point &pt)
             }
         }
     }
-    //cout << countLavaBall << '\n';
     if(SDL_GetTicks() - mTime2 > 250.f && countLavaBall < 20)
     {
 
@@ -51,7 +49,6 @@ void FireCircle::render(SDL_Rect &camera, SDL_Point &pt)
             ball[countLavaBall] = new LavaBall(mCollisionBox.x + 100 - 40, mCollisionBox.y + 100 - 40, pt.x + 50, pt.y + 30, mVelX, mVelY);
         }
     }
-    //cout << countLavaBall << '\n';
     if(countLavaBall == 20 && ball[countLavaBall - 1] == nullptr)
     {
         isDead = true;

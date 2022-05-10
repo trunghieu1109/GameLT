@@ -116,6 +116,11 @@ class Sigma
 public:
     static Texture sigmaSprite;
     static Texture sigmaPower;
+    static Mix_Chunk* sigmaBulletChunk;
+    static Mix_Chunk* sigmaElectricBallChunk;
+    static Mix_Chunk* sigmaLazerChunk;
+    static Mix_Chunk* sigmaSuperLazerChunk;
+    static Mix_Chunk* sigmaCycloneChunk;
     Sigma(int posX, int posY);
     void render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer);
     void move(SDL_Point &pt);
@@ -130,5 +135,10 @@ public:
     bool getExplosion();
     void setExplosioning(bool e);
     void setPowerSprite(Texture &sprite);
+    void setSigmaBulletChunk(Mix_Chunk* chunk);
+    void setSigmaLazerChunk(Mix_Chunk* chunk);
+    void setSigmaCycloneChunk(Mix_Chunk* chunk);
+    void setSigmaSuperLazerChunk(Mix_Chunk* chunk);
+    void setSigmaElectricBallChunk(Mix_Chunk* chunk);
 };
 #endif // SIGMA__H

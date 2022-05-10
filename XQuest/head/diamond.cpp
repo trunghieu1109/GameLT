@@ -32,12 +32,22 @@ void Diamond::checkCollision(Character *crt)
         if(mType == 1)
         {
             int h = crt->getHealth();
-            crt->setHealth(min(h + 20, 230));
+            crt->setHealth(min(h + 20, crt->getMaxHealth()));
+            if(h + 20 > crt->getMaxHealth())
+            {
+                int pd = h + 20 - crt->getMaxHealth();
+                if(crt->getHasHealthStored())crt->setHealthStored(pd / 2);
+            }
         }
         if(mType == 2)
         {
             int m = crt->getMana();
             crt->setMana(min(m + 15, 165));
+            if(m + 15 > 165)
+            {
+                int pb = m + 15 - 165;
+                if(crt->getHasManaStored())crt->setManaStored(pb);
+            }
         }
         mBox.x = -60;
         mBox.y = -60;

@@ -1,5 +1,4 @@
 #ifndef ROBOT1__h
-
 #define ROBOT1__h
 
 #include <iostream>
@@ -8,62 +7,36 @@
 #include <SDL_image.h>
 #include "tile.h"
 #include <vector>
+#include <deque>
 
 using namespace std;
 
 class Robot1
 {
-    SDL_Rect mCollisionBox;
-    SDL_Rect mCollisionBoxBullet;
-    SDL_Rect mCollisionBoxCircleBullet;
-    SDL_Rect mPosExplosion;
-    SDL_Rect mCollisionBoxGatlingunBullet;
-    SDL_Rect mCollisionBoxAttack;
-    SDL_Rect targetX;
-    SDL_Point lazerPos[18];
-    int frames;
-    int frames_bullet;
-    int frames_lazer;
-    int frames_circle_bullet;
-    int minY;
-    int minX;
-    int power;
-    int mX_bf;
-    int mY_bf;
-    int mDirect;
-    bool dash_attack;
-    int row;
-    bool shot;
-    bool shoting;
-    bool shot3, shoting3;
-    bool attack, attacking;
-    int mGoalDash;
-    int dashDirect;
-    bool jump;
-    bool jumpWhenDash;
-    bool jumpOverHole;
-    double mGX, mGY;
-    double aOverHole;
-    int direct;
-    int mGoalY, mGoalX;
-    Uint32 mTime;
-    double Y;
-    double mVelX;
-    double X, a;
-    bool defend;
-    //bool fall;
-    SDL_Point goal;
-    bool shot2;
-    bool shoting2;
-    int attacktype;
-    Uint32 mTime2;
-    int frames_explosion;
-    bool isExplosion;
     int mHealth;
-    Uint32 mTime3;
-    int status;
-    Uint32 timeChangeStatus;
-    Uint32 jumpTime;
+    SDL_Rect mCollsionBox;
+    double sX, sY;
+    double gX, gY;
+    double vX, vY;
+    double posBullet1X, posBullet1Y;
+    int frames = 0, frames_bullet1 = 0;
+    int frames_power = 0;
+    int row = 0;
+    int attackType;
+    double a, X, Y;
+    Uint32 mTime, mTimeBullet1, mTimeBullet2, mTimeGatling;
+    int mDirection, mDirection_attack;
+    int charging;
+    int state;
+    int oddoreven;
+    bool ready;
+    Uint32 mTimeChangeState;
+    int state_bf;
+    double sX_bf, sY_bf;
+    int mAttackType_bf;
+    bool attacking;
+    bool jump;
+    Uint32 mTime2;
 public:
     static Texture robotSprite;
     static Texture bullet1Sprite;
@@ -71,9 +44,19 @@ public:
     static Texture explosionBulletSprite;
     static Texture gatlingunBullet;
     static Texture superLazerSprite;
-    Robot1(int pos);
-    void render(SDL_Rect &camera, vector <Tile*> &tile, SDL_Point &pt);
+    static Mix_Chunk *robotShot;
+    static Mix_Chunk *robotGatlingShot;
+    static Mix_Chunk *robotSawAttack;
+    static Mix_Chunk *robotChargingPower;
+    static Mix_Chunk *robotPower;
+    static Mix_Chunk *robotWalk;
+    static Mix_Chunk *robotJump;
+    static Mix_Chunk *robotDash;
+    Robot1(int posX, int posY);
+    void render(SDL_Rect &camera, SDL_Point &pt);
+    void attack(SDL_Point &pt);
     void setSprite(Texture &sprite);
+    int checkCollision(SDL_Point &pt);
     void setBullet1Sprite(Texture &sprite);
     void setBullet2Sprite(Texture &sprite);
     void setExplosionBullet(Texture &sprite);
@@ -81,17 +64,16 @@ public:
     void setSuperLazer(Texture &sprite);
     void setHealth(int h);
     int getHealth();
-    int getAttackType();
-    SDL_Rect getBullet();
-    SDL_Rect getCircleBullet();
-    SDL_Rect getBox();
-    SDL_Rect getGatlingunBullet();
-    SDL_Rect getAttack();
-    SDL_Rect getLazerBox(int i);
+    void setShotChunk(Mix_Chunk* chunk);
+    void setGatlingChunk(Mix_Chunk* chunk);
+    void setSawAttackChunk(Mix_Chunk *chunk);
+    void setChargingPowerChunk(Mix_Chunk *chunk);
+    void setPowerChunk(Mix_Chunk *chunk);
+    void setWalkChunk(Mix_Chunk* chunk);
+    void setDashChunk(Mix_Chunk* chunk);
+    void setJumpChunk(Mix_Chunk* chunk);
+    void setTime(Uint32 t);
     Uint32 getTime();
-    void setTime(Uint32 time);
-    void setDefend(bool d);
-    void Attack(SDL_Rect &camera, vector <Tile*> &tile, SDL_Point &pt);
-    int getPower();
+    SDL_Rect getBox();
 };
 #endif // ROBOT1__h

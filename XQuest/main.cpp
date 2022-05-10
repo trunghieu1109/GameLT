@@ -10,77 +10,37 @@ SDL_Event e;
 int ck = 0;
 int startTime = 0;
 Game game;
+
 void winGame()
 {
-    ifstream file("credit.txt");
-    string ss = "";
-    deque <Texture*> t;
-    pair<double, double> p[100];
-    Uint32 mTime = 0;
+    Texture credit;
+    credit.setRenderer(game.object.renderer);
+    if(!credit.loadTextureFromImage("Texture/credit_word.png"))logIMGError(cout, "Load credit", true);
     bool quit = false;
+    double sX = 84, sY = SCREEN_HEIGHT;
     while(!quit)
     {
         SDL_SetRenderDrawColor(game.object.renderer, 0, 0, 0, 0);
         SDL_RenderClear(game.object.renderer);
-        game.object.thumb.render(0, 0, NULL);
-        if(!t.empty())
-        {
-            int cnt = 0;
-            for(deque<Texture*>::iterator it = t.begin(); it != t.end(); it++)
-            {
-                (*it)->render(p[cnt].first, p[cnt].second, NULL);
-                cnt++;
-            }
-        }
+        game.object.textArr[TEXTURE_THUMB].render(0, 0, NULL);
+        credit.render(sX, sY, nullptr);
+        sY -= 0.75;
         SDL_RenderPresent(game.object.renderer);
-        if(SDL_GetTicks() - mTime > 100.f)
+        if(sY == 0)
         {
-            if(!file.eof())
-            {
-                char s;
-                file >> s;
-                if(s == '|')
-                {
-                    Texture *text = new Texture();
-                    text->setRenderer(game.object.renderer);
-                    text->setFont(game.object.font);
-                    SDL_Color color = {0xFF, 0, 0};
-                    text->loadTextureFromText(ss.c_str(), color);
-                    ss = "";
-                    t.push_back(text);
-                    pair < int , int > po = {(SCREEN_WIDTH - text->getWidth())/2, (SCREEN_HEIGHT - text->getHeight())/2};
-                    int sz = t.size();
-                    p[sz - 1] = po;
-                }
-                else
-                {
-                    if(s != '|')
-                    {
-                        ss += s;
-                    }
-                }
-            }
-            else quit = true;
-            mTime = SDL_GetTicks();
-        }
-        //if(file.eof())quit = true;
-        for(int i=0; i<t.size(); i++)
-        {
-            p[i].second -= 2;
+            SDL_Delay(5000);
+            quit = true;
         }
     }
 }
 int playGame()
 {
-    if(game.object.currentMap == "sigma_.map")
-    {
-        game.object.sigma = new Sigma(2240, 1840);
-    }
     while(!quit)
     {
         SDL_Rect r = {game.object.posArenaX, game.object.posArenaY, game.object.arenaWidth, game.object.arenaHeight};
         game.object.x.setCamera(camera, r);
         game.setTileVector(camera, game.object.vTile);
+
         if(Mix_PlayingMusic() == 0)
         {
             Mix_PlayMusic(game.object.backGroundMusic, -1);
@@ -91,6 +51,7 @@ int playGame()
             {
                 game.saveGame();
                 quit = true;
+                //isplaying = false;
                 return -1;
             }
             else
@@ -99,6 +60,8 @@ int playGame()
                 {
                     if(e.key.keysym.sym == SDLK_p)
                     {
+                        game.object.healthStoredButton->setHealth(game.object.x.getHealthStored());
+                        game.object.manaStoredButton->setMana(game.object.x.getManaStored());
                         return 1;
                     }
                 }
@@ -107,11 +70,8 @@ int playGame()
             }
         }
         game.ObjectMove(camera);
-        game.checkCharacterHealth(&game.object.x);
-        game.checkEnemiesHealth();
         game.collision(startTime, camera, game.object.vTile);
         game.render(camera, ck);
-        game.checkExplosion(camera);
         if(game.object.x.getHealth() <= 0)
         {
             return 3;
@@ -133,6 +93,9 @@ int main(int argc, char* argv[])
     bool qquit = false;
     SDL_Event eMenu;
     int nextMove = 0;
+    ifstream file1 ("numofstage.txt");
+    file1 >> game.object.countStage;
+    file1.close();
     while(!qquit)
     {
         while(SDL_PollEvent(&eMenu) != 0)
@@ -140,20 +103,33 @@ int main(int argc, char* argv[])
             if(eMenu.type == SDL_QUIT)
             {
                 qquit = true;
+                ofstream file("numofstage.txt");
+                file << game.object.countStage;
+                file.close();
             }
             else
             {
                 string event = game.object.menu[nextMove]->handleEvent(&eMenu);
                 if(event != "a")
                 {
-                    Mix_PlayChannel(-1, game.object.chunkMenuSelected, 0);
+                    Mix_PlayChannel(-1, game.object.chunkArr[MIX_MENU_SELECTED], 0);
                 }
-                if(eMenu.type == SDL_KEYDOWN && eMenu.key.keysym.sym == SDLK_p)
+                for(int i=1; i<=min(5, game.object.countStage); i++)
+                {
+                    game.object.Stage[i]->setAble(true);
+                }
+                for(int i=min(5, game.object.countStage) + 1; i<=5; i++)
+                {
+                    game.object.Stage[i]->setAble(false);
+                }
+                if(eMenu.type == SDL_KEYDOWN && eMenu.key.keysym.sym == SDLK_p && nextMove == 1)
                 {
                     nextMove = playGame();
                 }
                 if(event == "NewGame")
                 {
+                    game.object.countStage = 1;
+                    game.setDefault();
                     game.setMap(game.object.tile, "map/WarmUp.map");
                     nextMove = playGame();
                     if(nextMove == -1)qquit = true;
@@ -163,6 +139,7 @@ int main(int argc, char* argv[])
                     ifstream file("continue.txt");
                     string continueMap = "";
                     file >> continueMap;
+                    game.setDefault();
                     game.setMap(game.object.tile, continueMap.c_str());
                     game.loadGame();
                     nextMove = playGame();
@@ -175,40 +152,42 @@ int main(int argc, char* argv[])
                 if(event == "QuitGame")
                 {
                     qquit = true;
+                    game.saveGame();
                 }
                 if(event == "BackToMainMenu")
                 {
                     nextMove = 0;
+                    game.saveGame();
                 }
-                if(event == "Stage1")
+                if(event == "Stage1" && game.object.Stage[1]->getAble())
                 {
                     game.setDefault();
                     game.setMap(game.object.tile, "map/WarmUp.map");
                     nextMove = playGame();
                     if(nextMove == -1)qquit = true;
                 }
-                if(event == "Stage2")
+                if(event == "Stage2" && game.object.Stage[2]->getAble())
                 {
                     game.setDefault();
                     game.setMap(game.object.tile, "map/Maze.map");
                     nextMove = playGame();
                     if(nextMove == -1)qquit = true;
                 }
-                if(event == "Stage3")
+                if(event == "Stage3"&& game.object.Stage[3]->getAble())
                 {
                     game.setDefault();
                     game.setMap(game.object.tile, "map/ArenaBoss.map");
                     nextMove = playGame();
                     if(nextMove == -1)qquit = true;
                 }
-                if(event == "Stage4")
+                if(event == "Stage4" && game.object.Stage[4]->getAble())
                 {
                     game.setDefault();
                     game.setMap(game.object.tile, "map/Vocalno.map");
                     nextMove = playGame();
                     if(nextMove == -1)qquit = true;
                 }
-                if(event == "Stage5")
+                if(event == "Stage5"&& game.object.Stage[5]->getAble())
                 {
                     game.setDefault();
                     game.setMap(game.object.tile, "map/FinalMap.map");
@@ -223,7 +202,28 @@ int main(int argc, char* argv[])
                     nextMove = playGame();
                     if(nextMove == -1)qquit = true;
                 }
+                if(event == "Healing")
+                {
+                    int h = game.object.x.getHealth();
+                    game.object.x.setHealth(min(h + game.object.x.getHealthStored(),game.object.x.getMaxHealth()));
+                    game.object.x.setHealthStored(-game.object.x.getHealthStored());
+                    game.object.healthStoredButton->setHealth(0);
+                }
+                if(event == "Restore Mana")
+                {
+                    int h = game.object.x.getMana();
+                    game.object.x.setMana(min(h + game.object.x.getManaStored(),165));
+                    game.object.x.setManaStored(-game.object.x.getManaStored());
+                    game.object.manaStoredButton->setMana(0);
+                }
             }
+        }
+        if(nextMove == -1)
+        {
+            qquit = true;
+            ofstream file("numofstage.txt");
+            file << game.object.countStage;
+            file.close();
         }
         if(Mix_PlayingMusic() == 1)
         {

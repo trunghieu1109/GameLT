@@ -7,8 +7,27 @@
 #include "texture.h"
 #include "sdl_utils.h"
 #include "constant_value.h"
-#include "fire.h"
 using namespace std;
+
+class Fire
+{
+    SDL_Rect mCollisionBox[9];
+    int mType;
+    int frames;
+    int heso;
+    bool isDead;
+    SDL_Rect mBoxx;
+public:
+    static Texture fireSprite;
+    Fire(int x, int y, int type);
+    void render(SDL_Rect &camera, SDL_Rect *spos);
+    void setSprite(Texture &sprite);
+    void nextFrame();
+    SDL_Rect getBox();
+    void setDefault();
+    bool getDead();
+    void setDead(bool d);
+};
 
 class FireTurret
 {

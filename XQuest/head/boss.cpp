@@ -11,439 +11,328 @@
 #include "tile.h"
 using namespace std;
 
-Boss::Boss(int pos)
+Boss::Boss(double posX, double posY)
 {
-    mCollisionBox = {pos%64 * 80, pos/64 * 80, BOSS_WIDTH, BOSS_HEIGHT};
+    sX = posX;
+    sY = posY;
+    mCollisionBox = {sX, sY, BOSS_WIDTH, BOSS_HEIGHT};
+    mTime = SDL_GetTicks();
+    health = 450;
+    attackType = -1;
     frames = 0;
     row = 0;
-    mTime = 0;
     fireBall = nullptr;
-    upp = false;
-    mHealth = 450;
-    time = 0;
-    velX = 0.f;
-    velY = 0.f;
-    frames_fire_flow = 0;
-    frames_fire_pillar = 0;
-    fireHitBox = {0, 0, 0, 0};
-    ok = 0;
-    vel = 0;
-    startTimeFireFlow = 0;
-    chose_attack = -1;
-    up[0] = {53, 4};
-    up[1] = {55, 4};
-    up[2] = {57, 4};
-    up[3] = {59, 4};
-    up[4] = {61, 4};
-    up[5] = {63, 4};
-    down[0] = {54, 4};
-    down[1] = {56, 4};
-    down[2] = {58, 4};
-    down[3] = {60, 4};
-    down[4] = {62, 4};
-    down[5] = {52, 4};
+    timeForFireFlow = 0;
+    goalY = -1;
+    goalX = -1;
+    velX = 0;
+    velY = 0;
+    posFirePillar = 4160;
+    phaseFire = 0;
+    timeForFirePillar = 0;
+    mTimeBeHurt = 0;
 }
-void Boss::setSprite(Texture &sprite)
+void Boss::render(SDL_Rect &camera, SDL_Point &pt, int isAppear)
 {
-    bossSprite = sprite;
-}
-void Boss::render(SDL_Rect &camera, SDL_Point &point, vector < Tile* > &tile, int limX)
-{
-    //cout << chose_attack << '\n';
-    if(mHealth <=  0)
+    if(health <= 0)
     {
-        mCollisionBox.x = -1000;
-        mCollisionBox.y = -1000;
+        sX = -1000;
+        sY = -1000;
+        mCollisionBox = {sX, sY, BOSS_WIDTH, BOSS_HEIGHT};
         return;
     }
-    if(frames / 10 == 7 && (row == 2 || row == 3))shot(point);
-    if((row == 4 || row == 5))
+    if(isAppear)attack(pt);
+    if(fireBall == nullptr && firePillar.empty() && fireFlow.empty())
     {
-        Mix_PlayChannel(-1, fireSpearChunk, 0);
-        double x = mCollisionBox.x - mPosX_bf;
-        double y = mCollisionBox.y - mPosY_bf;
-        double lenn = sqrt(x*x + y*y);
-        if(lenn > len_spear)
-        {
-            len_spear = 0;
-            frames = 0;
-            if(row == 5)row = 0;
-            else row = 1;
-            chose_attack = -1;
-        }
-        else
-        {
-            mCollisionBox.x += 10*velX;
-            if(mCollisionBox.x + BOSS_WIDTH > LEVEL_WIDTH)
-            {
-                mCollisionBox.x -=10*velX;
-                frames = 0;
-                if(row == 5)row = 0;
-                else row = 1;
-                chose_attack = -1;
-            }
-            mCollisionBox.y += 10*velY;
-            if(mCollisionBox.y + BOSS_HEIGHT > LEVEL_HEIGHT)
-            {
-                mCollisionBox.y -= 10*velY;
-                frames = 0;
-                if(row == 4)row = 1;
-                else row = 0;
-                chose_attack = -1;
-            }
-        }
-    }
-    if(row == 7 || row == 6)
-    {
-        if(chose_attack == 2)
-        {
-            fireflow(tile, camera);
-            if(ok == 1 && SDL_GetTicks() - startTimeFireFlow > 2000.f)
-            {
-                frames_fire_flow = 0;
-                frames = 0;
-                mTime = SDL_GetTicks();
-                fire.clear();
-                if(row == 6)row = 0;
-                else row = 1;
-                ok = 0;
-                chose_attack = -1;
-            }
-        }
-        if(chose_attack == 3)
-        {
-            Mix_PlayChannel(-1, firePillarChunk, 0);
-            if(upp)
-            {
-                for(int i=0; i<6; i++)
-                {
-                    SDL_Rect r = {frames_fire_pillar/5 * 80, 0, 80, 240};
-                    firePillarSprite.render(up[i].x*80 - camera.x, up[i].y*80 - camera.y, &r);
-                }
-            }
-            else
-            {
-                for(int i=0; i<6; i++)
-                {
-                    SDL_Rect r = {frames_fire_pillar/5 * 80, 0, 80, 240};
-                    firePillarSprite.render(down[i].x * 80 - camera.x, down[i].y * 80 - camera.y, &r);
-                }
-            }
-            frames_fire_pillar++;
-            if(frames_fire_pillar/5 >= 14)
-            {
-                if(upp)
-                {
-                    frames_fire_pillar = 0;
-                    upp = false;
-                }
-                else
-                {
-                    frames_fire_pillar = 0;
-                    if(row == 6)row = 0;
-                    else row = 1;
-                    mTime = SDL_GetTicks();
-                    frames = 0;
-                    chose_attack = -1;
-                }
-            }
-        }
-    }
-    SDL_Point pt1 = {mCollisionBox.x + BOSS_WIDTH/2, mCollisionBox.y + BOSS_HEIGHT/2};
-    double vX = point.x - pt1.x;
-    if(vX < 0)
-    {
-        if(row == 1 || row == 0)row = 1;
-        if(row == 4 || row == 5)row = 4;
-        if(row == 2 || row == 3)row = 3;
-    }
-    else
-    {
-        if(row == 1 || row == 0)row = 0;
-        if(row == 4 || row == 5)row = 5;
-        if(row == 2 || row == 3)row = 2;
-    }
-    if(SDL_GetTicks() - mTime > 3000.f)
-    {
-        chose_attack = rand()%4;
-        if(chose_attack == 0)
-        {
-            if(row == 1)row = 3;
-            else row = 2;
-            frames = 0 ;
-            mTime = SDL_GetTicks();
-        }
-        if(chose_attack == 1)
-        {
-            if(row == 1)row = 5;
-            else row = 4;
-            mPosX_bf = mCollisionBox.x;
-            mPosY_bf = mCollisionBox.y;
-            double x = point.x + 30 - (mCollisionBox.x + 160);
-            double y = point.y + 30 - (mCollisionBox.y + 120);
-            len_spear = sqrt(x*x + y*y);
-            velX = x / len_spear;
-            velY = y / len_spear;
-            frames = 0;
-            mTime = SDL_GetTicks();
-            ok = 0;
-        }
-        if(chose_attack == 2)
-        {
-            if(row == 1 || row == 3 || row == 4)
-            {
-                row = 7;
-                fireflow(tile, camera);
-                mPosY_bf = 80*(point.y / 80 - 1);
-                if(mPosY_bf < mCollisionBox.y)
-                {
-                    vel = -20;
-                }
-                else vel = 20;
-            }
-            else
-            {
-                row = 6;
-                fireflow(tile, camera);
-                mPosY_bf = 80*(point.y / 80 - 1);
-                if(mPosY_bf < mCollisionBox.y)
-                {
-                    vel = -20;
-                }
-                else vel = 20;
-            }
-            frames_fire_flow = 0;
-            frames = 0;
-            mTime = SDL_GetTicks();
-            startTimeFireFlow = SDL_GetTicks();
-        }
-        if(chose_attack == 3)
-        {
-            if(row == 1 || row == 3 || row == 4)
-            {
-                row = 7;
-            }
-            else
-            {
-                row = 6;
-            }
-            frames_fire_pillar = 0;
-            frames = 0;
-            mTime = SDL_GetTicks();
-            upp = true;
-        }
+        if(pt.x + 30 - mCollisionBox.x - 160 < 0)mDirection = -1;
+        else mDirection = 1;
     }
     if(checkCollisionBox(mCollisionBox, camera))
     {
-        SDL_Rect rect = {frames/10 * BOSS_WIDTH, row*BOSS_HEIGHT, min(BOSS_WIDTH, abs(mCollisionBox.x - limX)), BOSS_HEIGHT};
-        bossSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &rect);
-        frames ++;
-        if(frames/10 >= 8)
-        {
-            frames = 0;
-            if(chose_attack == 0)
-            {
-                if(row == 2)row = 0;
-                else row = 1;
-                //chose_attack = -1;
-            }
-
-        }
+        SDL_Rect r = {frames/8*BOSS_WIDTH, row * BOSS_HEIGHT, BOSS_WIDTH, BOSS_HEIGHT};
+        if(mDirection == 1) bossSprite.render(sX - camera.x, sY - camera.y, &r);
+        else bossSprite.render(sX - camera.x, sY - camera.y, &r, 0, nullptr, SDL_FLIP_HORIZONTAL);
     }
-    else
+    frames++;
+    if(frames/8 >= 8)
     {
         frames = 0;
+        if(row == 1)row = 0;
     }
+    sX += velX;
+    sY += velY;
+    mCollisionBox.x = sX;
+    mCollisionBox.y = sY;
     if(fireBall != nullptr)
     {
-        fireBall->render(camera, point, tile);
+        fireBall->render(camera);
         if(fireBall->getDead())
         {
             fireBall = nullptr;
-            mPosX_bf = 0;
-            mPosY_bf = 0;
-            chose_attack = -1;
+            attackType = -1;
+            row = 0;
+            frames = 0;
+            mTime = SDL_GetTicks();
         }
     }
-}
-void Boss::shot(SDL_Point &point)
-{
-    if(fireBall == nullptr)
+    if(!fireFlow.empty())
     {
-        SDL_Rect rect = {mCollisionBox.x - 30, mCollisionBox.y + (BOSS_HEIGHT - 80)/2 + 35, 80, 80};
-        SDL_Point pt = {mCollisionBox.x + 160, mCollisionBox.y + 120};
-        SDL_Point pt2 = {rect.x + 40, rect.y + 40};
-        double vX = (point.x + 30 - pt.x);
-        double vY = (point.y + 30 - pt.y);
-        double vvX = (point.x + 30 - pt2.x);
-        double vvY = (point.y + 30 - pt2.y);
-        if(vX > 0)
+        for(deque<FireFlow*>::iterator it = fireFlow.begin(); it != fireFlow.end(); it++)
         {
-            rect.x = mCollisionBox.x + 270;
-            rect.y = mCollisionBox.y+ (BOSS_HEIGHT - 80)/2 + 35;
-            pt2 = {rect.x + 40, rect.y + 40};
-            vvX = (point.x + 30 - pt2.x);
-            vvY = (point.y + 30 - pt2.y);
+            (*it)->render(camera, pt);
         }
-        double len = sqrt(vvX*vvX + vvY*vvY);
-        vvX /= len;
-        vvY /= len;
-        double length = sqrt((point.x - rect.x)*(point.x - rect.x) + (point.y - rect.y)*(point.y - rect.y));
-        fireBall = new FireBall(rect.x, rect.y, vvX, vvY, length);
-        Mix_PlayChannel(-1, fireBallChunk, 0);
-    }
-}
-void Boss::setMagicCircle(Texture &sprite)
-{
-    magicCircle = sprite;
-}
-int Boss::getHealth()
-{
-    return mHealth;
-}
-void Boss::setHealth(int h)
-{
-    mHealth = h;
-}
-void Boss::setTime(Uint32 stime)
-{
-    time = stime;
-}
-Uint32 Boss::getTime()
-{
-    return time;
-}
-SDL_Rect Boss::getBox()
-{
-    return mCollisionBox;
-}
-SDL_Rect Boss::getBox2()
-{
-    SDL_Rect empty = {0, 0, 0, 0};
-    if(fireBall == nullptr)return empty;
-    return fireBall->getBox();
-}
-SDL_Rect Boss::getBox3()
-{
-    SDL_Rect empty = {0, 0, 0, 0};
-    if(fire.empty())return empty;
-    SDL_Point pt = fire.back();
-    int cnt = fire.size();
-    SDL_Rect r = {pt.x, pt.y, 117*cnt, 165};
-    return r;
-}
-void Boss::setFireFlowSprite(Texture &sprite)
-{
-    fireFlowSprite = sprite;
-}
-void Boss::fireflow(vector < Tile* > &tile, SDL_Rect &camera)
-{
-    if((vel < 0 && mCollisionBox.y > mPosY_bf) || (vel > 0 && mCollisionBox.y < mPosY_bf))
-    {
-        mCollisionBox.y += vel;
-        return;
-    }
-    else
-    {
-        vel = 0;
-    }
-    Mix_PlayChannel(-1, fireFlowChunk, 0);
-    if(!fire.empty())
-    {
-        SDL_Rect rect = {frames_fire_flow/7*117, 0, 117, 165};
-        for(deque<SDL_Point>::iterator it = fire.begin(); it != fire.end(); it++)
+        if(SDL_GetTicks() - timeForFireFlow >= 3000.f)
         {
-            SDL_Point point = (*it);
-            fireFlowSprite.render(point.x - camera.x, point.y - camera.y, &rect);
-            if(!ok)
+            fireFlow.clear();
+            mTime = SDL_GetTicks();
+            row = 0;
+            attackType = -1;
+            frames = 0;
+            FireFlow::stable = 0;
+        }
+    }
+    if(!firePillar.empty())
+    {
+        for(deque < FirePillar* >::iterator it = firePillar.begin(); it != firePillar.end(); it++)
+        {
+            (*it)->render(camera, pt);
+        }
+        while(!firePillar.empty())
+        {
+            FirePillar *fire = firePillar.front();
+            if(fire->getDead())
             {
-                if(row == 7)
+                firePillar.pop_front();
+            }
+            else break;
+        }
+        if(firePillar.empty())
+        {
+            if(phaseFire == 0)
+            {
+                phaseFire = 1;
+                posFirePillar = 4240;
+            }
+            else
+            {
+                mTime = SDL_GetTicks();
+                attackType = -1;
+                frames = 0;
+                row = 0;
+                posFirePillar = 4160;
+                phaseFire = 0;
+            }
+        }
+    }
+}
+void Boss::attack(SDL_Point &pt)
+{
+    int lenX = pt.x + 30 - mCollisionBox.x - 160;
+    if(SDL_GetTicks() - mTime >= 3000.f)
+    {
+        if(attackType == -1)
+        {
+            attackType = rand()%4;
+        }
+    }
+    if(attackType == 0)
+    {
+        if(row != 1 && fireBall == nullptr)
+        {
+            row = 1;
+            frames = 0;
+        }
+        if(frames/8 == 6)
+        {
+            if(fireBall == nullptr)
+            {
+                Mix_PlayChannel(-1, fireBallChunk, 0);
+                if(lenX < 0)
                 {
-                    (*it).x -= 105;
+                    fireBall = new FireBall(mCollisionBox.x - 20, mCollisionBox.y + 60, pt.x, pt.y);
                 }
-                if(row == 6)
+                else
                 {
-                    (*it).x += 105;
+                    fireBall = new FireBall(mCollisionBox.x + BOSS_WIDTH + 20, mCollisionBox.y + 80, pt.x, pt.y);
                 }
             }
         }
     }
-    if(!ok && vel == 0)
+    else
     {
-        if(row == 7)
+        if(attackType == 1)
         {
-            SDL_Point point = {mCollisionBox.x - 117, mCollisionBox.y + 35};
-            fire.push_front(point);
+            if(row != 3 && fireFlow.empty())
+            {
+                if(goalY == -1)
+                {
+                    goalY = pt.y + 30;
+                    velY = (goalY - (sY + 100))/40;
+                }
+                if(abs(goalY - sY - 100) <= 5)
+                {
+                    goalY = -1;
+                    velY = 0;
+                    row = 3;
+                    frames = 0;
+                    timeForFireFlow = SDL_GetTicks();
+                    if(lenX < 0)FireFlow::direction = -1;
+                    else FireFlow::direction = 1;
+                }
+            }
+            if(!FireFlow::stable && (goalY == -1))
+            {
+                FireFlow *fire = nullptr;
+
+                if(FireFlow::direction == -1)
+                {
+                    Mix_PlayChannel(-1, fireFlowChunk, 0);
+                    fire = new FireFlow(mCollisionBox.x - FIRE_FLOW_WIDTH, mCollisionBox.y + 20);
+                }
+                else
+                {
+                    Mix_PlayChannel(-1, fireFlowChunk, 0);
+                    fire = new FireFlow(mCollisionBox.x + BOSS_WIDTH, mCollisionBox.y + 20);
+                }
+                fireFlow.push_back(fire);
+            }
         }
-        if(row == 6)
+        else
         {
-            SDL_Point point = {mCollisionBox.x + BOSS_WIDTH, mCollisionBox.y + 35};
-            fire.push_front(point);
+            if(attackType == 2)
+            {
+                if(posFirePillar == 4160)
+                {
+                    row = 3;
+                    frames = 0;
+                }
+                if(posFirePillar + 160 <= LEVEL_WIDTH)
+                {
+                    Mix_PlayChannel(-1, firePillarChunk, 0);
+                    FirePillar *fire = new FirePillar(posFirePillar, 320, 1);
+                    firePillar.push_back(fire);
+                    posFirePillar += 160;
+                }
+            }
+            else
+            {
+                if(attackType == 3)
+                {
+                    if(goalX == -1 && goalY == -1)
+                    {
+                        row = 2;
+                        frames = 0;
+                        goalX = pt.x + 30;
+                        goalY = pt.y + 30;
+                        velX = (goalX - sX - 160)/40;
+                        velY = (goalY - sY - 120)/40;
+                    }
+                    if(abs(goalX - sX - 160) <= 5 && abs(goalY - sY - 120) <= 5)
+                    {
+                        Mix_PlayChannel(-1, fireSpearChunk, 0);
+                        attackType = -1;
+                        mTime = SDL_GetTicks();
+                        frames = 0;
+                        row = 0;
+                        goalX = -1;
+                        goalY = -1;
+                        velX = 0;
+                        velY = 0;
+                    }
+                }
+            }
         }
-    }
-    SDL_Point pt = fire.back();
-    SDL_Rect r = {pt.x, pt.y, 117, 165};
-    if(fire.size() == 6)
-    {
-        ok = 1;
-    }
-    frames_fire_flow++;
-    if(frames_fire_flow/7 >= 4)
-    {
-        frames_fire_flow = 0;
     }
 }
-void Boss::setX(double x)
+int Boss::checkCollision(SDL_Point &pt)
 {
-    mCollisionBox.x += x;
+    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    if(checkCollisionBox(mCollisionBox, r))
+    {
+        return 20;
+    }
+    if(fireBall != nullptr)
+    {
+        if(fireBall->checkCollision(pt))
+        {
+            return 10;
+        }
+    }
+    if(!fireFlow.empty())
+    {
+        int cnt = 0;
+        for(deque<FireFlow*>::iterator it = fireFlow.begin(); it != fireFlow.end(); it++)
+        {
+            if((*it)->checkCollision(pt))
+            {
+                cnt = 1;
+                break;
+            }
+        }
+        if(cnt)
+        {
+            return 10;
+        }
+    }
+    if(!firePillar.empty())
+    {
+        int cnt = 0;
+        for(deque<FirePillar*>::iterator it = firePillar.begin(); it != firePillar.end(); it++)
+        {
+            if((*it)->checkCollision(pt))
+            {
+                cnt = 1;
+                break;
+            }
+        }
+        if(cnt)
+        {
+            return 10;
+        }
+    }
+    return 0;
 }
 int Boss::getX()
 {
     return mCollisionBox.x;
 }
-void Boss::setTime2(Uint32 t)
+int Boss::getY()
 {
-    mTime = t;
+    return mCollisionBox.y;
 }
-void Boss::setFirePillarSprite(Texture &sprite)
+void Boss::setX(double x)
 {
-    firePillarSprite = sprite;
+    sX += x;
+    mCollisionBox.x = sX;
 }
-int Boss::attackType()
+void Boss::setY(double y)
 {
-    return chose_attack;
+    sY += y;
+    mCollisionBox.y = sY;
 }
-bool Boss::checkAttack(SDL_Rect &crt)
+void Boss::setHealth(int h)
 {
-    if(upp)
-    {
-        for(int i=0;i<6;i++)
-        {
-            SDL_Rect r = {up[i].x * 80, up[i].y * 80, 80, 240};
-            if(checkCollisionBox(crt, r))return true;
-        }
-    }
-    else
-    {
-        for(int i=0;i<6;i++)
-        {
-            SDL_Rect r = {down[i].x * 80, down[i].y * 80, 80, 240};
-            if(checkCollisionBox(crt, r))return true;
-        }
-    }
-    return false;
+    health = h;
 }
-bool Boss::checkAttack2(SDL_Rect &rect)
+int Boss::getHealth()
 {
-    if(!fire.empty())
-    {
-        for(deque<SDL_Point>::iterator it = fire.begin(); it != fire.end(); it++)
-        {
-            SDL_Rect r = {(*it).x, (*it).y, 117, 165};
-            if(checkCollisionBox(rect, r))return true;
-        }
-    }
-    return false;
+    return health;
+}
+Uint32 Boss::getTime()
+{
+    return mTimeBeHurt;
+}
+void Boss::setTime(Uint32 t)
+{
+    mTimeBeHurt = t;
+}
+SDL_Rect Boss::getBox()
+{
+    return mCollisionBox;
+}
+void Boss::setSprite(Texture &sprite)
+{
+    bossSprite = sprite;
 }
 void Boss::loadFireBallChunk(Mix_Chunk* fbc)
 {
@@ -460,4 +349,137 @@ void Boss::loadFirePillarChunk(Mix_Chunk* fpc)
 void Boss::loadFireSpearChunk(Mix_Chunk* fsc)
 {
     fireSpearChunk = fsc;
+}
+
+FireBall::FireBall(int posX, int posY, int gX, int gY)
+{
+    stX = posX;
+    stY = posY;
+    goalX = gX;
+    goalY = gY;
+    vX = (goalX - stX)/40;
+    vY = (goalY - stY)/40;
+    mCollisionBox = {stX, stY, FIRE_BALL_WIDTH, FIRE_BALL_HEIGHT};
+    frames = 0;
+    isDead = false;
+}
+void FireBall::render(SDL_Rect &camera)
+{
+    if(isDead)return;
+    if(checkCollisionBox(camera, mCollisionBox))
+    {
+        SDL_Rect r = {frames/5*FIRE_BALL_WIDTH, 0, FIRE_BALL_WIDTH, FIRE_BALL_HEIGHT};
+        fireBallSprite.render(stX - camera.x, stY - camera.y, &r);
+    }
+    frames++;
+    if(frames/5 >= 6)
+    {
+        frames = 0;
+    }
+    stX += vX;
+    stY += vY;
+    mCollisionBox.x = stX;
+    mCollisionBox.y = stY;
+    if(abs(stX - goalX) <= 10 && abs(stY - goalY) <= 10)
+    {
+        isDead = true;
+        return;
+    }
+}
+void FireBall::setSprite(Texture &sprite)
+{
+    fireBallSprite = sprite;
+}
+bool FireBall::getDead()
+{
+    return isDead;
+}
+bool FireBall::checkCollision(SDL_Point &pt)
+{
+    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    if(checkCollisionBox(r, mCollisionBox))
+    {
+        return true;
+    }
+    return false;
+}
+FireFlow::FireFlow(int posX, int posY)
+{
+    mCollisionBox = {posX, posY, FIRE_FLOW_WIDTH, FIRE_FLOW_HEIGHT};
+    frames = 0;
+}
+void FireFlow::render(SDL_Rect &camera, SDL_Point &pt)
+{
+    if(checkCollisionBox(mCollisionBox, camera))
+    {
+        SDL_Rect r = {frames/5 * FIRE_FLOW_WIDTH, 0, FIRE_FLOW_WIDTH, FIRE_FLOW_HEIGHT};
+        fireFlowSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r);
+    }
+    frames++;
+    if(frames/5 >= 4)
+    {
+        frames = 0;
+    }
+    if(!stable)
+    {
+        mCollisionBox.x += (FIRE_FLOW_WIDTH - 20)*direction;
+    }
+    if((mCollisionBox.x <= 3000 && direction == -1) || (mCollisionBox.x >= LEVEL_WIDTH && direction == 1))
+    {
+        stable = 1;
+    }
+}
+bool FireFlow::checkCollision(SDL_Point &pt)
+{
+    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    if(checkCollisionBox(r, mCollisionBox))
+    {
+        return true;
+    }
+    return false;
+}
+void FireFlow::setSprite(Texture &sprite)
+{
+    fireFlowSprite = sprite;
+}
+
+FirePillar::FirePillar(int posX, int posY, int type)
+{
+    mCollisionBox = {posX, posY, FIRE_PILLAR_WIDTH, FIRE_PILLAR_HEIGHT};
+    frames = 0;
+    mType = type;
+    isDead = false;
+}
+void FirePillar::render(SDL_Rect &camera, SDL_Point &pt)
+{
+    if(isDead)return;
+    if(checkCollisionBox(mCollisionBox, camera))
+    {
+        SDL_Rect r = {frames/5 * FIRE_PILLAR_WIDTH, 0, FIRE_PILLAR_WIDTH, FIRE_PILLAR_HEIGHT};
+        if(mType)firePillarSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r);
+        else firePillarSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r, 0, nullptr, SDL_FLIP_VERTICAL);
+    }
+    frames++;
+    if(frames/5 >= 14)
+    {
+        frames = 0;
+        isDead = true;
+    }
+}
+bool FirePillar::checkCollision(SDL_Point &pt)
+{
+    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    if(checkCollisionBox(r, mCollisionBox))
+    {
+        return true;
+    }
+    return false;
+}
+void FirePillar::setSprite(Texture &sprite)
+{
+    firePillarSprite = sprite;
+}
+bool FirePillar::getDead()
+{
+    return isDead;
 }

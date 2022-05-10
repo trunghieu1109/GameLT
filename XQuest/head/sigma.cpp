@@ -35,6 +35,14 @@ Sigma::Sigma(int posX, int posY)
 int cntLaze = 0;
 void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
 {
+    if(mHealth <= 0)
+    {
+        dPosX = -1000;
+        dPosY = -1000;
+        mCollisionBox.x = dPosX;
+        mCollisionBox.y = dPosY;
+        return;
+    }
     move(pt);
     if(checkCollisionBox(mCollisionBox, camera))
     {
@@ -72,11 +80,13 @@ void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
     }
     if(eBall[0] != nullptr || eBall[1] != nullptr)
     {
+        Mix_PlayChannel(-1, sigmaElectricBallChunk, 0);
         int cnt = 0;
         for(int i=0; i<2; i++)
         {
             if(eBall[i] != nullptr)
             {
+
                 eBall[i]->render(camera, pt);
                 cnt++;
                 if(eBall[i]->getDead())
@@ -111,6 +121,7 @@ void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
     }
     if(attackType == 2)
     {
+        Mix_PlayChannel(-1, sigmaLazerChunk, 0);
         SDL_SetRenderDrawColor(renderer, 0xFF, 0, 0, 0);
         for(int i=0; i<20; i++)
         {
@@ -193,11 +204,14 @@ void Sigma::move(SDL_Point &pt)
         lenX = (goalX + 30 - mCollisionBox.x - 200);
         lenY = (goalY + 30 - mCollisionBox.y - 200);
     }
-    if(lenX > 0)
+    if(attackType == -1)
     {
-        mDirection = 1;
+        if(lenX > 0)
+        {
+            mDirection = 1;
+        }
+        else mDirection = -1;
     }
-    else mDirection = -1;
 
     double len = sqrt(lenX*lenX + lenY*lenY);
     /*if(abs(lenX) > 450.f)
@@ -271,6 +285,7 @@ void Sigma::move(SDL_Point &pt)
                             velX = 5*cos(angleinradian);
                             velY = 5*sin(angleinradian);
                         }
+                        Mix_PlayChannel(-1, sigmaBulletChunk, 0);
                         SigmaBullet *sbullet = new SigmaBullet(dPosX +20, dPosY + 290, velX, velY);
                         if(sBullet.empty())
                         {
@@ -287,6 +302,7 @@ void Sigma::move(SDL_Point &pt)
                         double angleinradian = (double)angle / 180 * 3.14;
                         velX = 5*cos(angleinradian);
                         velY = 5*sin(angleinradian);
+                        Mix_PlayChannel(-1, sigmaBulletChunk, 0);
                         SigmaBullet *sbullet = new SigmaBullet(dPosX - 20 + 400, dPosY + 290, velX, velY);
                         if(sBullet.empty())
                         {
@@ -368,6 +384,7 @@ void Sigma::move(SDL_Point &pt)
                         row = 3;
                         if(sLaze.size() >= 15)
                         {
+                            Mix_PlayChannel(-1, sigmaSuperLazerChunk, 0);
                             if(SigmaLaze::stop == false)SigmaLaze::stop = true;
                             return;
                         }
@@ -383,11 +400,13 @@ void Sigma::move(SDL_Point &pt)
                             }
                             if(SigmaLaze::direction == -1)
                             {
+                                Mix_PlayChannel(-1, sigmaSuperLazerChunk, 0);
                                 SigmaLaze *sl = new SigmaLaze(mCollisionBox.x - 80, mCollisionBox.y + 163);
                                 sLaze.push_back(sl);
                             }
                             else
                             {
+                                Mix_PlayChannel(-1, sigmaSuperLazerChunk, 0);
                                 SigmaLaze *sl = new SigmaLaze(mCollisionBox.x + 400 + 20, mCollisionBox.y + 163);
                                 sLaze.push_back(sl);
                             }
@@ -401,6 +420,7 @@ void Sigma::move(SDL_Point &pt)
                         {
                             if(cyclone == nullptr)
                             {
+                                Mix_PlayChannel(-1, sigmaCycloneChunk, 0);
                                 if(pt.x + 30 - mCollisionBox.x - 200 < 0)
                                 {
                                     cyclone = new SigmaCyclone(mCollisionBox.x, mCollisionBox.y, pt.x, pt.y);
@@ -442,34 +462,52 @@ bool Sigma::checkCollision(SDL_Point &pt)
     SDL_Rect r = {pt.x, pt.y, 60, 60};
     if(checkCollisionBox(r, mCollisionBox))
     {
+        cout << 1 << '\n';
         return true;
     }
     int cnt = 0;
     for(int i=0; i<2; i++)
     {
-        if(eBall[i] != nullptr)if(eBall[i]->checkCollision(pt))return true;
+        if(eBall[i] != nullptr)
+        {
+            if(eBall[i]->checkCollision(pt))
+            {
+                cout << 3 << '\n';
+                return true;
+            }
+        }
     }
     if(!sBullet.empty())
     {
         for(deque<SigmaBullet*>::iterator it = sBullet.begin(); it != sBullet.end(); it++)
         {
-            if((*it)->checkCollision(pt))return true;
+            if((*it)->checkCollision(pt))
+            {
+                cout << 2 << '\n';
+                return true;
+            }
         }
     }
     if(explosioning && pt.y >= 2280)
     {
+        cout << 4 << '\n';
         return true;
     }
     for(deque<SigmaLaze*>::iterator it = sLaze.begin(); it != sLaze.end(); it++)
     {
         if((*it)->checkCollision(pt))
         {
+            cout << 5 << '\n';
             return true;
         }
     }
     if(cyclone != nullptr)
     {
-        if(cyclone->checkCollision(pt))return true;
+        if(cyclone->checkCollision(pt))
+        {
+            cout << 6 << '\n';
+            return true;
+        }
     }
     return false;
 }
@@ -712,4 +750,24 @@ void SigmaCyclone::setSprite(Texture &sprite)
 bool SigmaCyclone::getDead()
 {
     return isDead;
+}
+void Sigma::setSigmaBulletChunk(Mix_Chunk* chunk)
+{
+    sigmaBulletChunk = chunk;
+}
+void Sigma::setSigmaLazerChunk(Mix_Chunk* chunk)
+{
+    sigmaLazerChunk = chunk;
+}
+void Sigma::setSigmaCycloneChunk(Mix_Chunk* chunk)
+{
+    sigmaCycloneChunk = chunk;
+}
+void Sigma::setSigmaSuperLazerChunk(Mix_Chunk* chunk)
+{
+    sigmaSuperLazerChunk = chunk;
+}
+void Sigma::setSigmaElectricBallChunk(Mix_Chunk* chunk)
+{
+    sigmaElectricBallChunk = chunk;
 }

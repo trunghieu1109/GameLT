@@ -22,18 +22,14 @@
 #include "button.h"
 #include "thorns.h"
 #include "gun.h"
-#include "bullet.h"
-#include "fire.h"
 #include "fire_turret.h"
 #include "xbuster.h"
 #include "deque"
 #include <utility>
 #include "creep.h"
-#include "creep_bullet.h"
 #include "lazergun.h"
 #include "door_button.h"
 #include "boss.h"
-#include "fire_ball.h"
 #include <time.h>
 #include <deque>
 #include "saw.h"
@@ -41,112 +37,32 @@
 #include "menu.h"
 #include "magicCircle.h"
 #include "lavaboss.h"
-#include "lavaball.h"
-#include "lavafist.h"
-#include "firecircle.h"
-#include "lavasun.h"
 #include "sigma.h"
+#include "healthStored.h"
+#include "manaStored.h"
+#include "heart.h"
 using namespace std;
 
 struct Object
 {
-    Texture spriteTile;
-    Texture spriteLazerGun;
-    Texture spriteLazer;
-    Texture spriteLazerHead;
-    Texture spriteButton;
-    Texture spriteDiamond;
-    Texture spritePortal;
-    Texture spriteThorn;
-    Texture spriteGun;
-    Texture spriteBullet;
-    Texture healthbar;
-    Texture thumb;
+    Texture textArr[TEXTURE_ID_TOTAL];
+    Mix_Chunk* chunkArr[MIX_ID_TOTAL];
     Texture name;
-    Texture spriteFire;
-    Texture spriteFireTurret;
-    Texture spriteXBuster;
-    Texture explosionSprite;
-    Texture spriteCreep;
-    Texture spriteCreepBullet;
-    Texture spriteCharging;
-    Texture spriteDoorButton;
-    Texture spriteBoss;
-    Texture spriteFireBall;
-    Texture spriteMagicCircle;
-    Texture spriteDoubleJump;
-    Texture spriteFireFlow;
-    Texture spriteDragonPortal;
-    Texture spriteFirePillar;
-    Texture spriteSigmaLaze;
-    Texture spriteGigaAttack;
-    Texture spriteSigmaPower;
-    Texture spriteSaw;
-    Texture spriteRobot1;
-    Texture spriteBullet1Robot;
-    Texture spriteBullet2Robot;
-    Texture spriteExplosionBullet;
-    Texture textureMagicCircle;
-    Texture spriteLavaBoss;
-    Texture spriteLavaFist;
-    Texture opaqueLava;
-    Texture spriteCyclone;
-    Texture losingBackGround;
-    Texture spriteLavaFireBall;
-    Texture lavaBossHealthBar;
-    Texture spriteLavaDroplet;
-    Texture spriteFireCircle;
-    Texture spriteLavaSun;
-    Texture spriteElectricBall;
-    Texture spriteSigmaBullet;
     SDL_Renderer* renderer;
     Window window;
     Tile *tile[ TOTAL_TILES ];
     Texture defaultText;
-    Texture dragonHealthBar;
-    Texture manaBar;
-    Texture warningSprite;
-    Texture robotHealthBar;
-    Texture bulletGatlingun;
-    Texture spriteSuperLazer;
-    Texture mainMenuBackGround;
-    Texture pauseMenuBackGround;
-    Texture stageSelectBackGround;
-    Texture fireAllMap;
-    Texture textureKnee;
-    Texture spriteSigma;
-    Texture sigmaHealthBar;
     GameButton* newGameButton;
     GameButton* continueGameButton;
     GameButton* quitGameButton;
     GameButton* selectGameButton;
     GameButton* backToMainMenu;
     GameButton* restart;
-    GameButton* Stage1;
-    GameButton* Stage2;
-    GameButton* Stage3;
-    GameButton* Stage4;
-    GameButton* Stage5;
+    GameButton* Stage[6];
+    GameButton* healthStoredButton;
+    GameButton* manaStoredButton;
     Menu* menu[4];
     Mix_Music* backGroundMusic;
-    Mix_Chunk* chunkDash;
-    Mix_Chunk* chunkNormalAttack;
-    Mix_Chunk* chunkJump;
-    Mix_Chunk* chunkJumpClimb;
-    Mix_Chunk* chunkGiga;
-    Mix_Chunk* chunkHurt;
-    Mix_Chunk* chunkCharging;
-    Mix_Chunk* explosionChunk;
-    Mix_Chunk* chunkFireBall;
-    Mix_Chunk* chunkFireFlow;
-    Mix_Chunk* chunkFirePillar;
-    Mix_Chunk* warningChunk;
-    Mix_Chunk* bossDied;
-    Mix_Chunk* chunkFireSpear;
-    Mix_Chunk* chunkGunShot;
-    Mix_Chunk* chunkCreepShot;
-    Mix_Chunk* chunkDiamondCollision;
-    Mix_Chunk* chunkMenuSelected;
     SDL_Color textColor;
     SDL_Rect mCollisionBoxFire;
     Uint32 startTimeForFire, waitTimeForFire;
@@ -157,6 +73,7 @@ struct Object
     int diaPos[1000];
     Button playButton;
     vector <FireTurret*> fireTurret;
+    int countStage;
     int hasGun;
     int hasThorn;
     int hasPortal;
@@ -168,6 +85,10 @@ struct Object
     int hasSaw;
     int hasMagicCircle;
     int frames_fire_storm;
+    int hasHealthStored;
+    int hasManaStored;
+    int hasHeart;
+    bool battle_with_boss;
     string currentMap;
     deque < pair < SDL_Point, int > > p;
     Creep *cre, *cre2;
@@ -180,6 +101,7 @@ struct Object
     vector < Gun* > gun;
     vector < Saw* > saw;
     vector < MagicCircle* > magicC;
+    HealthStored *healthS;
     Boss *boss;
     bool bossAppearing;
     bool bossAppeared;
@@ -198,7 +120,10 @@ struct Object
     int mPosPorX[4];
     int mPosPorY[4];
     int arenaHeight;
+    Uint32 timevsboss;
     string nextRound;
+    ManaStored *manaS;
+    Heart *heart;
     Object ()
     {
         hasGun = -1;
@@ -214,8 +139,10 @@ struct Object
         posArenaY = -1;
         arenaWidth = -1;
         arenaHeight = -1;
-
+        hasHealthStored = -1;
         hasMagicCircle = -1;
+        hasManaStored = -1;
+        hasHeart = -1;
         textColor = {0xFF, 0xFF, 0};
         frames_portal = 30;
         camera_bf = {0, 0, 0, 0};
@@ -227,10 +154,15 @@ struct Object
         frames_fire_storm = 0;
         startTimeForFire = 0;
         waitTimeForFire = 0;
-        robot = new Robot1(2894);
-        boss = new Boss(254);
+        robot = new Robot1(1360, 3600);
+        boss = new Boss(4880, 240);
         lavaboss = new LavaBoss(438);
         sigma = new Sigma(2240, 1840);
+        heart = nullptr;
+        battle_with_boss = false;
+        countStage = 0;
+        //healthS = new HealthStored(480, 3720);
+        //manaS = new ManaStored(560, 3720);
     }
 };
 

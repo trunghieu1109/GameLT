@@ -2320,7 +2320,7 @@
 	<iostream>
 	"magicCircle.h"
 
-1651508208 source:c:\users\admin\desktop\baitapuet\quest\main.cpp
+1652173466 source:c:\users\admin\desktop\baitapuet\quest\main.cpp
 	<iostream>
 	"head/game.h"
 	"head/menu.h"
@@ -2412,16 +2412,16 @@
 	"xbuster.h"
 	"collision.h"
 
-1648782769 c:\users\admin\desktop\baitapuet\quest\head\boss.h
+1651890415 c:\users\admin\desktop\baitapuet\quest\head\boss.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
 	"texture.h"
 	"sdl_utils.h"
 	"constant_value.h"
-	"fire_ball.h"
 	"tile.h"
 	<deque>
+	<vector>
 
 1651508849 source:c:\users\admin\desktop\baitapuet\quest\head\bullet.cpp
 	<iostream>
@@ -2449,7 +2449,7 @@
 	<SDL_image.h>
 	<SDL_ttf.h>
 
-1649946958 c:\users\admin\desktop\baitapuet\quest\head\constant_value.h
+1652152999 c:\users\admin\desktop\baitapuet\quest\head\constant_value.h
 	<iostream>
 	<string>
 	<SDL_mixer.h>
@@ -2462,7 +2462,7 @@
 	"tile.h"
 	<vector>
 
-1650080611 c:\users\admin\desktop\baitapuet\quest\head\tile.h
+1651573766 c:\users\admin\desktop\baitapuet\quest\head\tile.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2477,7 +2477,7 @@
 	"tile.h"
 	<vector>
 
-1651509296 source:c:\users\admin\desktop\baitapuet\quest\head\character.cpp
+1652108821 source:c:\users\admin\desktop\baitapuet\quest\head\character.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2491,7 +2491,7 @@
 	<iterator>
 	<SDL_mixer.h>
 
-1651485560 c:\users\admin\desktop\baitapuet\quest\head\character.h
+1651941547 c:\users\admin\desktop\baitapuet\quest\head\character.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2532,23 +2532,22 @@
 	"collision.h"
 	"vector"
 
-1651509315 source:c:\users\admin\desktop\baitapuet\quest\head\creep.cpp
+1651808066 source:c:\users\admin\desktop\baitapuet\quest\head\creep.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
-	"texture.h"
 	"creep.h"
 	"collision.h"
 	<cmath>
-	"creep_bullet.h"
 	"constant_value.h"
 
-1648801451 c:\users\admin\desktop\baitapuet\quest\head\creep.h
+1651808036 c:\users\admin\desktop\baitapuet\quest\head\creep.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
 	"texture.h"
-	"creep_bullet.h"
+	<vector>
+	"tile.h"
 
 1647670903 c:\users\admin\desktop\baitapuet\quest\head\creep_bullet.h
 	<iostream>
@@ -2583,7 +2582,7 @@
 	"constant_value.h"
 	<cmath>
 
-1651509392 source:c:\users\admin\desktop\baitapuet\quest\head\diamond.cpp
+1651941987 source:c:\users\admin\desktop\baitapuet\quest\head\diamond.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2599,7 +2598,7 @@
 	<SDL_image.h>
 	"texture.h"
 
-1651509651 source:c:\users\admin\desktop\baitapuet\quest\head\boss.cpp
+1651984188 source:c:\users\admin\desktop\baitapuet\quest\head\boss.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2662,24 +2661,20 @@
 	<cmath>
 	"collision.h"
 
-1651509425 source:c:\users\admin\desktop\baitapuet\quest\head\fire_turret.cpp
+1651808251 source:c:\users\admin\desktop\baitapuet\quest\head\fire_turret.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
-	"texture.h"
-	"constant_value.h"
-	"sdl_utils.h"
 	"fire_turret.h"
 	"collision.h"
 
-1648975816 c:\users\admin\desktop\baitapuet\quest\head\fire_turret.h
+1651808249 c:\users\admin\desktop\baitapuet\quest\head\fire_turret.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
 	"texture.h"
 	"sdl_utils.h"
 	"constant_value.h"
-	"fire.h"
 
 1651509439 source:c:\users\admin\desktop\baitapuet\quest\head\firecircle.cpp
 	<iostream>
@@ -2700,15 +2695,15 @@
 	"texture.h"
 	"collision.h"
 
-1651509444 source:c:\users\admin\desktop\baitapuet\quest\head\game.cpp
+1652173689 source:c:\users\admin\desktop\baitapuet\quest\head\game.cpp
 	<iostream>
 	"game.h"
 
-1651327693 c:\users\admin\desktop\baitapuet\quest\head\game.h
+1651825195 c:\users\admin\desktop\baitapuet\quest\head\game.h
 	<iostream>
 	"object.h"
 
-1651482670 c:\users\admin\desktop\baitapuet\quest\head\object.h
+1652166816 c:\users\admin\desktop\baitapuet\quest\head\object.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2730,18 +2725,14 @@
 	"button.h"
 	"thorns.h"
 	"gun.h"
-	"bullet.h"
-	"fire.h"
 	"fire_turret.h"
 	"xbuster.h"
 	"deque"
 	<utility>
 	"creep.h"
-	"creep_bullet.h"
 	"lazergun.h"
 	"door_button.h"
 	"boss.h"
-	"fire_ball.h"
 	<time.h>
 	<deque>
 	"saw.h"
@@ -2749,11 +2740,10 @@
 	"menu.h"
 	"magicCircle.h"
 	"lavaboss.h"
-	"lavaball.h"
-	"lavafist.h"
-	"firecircle.h"
-	"lavasun.h"
 	"sigma.h"
+	"healthStored.h"
+	"manaStored.h"
+	"heart.h"
 
 1646729820 c:\users\admin\desktop\baitapuet\quest\head\window.h
 	<iostream>
@@ -2771,12 +2761,13 @@
 	<SDL_image.h>
 	"texture.h"
 
-1648787071 c:\users\admin\desktop\baitapuet\quest\head\gun.h
+1651762116 c:\users\admin\desktop\baitapuet\quest\head\gun.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
 	"texture.h"
-	"bullet.h"
+	<vector>
+	"tile.h"
 
 1648108068 c:\users\admin\desktop\baitapuet\quest\head\lazergun.h
 	<iostream>
@@ -2794,13 +2785,14 @@
 	"tile.h"
 	<vector>
 
-1649944342 c:\users\admin\desktop\baitapuet\quest\head\robot1.h
+1652108309 c:\users\admin\desktop\baitapuet\quest\head\robot1.h
 	<iostream>
 	"texture.h"
 	<SDL.h>
 	<SDL_image.h>
 	"tile.h"
 	<vector>
+	<deque>
 
 1650075801 c:\users\admin\desktop\baitapuet\quest\head\menu.h
 	<iostream>
@@ -2809,7 +2801,7 @@
 	"gamebutton.h"
 	<vector>
 
-1650075828 c:\users\admin\desktop\baitapuet\quest\head\gamebutton.h
+1652164474 c:\users\admin\desktop\baitapuet\quest\head\gamebutton.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2826,7 +2818,7 @@
 	"collision.h"
 	"constant_value.h"
 
-1650545310 c:\users\admin\desktop\baitapuet\quest\head\lavaboss.h
+1652004073 c:\users\admin\desktop\baitapuet\quest\head\lavaboss.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2834,11 +2826,6 @@
 	"collision.h"
 	"constant_value.h"
 	"sdl_utils.h"
-	"lavaball.h"
-	"lavafist.h"
-	"lava_droplet.h"
-	"firecircle.h"
-	"lavasun.h"
 	"deque"
 
 1650364547 c:\users\admin\desktop\baitapuet\quest\head\lavafist.h
@@ -2862,7 +2849,7 @@
 	"texture.h"
 	"collision.h"
 
-1651482062 c:\users\admin\desktop\baitapuet\quest\head\sigma.h
+1652016282 c:\users\admin\desktop\baitapuet\quest\head\sigma.h
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2872,11 +2859,10 @@
 	"sdl_utils.h"
 	<deque>
 
-1651509450 source:c:\users\admin\desktop\baitapuet\quest\head\gamebutton.cpp
-	<iostream>
+1652165131 source:c:\users\admin\desktop\baitapuet\quest\head\gamebutton.cpp
 	"gamebutton.h"
 
-1651509456 source:c:\users\admin\desktop\baitapuet\quest\head\gun.cpp
+1651761916 source:c:\users\admin\desktop\baitapuet\quest\head\gun.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2893,7 +2879,7 @@
 	<iostream>
 	"lavaball.h"
 
-1651509475 source:c:\users\admin\desktop\baitapuet\quest\head\lavaboss.cpp
+1652004156 source:c:\users\admin\desktop\baitapuet\quest\head\lavaboss.cpp
 	<iostream>
 	"lavaboss.h"
 	<cmath>
@@ -2927,7 +2913,7 @@
 
 1647339340 source:c:\users\admin\desktop\baitapuet\quest\head\map.cpp
 
-1651509505 source:c:\users\admin\desktop\baitapuet\quest\head\menu.cpp
+1651910483 source:c:\users\admin\desktop\baitapuet\quest\head\menu.cpp
 	<iostream>
 	"menu.h"
 
@@ -2941,7 +2927,7 @@
 	"constant_value.h"
 	"portal.h"
 
-1651509526 source:c:\users\admin\desktop\baitapuet\quest\head\robot1.cpp
+1652108507 source:c:\users\admin\desktop\baitapuet\quest\head\robot1.cpp
 	<iostream>
 	"robot1.h"
 	"collision.h"
@@ -2952,7 +2938,7 @@
 	"saw.h"
 	"collision.h"
 
-1651509538 source:c:\users\admin\desktop\baitapuet\quest\head\sdl_utils.cpp
+1651996302 source:c:\users\admin\desktop\baitapuet\quest\head\sdl_utils.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -2960,7 +2946,7 @@
 	<SDL_mixer.h>
 	"sdl_utils.h"
 
-1651509544 source:c:\users\admin\desktop\baitapuet\quest\head\sigma.cpp
+1652109588 source:c:\users\admin\desktop\baitapuet\quest\head\sigma.cpp
 	<iostream>
 	"sigma.h"
 	<cmath>
@@ -2987,7 +2973,7 @@
 	"thorns.h"
 	"collision.h"
 
-1651509565 source:c:\users\admin\desktop\baitapuet\quest\head\tile.cpp
+1651573776 source:c:\users\admin\desktop\baitapuet\quest\head\tile.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
@@ -3011,4 +2997,37 @@
 	"texture.h"
 	"xbuster.h"
 	"collision.h"
+
+1651915917 c:\users\admin\desktop\baitapuet\quest\head\healthstored.h
+	<iostream>
+	<SDL.h>
+	"texture.h"
+	<SDL_image.h>
+	"collision.h"
+
+1651916198 source:c:\users\admin\desktop\baitapuet\quest\head\healthstored.cpp
+	<iostream>
+	"healthStored.h"
+
+1651916605 source:c:\users\admin\desktop\baitapuet\quest\head\manastored.cpp
+	<iostream>
+	"manaStored.h"
+
+1651916292 c:\users\admin\desktop\baitapuet\quest\head\manastored.h
+	<iostream>
+	<SDL.h>
+	"texture.h"
+	<SDL_image.h>
+	"collision.h"
+
+1651938790 c:\users\admin\desktop\baitapuet\quest\head\heart.h
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"texture.h"
+	"collision.h"
+
+1651940004 source:c:\users\admin\desktop\baitapuet\quest\head\heart.cpp
+	<iostream>
+	"heart.h"
 
