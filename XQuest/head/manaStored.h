@@ -15,6 +15,7 @@ class ManaStored
 public:
     static Texture manaStoreSprite;
     ManaStored(int posX, int posY);
+    ~ManaStored();
     void render(SDL_Rect &camera);
     bool checkCollision(SDL_Point &pt);
     void setSprite(Texture &sprite);

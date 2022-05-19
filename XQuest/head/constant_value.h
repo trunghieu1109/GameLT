@@ -1,15 +1,19 @@
 #ifndef CONSTANT_VALUE__H
 #define CONSTANT_VALUE__H
 #include <iostream>
-#include <string>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <SDL_mixer.h>
+#include <string>
+#include "texture.h"
 using namespace std;
 
 const int LEVEL_HEIGHT = 3840;
 const int LEVEL_WIDTH = 5120;
 const int TOTAL_TILES = 3072;
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 960;
+const int SCREEN_HEIGHT = 640;
 const int TOTAL_TILE_SPRITES = 80;
 const int TILE_WIDTH = 80;
 const int TILE_HEIGHT = 80;
@@ -58,6 +62,70 @@ const int FIRE_PILLAR_HEIGHT = 240;
 const int FIRE_PILLAR_WIDTH = 80;
 const int FIRE_FLOW_WIDTH = 120;
 const int FIRE_FLOW_HEIGHT = 160;
+const int CREEP_HEIGHT = 80;
+const int CREEP_WIDTH = 80;
+const int DEFAULT_HEALTH = 150;
+const int DEFAULT_MANA = 165;
+const int GIGA_WIDTH = 63;
+const int GIGA_HEIGHT = 60;
+const int CIRCLE_IN_DOUBLE_JUMP_WIDTH = 140;
+const int CIRCLE_IN_DOUBLE_JUMP_HEIGHT = 50;
+const int CHARGE_WIDTH = 120;
+const int CHARGE_HEIGHT = 120;
+const int DOOR_BUTTON_WIDTH = 80;
+const int DOOR_BUTTON_HEIGHT = 80;
+const int HEALTH_STORED_WIDTH = 80;
+const int HEALTH_STORED_HEIGHT = 40;
+const int HEART_HEIGHT = 60;
+const int HEART_WIDTH = 40;
+const int LAVABOSS_WIDTH = 320;
+const int LAVABOSS_HEIGHT = 320;
+const int FIRE_CIRCLE_WIDTH = 200;
+const int FIRE_CIRCLE_HEIGHT = 200;
+const int LAVA_BALL_HEIGHT = 80;
+const int LAVA_BALL_WIDTH = 80;
+const int LAVA_FIST_WIDTH = 160;
+const int LAVA_FIST_HEIGHT = 320;
+const int LAVA_SUN_WIDTH = 50;
+const int LAVA_SUN_HEIGHT = 50;
+const int KNEE_WIDTH = 80;
+const int KNEE_HEIGHT = 20;
+const int LAVA_DROPLET_WIDTH = 80;
+const int LAVA_DROPLET_HEIGHT = 80;
+const int MAGIC_CIRCLE_VERTICAL_WIDTH = 80;
+const int MAGIC_CIRCLE_VERTICAL_HEIGHT = 400;
+const int MAGIC_CIRCLE_HORIZONTAL_WIDTH = 400;
+const int MAGIC_CIRCLE_HORIZONTAL_HEIGHT = 80;
+const int MANA_STORED_WIDTH = 80;
+const int MANA_STORED_HEIGHT = 40;
+const int ROBOT_WIDTH = 240;
+const int ROBOT_HEIGHT = 160;
+const int ROBOT_BULLET_WIDTH = 60;
+const int ROBOT_BULLET_HEIGHT = 40;
+const int ROBOT_GATLING_BULLET_WIDTH = 45;
+const int ROBOT_GATLING_BULLET_HEIGHT = 40;
+const int ROBOT_SUPER_LAZER_WIDTH = 80;
+const int ROBOT_SUPER_LAZER_HEIGHT = 1200;
+const int SAW_WIDTH = 80;
+const int SAW_HEIGHT = 80;
+const int SIGMA_WIDTH = 400;
+const int SIGMA_HEIGHT = 400;
+const int SIGMA_CYCLONE_WIDTH = 160;
+const int SIGMA_CYCLONE_HEIGHT = 320;
+const int SIGMA_LAZE_WIDTH = 80;
+const int SIGMA_LAZE_HEIGHT = 300;
+const int SIGMA_BULLET_WIDTH = 40;
+const int SIGMA_BULLET_HEIGHT = 40;
+const int SIGMA_ELECTRIC_BALL_WIDTH = 80;
+const int SIGMA_ELECTRIC_BALL_HEIGHT = 80;
+const int DRAGON_PORTAL_WIDTH = 104;
+const int DRAGON_PORTAL_HEIGHT = 300;
+const int FIRE_ALL_MAP_WIDTH = 1250;
+const int FIRE_ALL_MAP_HEIGHT = 1000;
+const int FONT_SIZE = 20;
+const int ACTION_BUTTON_WIDTH = 300;
+const int ACTION_BUTTON_HEIGHT = 60;
+const int DISTANCE_BETWEEN_BUTTON = 20;
 enum TextureID
 {
     TEXTURE_TILE,
@@ -126,6 +194,7 @@ enum TextureID
     TEXTURE_HEART,
     TEXTURE_HEALTH_BAR_REST,
     TEXTURE_LOCK_STAGE,
+    TEXTURE_DIAMOND_BAR,
     TEXTURE_ID_TOTAL
 };
 
@@ -172,5 +241,65 @@ enum MixID
     MIX_SIGMA_LAZER,
     MIX_SIGMA_EXPLOSION2,
     MIX_ID_TOTAL
+};
+enum ACTION_BUTTON_ID
+{
+    NEW_GAME_BUTTON,
+    CONTINUE_GAME_BUTTON,
+    QUIT_GAME_BUTTON,
+    SELECT_GAME_BUTTON,
+    BACK_TO_MAIN_MENU_BUTTON,
+    RESTART_GAME_BUTTON,
+    BACK_BUTTON,
+    TOTAL_ACTION_BUTTON
+};
+enum STAGE_BUTTON_ID
+{
+    STAGE_1_BUTTON,
+    STAGE_2_BUTTON,
+    STAGE_3_BUTTON,
+    STAGE_4_BUTTON,
+    STAGE_5_BUTTON,
+    TOTAL_STAGE_BUTTON
+};
+enum STORE_BUTTON_ID
+{
+    HEALTH_STORE_BUTTON,
+    MANA_STORE_BUTTON,
+    TOTAL_STORE_BUTTON
+};
+
+enum MENU_ID
+{
+    MAIN_MENU,
+    PAUSE_MENU,
+    SELECT_STAGE,
+    LOSING_MENU,
+    TOTAL_MENU
+};
+enum MAP_ID
+{
+    STAGE_1,
+    STAGE_2,
+    STAGE_3,
+    STAGE_4,
+    STAGE_5
+};
+enum OBJECT_ID
+{
+    GUN,
+    THORN,
+    PORTAL,
+    FIRETURRET,
+    DIAMOND,
+    DOORBUTTON,
+    LAZERGUN,
+    CREEP,
+    SAW,
+    MAGICCIRCLE,
+    HEALTHSTORED,
+    MANASTORED,
+    HEART,
+    TOTAL_OBJECTS
 };
 #endif // CONSTANT_VALUE__H

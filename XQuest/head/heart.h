@@ -16,6 +16,7 @@ class Heart
 public:
     static Texture heartSprite;
     Heart(int posX, int posY);
+    ~Heart();
     void render(SDL_Rect &camera);
     bool checkCollision(SDL_Point &pt);
     void setSprite(Texture &sprite);

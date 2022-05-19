@@ -1,10 +1,5 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include "texture.h"
 #include "gun.h"
-#include "constant_value.h"
-#include "collision.h"
+
 using namespace std;
 
 Gun::Gun(int pos, int type, int bulletType)
@@ -15,6 +10,11 @@ Gun::Gun(int pos, int type, int bulletType)
     mHealth = 20;
     time = 0;
     time2 = 0;
+}
+Gun::~Gun()
+{
+    mBox = {0, 0, 0, 0};
+    delete mBullet;
 }
 void Gun::setSprite(Texture &sprite)
 {
@@ -70,6 +70,12 @@ Bullet::Bullet(int x, int y, int type)
     time = 0;
     mHealth = 10;
     mTime = 0;
+    isDead = false;
+}
+Bullet::~Bullet()
+{
+    mPosX = 0;
+    mBox = {0, 0, 0, 0};
     isDead = false;
 }
 void Bullet::setSprite(Texture &sprite)

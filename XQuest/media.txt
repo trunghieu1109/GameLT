@@ -64,3 +64,4 @@ Texture/manaStoredSprite.png|
 Texture/heart.png|
 Texture/health_bar_rest.png|
 Texture/lock_stage.png|
+Texture/diamond_bar.png|

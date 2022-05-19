@@ -1,12 +1,5 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include "texture.h"
-#include "constant_value.h"
-#include "sdl_utils.h"
-#include "collision.h"
-#include "tile.h"
 #include "door_button.h"
+
 using namespace std;
 
 DoorButton::DoorButton(int pos, int type, Tile *door_1, Tile *door_2)
@@ -16,7 +9,7 @@ DoorButton::DoorButton(int pos, int type, Tile *door_1, Tile *door_2)
     row = 0;
     mDoor_1 = door_1;
     mDoor_2 = door_2;
-    mBox = {(pos % 64) * 80, (pos / 64) * 80, 80, 80};
+    mBox = {(pos % 64) * DOOR_BUTTON_WIDTH, (pos / 64) * DOOR_BUTTON_HEIGHT, DOOR_BUTTON_WIDTH, DOOR_BUTTON_HEIGHT};
     if(mType == 0)
     {
         mCollisionBox = {mBox.x, mBox.y +20, 80, 60};
@@ -34,11 +27,17 @@ DoorButton::DoorButton(int pos, int type, Tile *door_1, Tile *door_2)
         mCollisionBox = {mBox.x + 20, mBox.y, 60, 80};
     }
 }
+DoorButton::~DoorButton()
+{
+    mBox = {0, 0, 0, 0};
+    mType = 0;
+    mPos = 0;
+}
 void DoorButton::render(SDL_Rect &camera)
 {
     if(checkCollisionBox(camera, mBox))
     {
-        SDL_Rect rect = {mType * 80, row * 80, 80, 80};
+        SDL_Rect rect = {mType * DOOR_BUTTON_WIDTH, row * DOOR_BUTTON_HEIGHT, DOOR_BUTTON_WIDTH, DOOR_BUTTON_HEIGHT};
         doorbuttonSprite.render(mBox.x - camera.x, mBox.y - camera.y, &rect);
     }
 }

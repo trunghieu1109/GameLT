@@ -1,5 +1,3 @@
-#include <iostream>
-#include <SDL.h>
 #include "window.h"
 #include "constant_value.h"
 #include "sdl_utils.h"
@@ -15,9 +13,23 @@ Window::Window()
     mMouseFocus = false;
     mKeyBoardFocus = false;
 }
+Window::~Window()
+{
+    mWidth = 0;
+    mHeight = 0;
+    SDL_DestroyRenderer(mRenderer);
+    SDL_DestroyWindow(mWindow);
+}
 bool Window::init()
 {
     mWindow = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    SDL_Surface *surface = IMG_Load("Texture/icon.jpg");
+    if(surface == nullptr)
+    {
+        logIMGError(cout, "Load Icon", true);
+    }
+    SDL_SetWindowIcon(mWindow, surface);
+    SDL_FreeSurface(surface);
     if(mWindow == nullptr)logSDLError(cout, "CreateWindow", true);
     else
     {

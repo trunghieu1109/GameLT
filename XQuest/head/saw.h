@@ -21,6 +21,7 @@ class Saw
 public:
     static Texture sawSprite;
     Saw(int pos, int direction);
+    ~Saw();
     void render(SDL_Rect &camera, vector <Tile*> &tile);
     SDL_Rect getBox();
     void setSprite(Texture &sprite);

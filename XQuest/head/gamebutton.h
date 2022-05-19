@@ -13,42 +13,70 @@ using namespace std;
 
 class GameButton
 {
-    SDL_Rect mCollisionBox;
-    Texture gameButton;
-    string stringinbutton;
-    Texture textinbutton[3];
-    SDL_Color color[3];
-    Texture textureWithButton;
-    Texture lockstage;
-    string nextMove;
-    int colorType;
-    int mType;
-    int frames;
-    int health;
-    int mana;
-    bool able;
-    SDL_Renderer *mRenderer;
-    bool hasHealth;
-    bool hasMana;
 public:
-    static Texture storeBar;
-    GameButton(int posX, int posY, int type, const string &pathtogameButton, const string &string_in_button, SDL_Renderer *renderer, TTF_Font *font, string next);
-    GameButton(int posX, int posY, int type, const string &pathtotexturewithbutton, SDL_Renderer *renderer, string next);
-    GameButton(int posX, int posY, int type, const string &pathtotexturewithbutton, const string &pathtolockstagetexture, SDL_Renderer *renderer, string next);
+    SDL_Rect mCollisionBox;
+    Texture textureOfButton;
+    SDL_Renderer *mRenderer;
+    string nextMove;
+    bool able;
     GameButton();
+    virtual void render() = 0;
+    virtual string handleEvent(SDL_Event* e) = 0;
+    virtual int getHeight() = 0;
+    virtual int getWidth() = 0;
+    void setPos(int posX, int posY);
+    string getNextMenu();
+    void setRenderer(SDL_Renderer *renderer);
+    bool getAble();
+    void setAble(bool a);
+};
+
+class ActionButton : public GameButton
+{
+    Texture text[3];
+    SDL_Color color[3];
+    int colorType;
+public:
+    ActionButton(const string &pathOfBackground, const string &textInButton, TTF_Font *font, string next, SDL_Renderer *renderer);
     void render();
     string handleEvent(SDL_Event *e);
-    void setPos(int posX, int posY);
-    int getWidth();
     int getHeight();
-    string getNextMenu();
-    void setHealth(int h);
+    int getWidth();
+};
+
+class StageButton : public GameButton
+{
+    int frames;
+    Texture lockTexture;
+public:
+    StageButton(const string &pathOfTexture, const string &pathOfLock, string next, SDL_Renderer *renderer);
+    void render();
+    string handleEvent(SDL_Event *e);
+    int getHeight();
+    int getWidth();
+};
+
+class StoredButton : public GameButton
+{
+    int frames;
+    bool hasMana, hasHealth;
+    int mana, health;
+public:
+    static Texture storeBar;
+    StoredButton(const string &pathOfTexture, string next, SDL_Renderer *renderer);
+    void render();
+    string handleEvent(SDL_Event *e);
+    int getHeight();
+    int getWidth();
     void setSprite(Texture &sprite);
+    int getHasHealth();
+    void setHasHealth(bool h);
+    int getHasMana();
+    void setHasMana(bool m);
+    int getHealth();
+    void setHealth(int h);
+    int getMana();
     void setMana(int m);
-    void setHasHealth();
-    void setHasMana();
-    void setAble(bool a);
-    bool getAble();
 };
 
 #endif // GAMEBUTTON__H

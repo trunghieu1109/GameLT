@@ -18,6 +18,7 @@ class MagicCircle
 public:
     static Texture magicCircleTexture;
     MagicCircle(int x, int y, int type, int nextX, int nextY, double degree);
+    ~MagicCircle();
     void render(SDL_Rect &camera);
     SDL_Point checkCollision(SDL_Point &pt);
     void setTexture(Texture &sprite);

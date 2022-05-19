@@ -1,11 +1,5 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include "texture.h"
-#include "character.h"
-#include "collision.h"
-#include "constant_value.h"
 #include "portal.h"
+
 using namespace std;
 
 Portal::Portal(int x, int y, string &round, int type1, int type2, int type3)
@@ -20,6 +14,13 @@ Portal::Portal(int x, int y, string &round, int type1, int type2, int type3)
     isSave = type2;
     isWin = type3;
 }
+Portal::~Portal()
+{
+    mBox = {0, 0, 0, 0};
+    frames = 0;
+    row = 0;
+    appear = true;
+}
 bool Portal::checkCollision(Character *crt, int numOfDiamond)
 {
     SDL_Rect rect = crt->getBox();
@@ -27,9 +28,9 @@ bool Portal::checkCollision(Character *crt, int numOfDiamond)
     if(checkCollisionBox(mBox, crt->getBox()))
     {
         int poi = crt->getPoint();
-        if(isWin)if(poi >= 0)crt->setWin(true);
+        if(isWin)if(poi >= numOfDiamond)crt->setWin(true);
         return true;
-    }//cout << rect.x << ' ' << rect.y << ' ' << rect.w << ' ' << rect.h << '\n';
+    }
     return false;
 }
 void Portal::render(SDL_Rect &camera)

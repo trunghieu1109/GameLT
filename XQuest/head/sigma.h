@@ -25,6 +25,7 @@ class SigmaElectricBall
 public:
     static Texture electricBallSprite;
     SigmaElectricBall(int posX, int posY);
+    ~SigmaElectricBall();
     void render(SDL_Rect &camera, SDL_Point &pt);
     bool checkCollision(SDL_Point &pt);
     bool getDead();
@@ -37,11 +38,11 @@ class SigmaBullet
     double stX, stY;
     int frames;
     bool isDead;
-    //int goalX, goalY;
     double velX, velY;
 public:
     static Texture sigmaBulletSprite;
     SigmaBullet(int posX, int posY, double _velX, double _velY);
+    ~SigmaBullet();
     void render(SDL_Rect &camera, SDL_Point &pt);
     bool checkCollision(SDL_Point &pt);
     bool getDead();
@@ -57,6 +58,7 @@ public:
     static int frames;
     static int direction;
     SigmaLaze(int posX, int posY);
+    ~SigmaLaze();
     void render(SDL_Rect &camera);
     bool checkCollision(SDL_Point &pt);
     void setSprite(Texture &sprite);
@@ -83,6 +85,7 @@ class SigmaCyclone
 public:
     static Texture cycloneSprite;
     SigmaCyclone(double posX, double posY, double _goalX, double _goalY);
+    ~SigmaCyclone();
     void render(SDL_Rect &camera, SDL_Point &pt);
     bool checkCollision(SDL_Point &pt);
     void setSprite(Texture &sprite);
@@ -122,13 +125,14 @@ public:
     static Mix_Chunk* sigmaSuperLazerChunk;
     static Mix_Chunk* sigmaCycloneChunk;
     Sigma(int posX, int posY);
+    ~Sigma();
     void render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer);
     void move(SDL_Point &pt);
     void setSprite(Texture &sprite);
     void setHealth(int h);
     int getHealth();
     bool getDead();
-    bool checkCollision(SDL_Point &pt);
+    int checkCollision(SDL_Point &pt);
     SDL_Rect getBox();
     void setTime(Uint32 t);
     Uint32 getTime();

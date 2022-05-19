@@ -1,11 +1,10 @@
-#include <iostream>
 #include "sigma.h"
 #include <cmath>
 using namespace std;
 
 Sigma::Sigma(int posX, int posY)
 {
-    mCollisionBox = {posX, posY, 400, 400};
+    mCollisionBox = {posX, posY, SIGMA_WIDTH, SIGMA_HEIGHT};
     frames = 0;
     row = 1;
     mDirection = -1;
@@ -32,6 +31,20 @@ Sigma::Sigma(int posX, int posY)
     cyclone = nullptr;
     appear = true;
 }
+Sigma::~Sigma()
+{
+    mCollisionBox = {0, 0, 0, 0};
+    frames = 0;
+    row = 0;
+    isDead = false;
+    for(int i=0;i<2;i++)
+    {
+        delete eBall[i];
+    }
+    delete cyclone;
+    sBullet.clear();
+    sLaze.clear();
+}
 int cntLaze = 0;
 void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
 {
@@ -43,10 +56,9 @@ void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
         mCollisionBox.y = dPosY;
         return;
     }
-    move(pt);
     if(checkCollisionBox(mCollisionBox, camera))
     {
-        SDL_Rect r = {frames/5*400, row*400, 400, 400};
+        SDL_Rect r = {frames/5*SIGMA_WIDTH, row*SIGMA_HEIGHT, SIGMA_WIDTH, SIGMA_HEIGHT};
         if(mDirection == -1)sigmaSprite.render(dPosX - camera.x, dPosY - camera.y, &r);
         else sigmaSprite.render(dPosX - camera.x, dPosY - camera.y, &r, 0, nullptr, SDL_FLIP_HORIZONTAL);
     }
@@ -63,7 +75,7 @@ void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
                 dPosX = 2240;
                 dPosY = 1840;
                 mTime = SDL_GetTicks();
-                mCollisionBox = {dPosX, dPosY, 400, 400};
+                mCollisionBox = {dPosX, dPosY, SIGMA_WIDTH, SIGMA_HEIGHT};
             }
             else
             {
@@ -128,7 +140,6 @@ void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
             SDL_RenderDrawLine(renderer, dPosX + 10 -camera.x, dPosY + 160 - camera.y, lazerDot.x - i - camera.x, lazerDot.y - camera.y);
         }
         lazerDot.x -= 20;
-
         if(lazerDot.x == 1680)
         {
             explosionn = true;
@@ -136,7 +147,6 @@ void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
             lazerDot = {0, 0};
             mTime = SDL_GetTicks();
         }
-
     }
     if(explosioning)
     {
@@ -196,13 +206,13 @@ void Sigma::render(SDL_Rect &camera, SDL_Point &pt, SDL_Renderer* &renderer)
 }
 void Sigma::move(SDL_Point &pt)
 {
-    if(appear)return;
-    double lenX = -(mCollisionBox.x + 200 - pt.x - 30);
-    double lenY = -(mCollisionBox.y + 200 - pt.y - 30);
+    if(appear || mHealth <= 0)return;
+    double lenX = -(mCollisionBox.x + SIGMA_WIDTH/2 - pt.x - CHAR_WIDTH/2);
+    double lenY = -(mCollisionBox.y + SIGMA_HEIGHT/2 - pt.y - CHAR_HEIGHT/2);
     if(attackType == 1)
     {
-        lenX = (goalX + 30 - mCollisionBox.x - 200);
-        lenY = (goalY + 30 - mCollisionBox.y - 200);
+        lenX = (goalX + CHAR_WIDTH/2 - mCollisionBox.x - SIGMA_WIDTH/2);
+        lenY = (goalY + CHAR_HEIGHT/2 - mCollisionBox.y - SIGMA_HEIGHT/2);
     }
     if(attackType == -1)
     {
@@ -212,14 +222,7 @@ void Sigma::move(SDL_Point &pt)
         }
         else mDirection = -1;
     }
-
     double len = sqrt(lenX*lenX + lenY*lenY);
-    /*if(abs(lenX) > 450.f)
-    {
-        double velX = lenX / 150.f;
-        double velY = lenY / 150.f;
-        mCollisionBox.x += velX;
-    }*/
     if(SDL_GetTicks() - mTime > 2000.f)
     {
         if(attackType == -1)
@@ -240,8 +243,8 @@ void Sigma::move(SDL_Point &pt)
             {
                 if(eBall[0] == nullptr && eBall[1] == nullptr)
                 {
-                    eBall[0] = new SigmaElectricBall(mCollisionBox.x + 150 + 400, mCollisionBox.y + 170);
-                    eBall[1] = new SigmaElectricBall(mCollisionBox.x + 50 + 400, mCollisionBox.y + 200);
+                    eBall[0] = new SigmaElectricBall(mCollisionBox.x + 150 + SIGMA_WIDTH, mCollisionBox.y + 170);
+                    eBall[1] = new SigmaElectricBall(mCollisionBox.x + 50 + SIGMA_HEIGHT, mCollisionBox.y + 200);
                 }
             }
         }
@@ -256,13 +259,13 @@ void Sigma::move(SDL_Point &pt)
                     goalY = pt.y;
                     if(lenX < 0)
                     {
-                        vX = (goalX + 30 - (dPosX - 80))/40;
-                        vY = (goalY + 30 - (dPosY + 270))/40;
+                        vX = (goalX + CHAR_WIDTH/2 - (dPosX - 80))/40;
+                        vY = (goalY + CHAR_HEIGHT/2 - (dPosY + 270))/40;
                     }
                     else
                     {
-                        vX = (goalX + 30 - (dPosX + 400 + 80))/40;
-                        vY = (goalY + 30 - (dPosY + 270))/40;
+                        vX = (goalX + CHAR_WIDTH/2 - (dPosX + 400 + 80))/40;
+                        vY = (goalY + CHAR_HEIGHT/2 - (dPosY + 270))/40;
                     }
                 }
                 if(countBullet%3 == 0)
@@ -289,7 +292,6 @@ void Sigma::move(SDL_Point &pt)
                         SigmaBullet *sbullet = new SigmaBullet(dPosX +20, dPosY + 290, velX, velY);
                         if(sBullet.empty())
                         {
-                            //cout << "Start" << '\n';
                             mTime2 = SDL_GetTicks();
                         }
                         sBullet.push_back(sbullet);
@@ -303,10 +305,9 @@ void Sigma::move(SDL_Point &pt)
                         velX = 5*cos(angleinradian);
                         velY = 5*sin(angleinradian);
                         Mix_PlayChannel(-1, sigmaBulletChunk, 0);
-                        SigmaBullet *sbullet = new SigmaBullet(dPosX - 20 + 400, dPosY + 290, velX, velY);
+                        SigmaBullet *sbullet = new SigmaBullet(dPosX - 20 + SIGMA_WIDTH, dPosY + 290, velX, velY);
                         if(sBullet.empty())
                         {
-                            //cout << "Start\n";
                             mTime2 = SDL_GetTicks();
                         }
                         sBullet.push_back(sbullet);
@@ -314,7 +315,7 @@ void Sigma::move(SDL_Point &pt)
                 }
                 if(lenX < 0)
                 {
-                    if(abs(goalX + 30 - (dPosX - 80)) > 40 || abs(goalY + 30 - (dPosY + 270)) > 40)
+                    if(abs(goalX + CHAR_WIDTH/2 - (dPosX - 80)) > 40 || abs(goalY + CHAR_HEIGHT/2 - (dPosY + 270)) > 40)
                     {
                         dPosX += vX;
                         dPosY += vY;
@@ -322,13 +323,13 @@ void Sigma::move(SDL_Point &pt)
                 }
                 else
                 {
-                    if(abs(goalX + 30 - (dPosX + 400 + 80)) > 40 || abs(goalY + 30 - (dPosY + 270)) > 40)
+                    if(abs(goalX + CHAR_WIDTH/2 - (dPosX + SIGMA_WIDTH + 80)) > 40 || abs(goalY + CHAR_HEIGHT/2 - (dPosY + 270)) > 40)
                     {
                         dPosX += vX;
                         dPosY += vY;
                     }
                 }
-                mCollisionBox = {dPosX, dPosY, 400, 400};
+                mCollisionBox = {dPosX, dPosY, SIGMA_WIDTH, SIGMA_HEIGHT};
                 countBullet++;
             }
             else
@@ -352,13 +353,13 @@ void Sigma::move(SDL_Point &pt)
                                 goalY = pt.y;
 
                             }
-                            SDL_Rect r = {goalX, goalY, 60, 60};
-                            if(goalY - dPosY - 150 < 0)
+                            SDL_Rect r = {goalX, goalY, CHAR_WIDTH, CHAR_HEIGHT};
+                            if(goalY - dPosY - SIGMA_LAZE_HEIGHT/2 < 0)
                             {
                                 dPosY -= 5;
                             }
                             else dPosY += 5;
-                            SDL_Rect collisionBox = {0, dPosY + 200, LEVEL_WIDTH, 50};
+                            SDL_Rect collisionBox = {0, dPosY + SIGMA_HEIGHT/2, LEVEL_WIDTH, 50};
                             double topA, topB, bottomA, bottomB, leftA, leftB, rightA, rightB;
                             topA = r.y;
                             bottomA = r.y + r.h;
@@ -368,7 +369,6 @@ void Sigma::move(SDL_Point &pt)
                             bottomB = collisionBox.y + collisionBox.h;
                             leftB = collisionBox.x;
                             rightB = collisionBox.x + collisionBox.w;
-                            //cout << topA << ' ' << bottomB << ' ' << topB << ' ' << bottomA << ' ' << leftA << ' ' << rightB << ' ' << leftB << ' ' << rightA << '\n';;
                             if(topA >= bottomB || topB >= bottomA || leftA >= rightB || leftB >= rightA)
                             {
                             }
@@ -378,7 +378,7 @@ void Sigma::move(SDL_Point &pt)
                                 goalX = -1;
                                 goalY = -1;
                             }
-                            mCollisionBox = {dPosX, dPosY, 400, 400};
+                            mCollisionBox = {dPosX, dPosY, SIGMA_WIDTH, SIGMA_HEIGHT};
                             if(!lazering)return;
                         }
                         row = 3;
@@ -395,7 +395,7 @@ void Sigma::move(SDL_Point &pt)
                                 mTime4 = SDL_GetTicks();
                                 goalX = pt.x;
                                 goalY = pt.y;
-                                if(goalX + 30 < mCollisionBox.x + 200)SigmaLaze::direction = -1;
+                                if(goalX + CHAR_WIDTH/2 < mCollisionBox.x + SIGMA_WIDTH/2)SigmaLaze::direction = -1;
                                 else SigmaLaze::direction = 1;
                             }
                             if(SigmaLaze::direction == -1)
@@ -421,7 +421,7 @@ void Sigma::move(SDL_Point &pt)
                             if(cyclone == nullptr)
                             {
                                 Mix_PlayChannel(-1, sigmaCycloneChunk, 0);
-                                if(pt.x + 30 - mCollisionBox.x - 200 < 0)
+                                if(pt.x + CHAR_WIDTH/2 - mCollisionBox.x - SIGMA_WIDTH/2 < 0)
                                 {
                                     cyclone = new SigmaCyclone(mCollisionBox.x, mCollisionBox.y, pt.x, pt.y);
                                 }
@@ -457,13 +457,12 @@ void Sigma::setPowerSprite(Texture &sprite)
 {
     sigmaPower = sprite;
 }
-bool Sigma::checkCollision(SDL_Point &pt)
+int Sigma::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(r, mCollisionBox))
     {
-        cout << 1 << '\n';
-        return true;
+        return 15;
     }
     int cnt = 0;
     for(int i=0; i<2; i++)
@@ -472,8 +471,7 @@ bool Sigma::checkCollision(SDL_Point &pt)
         {
             if(eBall[i]->checkCollision(pt))
             {
-                cout << 3 << '\n';
-                return true;
+                return 10;
             }
         }
     }
@@ -483,33 +481,29 @@ bool Sigma::checkCollision(SDL_Point &pt)
         {
             if((*it)->checkCollision(pt))
             {
-                cout << 2 << '\n';
-                return true;
+                return 10;
             }
         }
     }
     if(explosioning && pt.y >= 2280)
     {
-        cout << 4 << '\n';
-        return true;
+        return 10;
     }
     for(deque<SigmaLaze*>::iterator it = sLaze.begin(); it != sLaze.end(); it++)
     {
         if((*it)->checkCollision(pt))
         {
-            cout << 5 << '\n';
-            return true;
+            return 10;
         }
     }
     if(cyclone != nullptr)
     {
         if(cyclone->checkCollision(pt))
         {
-            cout << 6 << '\n';
-            return true;
+            return 10;
         }
     }
-    return false;
+    return 0;
 }
 SDL_Rect Sigma::getBox()
 {
@@ -538,10 +532,18 @@ SigmaElectricBall::SigmaElectricBall(int posX, int posY)
 {
     stX = posX;
     stY = posY;
-    mCollisionBox = {posX, posY, 80, 80};
+    mCollisionBox = {posX, posY, SIGMA_ELECTRIC_BALL_WIDTH, SIGMA_ELECTRIC_BALL_HEIGHT};
     frames = 0;
     isDead = false;
     mTime = SDL_GetTicks();
+    run = false;
+}
+SigmaElectricBall::~SigmaElectricBall()
+{
+    mCollisionBox = {0, 0, 0, 0};
+    frames = 0;
+    isDead = false;
+    mTime = 0;
     run = false;
 }
 void SigmaElectricBall::render(SDL_Rect &camera, SDL_Point &pt)
@@ -552,7 +554,7 @@ void SigmaElectricBall::render(SDL_Rect &camera, SDL_Point &pt)
     }
     if(checkCollisionBox(mCollisionBox, camera))
     {
-        SDL_Rect r = {frames/5 * 80, 0, 80, 80};
+        SDL_Rect r = {frames/5 * SIGMA_ELECTRIC_BALL_WIDTH, 0, SIGMA_ELECTRIC_BALL_WIDTH, SIGMA_ELECTRIC_BALL_HEIGHT};
         electricBallSprite.render(stX - camera.x, stY - camera.y, &r);
     }
     frames ++;
@@ -571,8 +573,8 @@ void SigmaElectricBall::render(SDL_Rect &camera, SDL_Point &pt)
         {
             stX += velX;
             stY += velY;
-            mCollisionBox = {stX, stY, 80, 80};
-            SDL_Rect r = {goalX, goalY, 60, 60};
+            mCollisionBox = {stX, stY, SIGMA_ELECTRIC_BALL_WIDTH, SIGMA_ELECTRIC_BALL_HEIGHT};
+            SDL_Rect r = {goalX, goalY, CHAR_WIDTH, CHAR_HEIGHT};
             double llX = r.x - stX;
             double llY = r.y - stY;
             double len = sqrt(llX*llX + llY*llY);
@@ -586,7 +588,7 @@ void SigmaElectricBall::render(SDL_Rect &camera, SDL_Point &pt)
 }
 bool SigmaElectricBall::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(r, mCollisionBox))
     {
         return 1;
@@ -607,7 +609,13 @@ SigmaBullet::SigmaBullet(int posX, int posY, double _velX, double _velY)
     stY = posY;
     velX = _velX;
     velY = _velY;
-    mCollisionBox = {posX, posY, 40, 40};
+    mCollisionBox = {posX, posY, SIGMA_BULLET_WIDTH, SIGMA_BULLET_HEIGHT};
+    isDead = false;
+    frames = 0;
+}
+SigmaBullet::~SigmaBullet()
+{
+    mCollisionBox = {0, 0, 0, 0};
     isDead = false;
     frames = 0;
 }
@@ -615,7 +623,7 @@ void SigmaBullet::render(SDL_Rect &camera, SDL_Point &pt)
 {
     if(checkCollisionBox(camera, mCollisionBox))
     {
-        SDL_Rect r = {frames/5 * 40, 0, 40, 40};
+        SDL_Rect r = {frames/5 * SIGMA_BULLET_WIDTH, 0, SIGMA_BULLET_WIDTH, SIGMA_BULLET_HEIGHT};
         sigmaBulletSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r);
     }
     frames++;
@@ -625,7 +633,7 @@ void SigmaBullet::render(SDL_Rect &camera, SDL_Point &pt)
     }
     stX += velX;
     stY += velY;
-    mCollisionBox = {stX, stY, 40, 40};
+    mCollisionBox = {stX, stY, SIGMA_BULLET_WIDTH, SIGMA_BULLET_HEIGHT};
 }
 void SigmaBullet::setSprite(Texture &sprite)
 {
@@ -637,7 +645,7 @@ bool SigmaBullet::getDead()
 }
 bool SigmaBullet::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(r, mCollisionBox))
     {
         return 1;
@@ -646,13 +654,17 @@ bool SigmaBullet::checkCollision(SDL_Point &pt)
 }
 SigmaLaze::SigmaLaze(int posX, int posY)
 {
-    mCollisionBox = {posX, posY, 80, 160};
+    mCollisionBox = {posX, posY, SIGMA_LAZE_WIDTH, 160};
+}
+SigmaLaze::~SigmaLaze()
+{
+    mCollisionBox = {0, 0, 0, 0};
 }
 void SigmaLaze::render(SDL_Rect &camera)
 {
     if(checkCollisionBox(mCollisionBox, camera))
     {
-        SDL_Rect r = {80*frames/5, 0, 80, 300};
+        SDL_Rect r = {SIGMA_LAZE_WIDTH*frames/5, 0, SIGMA_LAZE_WIDTH, SIGMA_LAZE_HEIGHT};
         sigmaLazeSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r);
     }
     if(direction == -1)
@@ -671,7 +683,7 @@ void SigmaLaze::render(SDL_Rect &camera)
 }
 bool SigmaLaze::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(mCollisionBox, r))
     {
         return true;
@@ -686,7 +698,6 @@ void SigmaLaze::setStop(bool s)
 {
     stop = s;
 }
-static Texture cycloneSprite;
 SigmaCyclone::SigmaCyclone(double posX, double posY, double _goalX, double _goalY)
 {
     cposX = posX;
@@ -695,25 +706,29 @@ SigmaCyclone::SigmaCyclone(double posX, double posY, double _goalX, double _goal
     goalY = _goalY;
     if(goalX > cposX)
     {
-        addedX = 60;
+        addedX = CHAR_WIDTH;
     }
-    else addedX = -60;
+    else addedX = -CHAR_WIDTH;
     if(goalY > cposY)
     {
-        addedY = 60;
+        addedY = CHAR_HEIGHT;
     }
-    else addedY = -60;
-    //cout << addedX << ' ' << addedY << '\n';
-    velX = (goalX + 30 + addedX - cposX - 80)/40;
-    velY = (goalY + 30 + addedY - cposY - 160)/40;
+    else addedY = -CHAR_HEIGHT;
+    velX = (goalX + CHAR_WIDTH/2 + addedX - cposX - SIGMA_CYCLONE_WIDTH/2)/40;
+    velY = (goalY + CHAR_HEIGHT/2 + addedY - cposY - SIGMA_CYCLONE_HEIGHT/2)/40;
     frames = 0;
     isDead = false;
     mTime = SDL_GetTicks();
-    mCollisionBox = {cposX, cposY, 160, 320};
+    mCollisionBox = {cposX, cposY, SIGMA_CYCLONE_WIDTH, SIGMA_CYCLONE_HEIGHT};
+}
+SigmaCyclone::~SigmaCyclone()
+{
+    mCollisionBox = {0, 0, 0, 0};
+    isDead = false;
+    frames = 0;
 }
 void SigmaCyclone::render(SDL_Rect &camera, SDL_Point &pt)
 {
-    //SDL_Rect r = {pt.x, pt.y, 60, 60};
     if(SDL_GetTicks() - mTime >= 3000.f)
     {
         isDead = true;
@@ -721,7 +736,7 @@ void SigmaCyclone::render(SDL_Rect &camera, SDL_Point &pt)
     if(isDead)return;
     if(checkCollisionBox(camera, mCollisionBox))
     {
-        SDL_Rect r = {frames/5 * 160, 0, 160, 320};
+        SDL_Rect r = {frames/5 * SIGMA_CYCLONE_WIDTH, 0, SIGMA_CYCLONE_WIDTH, SIGMA_CYCLONE_HEIGHT};
         cycloneSprite.render(cposX - camera.x, cposY - camera.y, &r);
     }
     frames++;
@@ -731,11 +746,11 @@ void SigmaCyclone::render(SDL_Rect &camera, SDL_Point &pt)
     }
     cposX += velX;
     cposY += velY;
-    mCollisionBox = {cposX, cposY, 160, 320};
+    mCollisionBox = {cposX, cposY, SIGMA_CYCLONE_WIDTH, SIGMA_CYCLONE_HEIGHT};
 }
 bool SigmaCyclone::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x + addedX, pt.y + addedY, 60, 60};
+    SDL_Rect r = {pt.x + addedX, pt.y + addedY, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(r, mCollisionBox))
     {
         isDead = true;

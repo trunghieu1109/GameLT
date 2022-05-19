@@ -53,6 +53,7 @@ public:
     static Mix_Chunk *robotJump;
     static Mix_Chunk *robotDash;
     Robot1(int posX, int posY);
+    ~Robot1();
     void render(SDL_Rect &camera, SDL_Point &pt);
     void attack(SDL_Point &pt);
     void setSprite(Texture &sprite);

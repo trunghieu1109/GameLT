@@ -1,12 +1,12 @@
 #ifndef GUN__H
 #define GUN__H
 
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
 #include "texture.h"
 #include <vector>
 #include "tile.h"
+#include "constant_value.h"
+#include "collision.h"
+
 using namespace std;
 
 class Bullet
@@ -23,6 +23,7 @@ public:
     static Texture bulletSprite;
     static Mix_Chunk* gunShotChunk;
     Bullet(int x, int y, int type);
+    ~Bullet();
     void render(SDL_Rect &camera, vector< Tile* > &tile, SDL_Rect &rect);
     void setSprite(Texture &sprite);
     SDL_Rect getBox();
@@ -46,6 +47,7 @@ class Gun
 public:
     static Texture gunSprite;
     Gun(int pos, int type, int bulletType);
+    ~Gun();
     void setSprite(Texture &sprite);
     void render(SDL_Rect &camera, vector <Tile*> &tile);
     Bullet *getBullet();

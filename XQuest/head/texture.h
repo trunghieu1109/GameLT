@@ -9,8 +9,6 @@
 #include <sstream>
 #include <string>
 #include "sdl_utils.h"
-#include "constant_value.h"
-
 using namespace std;
 
 class Texture

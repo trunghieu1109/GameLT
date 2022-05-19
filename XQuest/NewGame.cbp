@@ -22,9 +22,20 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-std=gnu++14" />
+					<Add option="-std=c++11" />
+					<Add directory="D:/NewSDL/SDL2/x86_64-w64-mingw32/include/SDL2" />
+					<Add directory="D:/NewSDL/SDL2_image/x86_64-w64-mingw32/include/SDL2" />
+					<Add directory="D:/NewSDL/SDL2_mixer/x86_64-w64-mingw32/include/SDL2" />
+					<Add directory="D:/NewSDL/SDL2_ttf/x86_64-w64-mingw32/include/SDL2" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf  -lSDL2_mixer" />
+					<Add directory="D:/NewSDL/SDL2/x86_64-w64-mingw32/lib" />
+					<Add directory="D:/NewSDL/SDL2_image/x86_64-w64-mingw32/lib" />
+					<Add directory="D:/NewSDL/SDL2_mixer/x86_64-w64-mingw32/lib" />
+					<Add directory="D:/NewSDL/SDL2_ttf/x86_64-w64-mingw32/lib" />
 				</Linker>
 			</Target>
 		</Build>
@@ -35,8 +46,6 @@
 		<Unit filename="head/Menu.cpp" />
 		<Unit filename="head/boss.cpp" />
 		<Unit filename="head/boss.h" />
-		<Unit filename="head/button.cpp" />
-		<Unit filename="head/button.h" />
 		<Unit filename="head/character.cpp" />
 		<Unit filename="head/character.h" />
 		<Unit filename="head/collision.cpp" />
@@ -46,7 +55,6 @@
 		<Unit filename="head/creep.h" />
 		<Unit filename="head/diamond.cpp" />
 		<Unit filename="head/diamond.h" />
-		<Unit filename="head/door.h" />
 		<Unit filename="head/door_button.cpp" />
 		<Unit filename="head/door_button.h" />
 		<Unit filename="head/fire_turret.cpp" />
@@ -61,16 +69,15 @@
 		<Unit filename="head/healthStored.h" />
 		<Unit filename="head/heart.cpp" />
 		<Unit filename="head/heart.h" />
-		<Unit filename="head/lava.h" />
 		<Unit filename="head/lavaboss.cpp" />
 		<Unit filename="head/lavaboss.h" />
 		<Unit filename="head/lazergun.cpp" />
 		<Unit filename="head/lazergun.h" />
 		<Unit filename="head/magicCircle.cpp" />
 		<Unit filename="head/magicCircle.h" />
+		<Unit filename="head/main.cpp" />
 		<Unit filename="head/manaStored.cpp" />
 		<Unit filename="head/manaStored.h" />
-		<Unit filename="head/map.cpp" />
 		<Unit filename="head/menu.h" />
 		<Unit filename="head/object.h" />
 		<Unit filename="head/portal.cpp" />
@@ -91,9 +98,6 @@
 		<Unit filename="head/tile.h" />
 		<Unit filename="head/window.cpp" />
 		<Unit filename="head/window.h" />
-		<Unit filename="head/xbuster.cpp" />
-		<Unit filename="head/xbuster.h" />
-		<Unit filename="main.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

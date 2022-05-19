@@ -1,7 +1,3 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -30,7 +26,9 @@ void Texture::free()
     mHeight = 0;
     SDL_DestroyTexture(mTexture);
     mTexture = nullptr;
-    //mRenderer = nullptr;
+    mRenderer = nullptr;
+    mFont = nullptr;
+    mColorKey = {0, 0, 0};
 }
 bool Texture::loadTextureFromImage(string path)
 {
@@ -58,7 +56,6 @@ bool Texture::loadTextureFromImage(string path)
 }
 bool Texture::loadTextureFromText( string textureText, SDL_Color textColor )
 {
-    free();
     SDL_Surface* textSurface = TTF_RenderText_Solid( mFont, textureText.c_str(), textColor );
    // cout << textureText << '\n';
     if( textSurface == NULL )

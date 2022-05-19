@@ -15,6 +15,7 @@ class HealthStored
 public:
     static Texture healthStoreSprite;
     HealthStored(int posX, int posY);
+    ~HealthStored();
     void render(SDL_Rect &camera);
     bool checkCollision(SDL_Point &pt);
     void setSprite(Texture &sprite);

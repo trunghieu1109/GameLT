@@ -1,394 +1,371 @@
-#include <iostream>
 #include "game.h"
 
-
-
-Object oobject;
-Texture Tile::tileSprite = oobject.textArr[TEXTURE_TILE];
-Texture Diamond::diamondSprite = oobject.textArr[TEXTURE_DIAMOND];
-Texture Portal::portalSprite = oobject.textArr[TEXTURE_PORTAL];
-Texture Thorns::thornSprite = oobject.textArr[TEXTURE_THORN];
-Texture Bullet::bulletSprite = oobject.textArr[TEXTURE_BULLET];
-Texture Fire::fireSprite = oobject.textArr[TEXTURE_FIRE];
-Texture FireTurret::fireTurretSprite = oobject.textArr[TEXTURE_FIRE_TURRET];
-Texture Gun::gunSprite = oobject.textArr[TEXTURE_GUN];
-Texture XBuster::xBusterSprite = oobject.textArr[TEXTURE_XBUSTER];
-Texture Creep::creepSprite = oobject.textArr[TEXTURE_CREEP];
-Texture CreepBullet::creepBulletSprite = oobject.textArr[TEXTURE_CREEP_BULLET];
-Texture LazerGun::lazerGunSprite = oobject.textArr[TEXTURE_LAZER_GUN];
-Texture LazerGun::lazerHeadSprite = oobject.textArr[TEXTURE_LAZER_HEAD];
-Texture LazerGun::lazerSprite = oobject.textArr[TEXTURE_LAZER];
-Texture DoorButton::doorbuttonSprite = oobject.textArr[TEXTURE_DOOR_BUTTON];
-Texture Boss::bossSprite = oobject.textArr[TEXTURE_DRAGON];
-Texture FireFlow::fireFlowSprite = oobject.textArr[TEXTURE_FIRE_FLOW];
-Texture FireBall::fireBallSprite = oobject.textArr[TEXTURE_FIRE_BALL];
-Texture FirePillar::firePillarSprite = oobject.textArr[TEXTURE_FIRE_PILLAR];
-Texture Saw::sawSprite = oobject.textArr[TEXTURE_SAW];
-Texture Robot1::robotSprite = oobject.textArr[TEXTURE_ROBOT];
-Texture Robot1::bullet1Sprite = oobject.textArr[TEXTURE_ROBOT_BULLET];
-Texture Robot1::bullet2Sprite = oobject.textArr[TEXTURE_ROBOT_BULLET_2];
-Texture Robot1::explosionBulletSprite = oobject.textArr[TEXTURE_EXPLOSION_BULLET];
-Texture Robot1::gatlingunBullet = oobject.textArr[TEXTURE_BULLET_GATLING_GUN];
-Texture Robot1::superLazerSprite = oobject.textArr[TEXTURE_SUPER_LAZER];
-Texture MagicCircle::magicCircleTexture = oobject.textArr[TEXTURE_LAVA_MAGIC_CIRCLE];
-Texture Tile::lavaOpaque = oobject.textArr[TEXTURE_OPAQUE_LAVA];
-Texture LavaBoss::lavaBossSprite = oobject.textArr[TEXTURE_LAVA_BOSS];
-Texture LavaFist::lavaFistSprite = oobject.textArr[TEXTURE_LAVA_FIST];
-Texture LavaBall::lavaBallSprite = oobject.textArr[TEXTURE_LAVA_FIRE_BALL];
-Texture LavaDroplet::lavaDropletSprite = oobject.textArr[TEXTURE_LAVA_DROPLET];
-Texture FireCircle::fireCircleSprite = oobject.textArr[TEXTURE_FIRE_CIRCLE];
-Texture LavaSun::lavaSunSprite = oobject.textArr[TEXTURE_SUN];
-Texture LavaSun::kneeTexture = oobject.textArr[TEXTURE_KNEE];
-Texture Sigma::sigmaSprite = oobject.textArr[TEXTURE_SIGMA];
-Texture SigmaBullet::sigmaBulletSprite = oobject.textArr[TEXTURE_SIGMA_BULLET];
-Texture SigmaElectricBall::electricBallSprite = oobject.textArr[TEXTURE_SIGMA_ELECTRIC_BALL];
-Texture SigmaLaze::sigmaLazeSprite = oobject.textArr[TEXTURE_SIGMA_LAZER];
-Texture GameButton::storeBar = oobject.textArr[TEXTURE_STORE_BAR];
-Texture HealthStored::healthStoreSprite = oobject.textArr[TEXTURE_HEALTH_STORE];
-Texture ManaStored::manaStoreSprite = oobject.textArr[TEXTURE_MANA_STORE];
-Texture Heart::heartSprite = oobject.textArr[TEXTURE_HEART];
+Object cloneObject;
+Texture Tile::tileSprite = cloneObject.textArr[TEXTURE_TILE];
+Texture Diamond::diamondSprite = cloneObject.textArr[TEXTURE_DIAMOND];
+Texture Portal::portalSprite = cloneObject.textArr[TEXTURE_PORTAL];
+Texture Thorns::thornSprite = cloneObject.textArr[TEXTURE_THORN];
+Texture Bullet::bulletSprite = cloneObject.textArr[TEXTURE_BULLET];
+Texture Fire::fireSprite = cloneObject.textArr[TEXTURE_FIRE];
+Texture FireTurret::fireTurretSprite = cloneObject.textArr[TEXTURE_FIRE_TURRET];
+Texture Gun::gunSprite = cloneObject.textArr[TEXTURE_GUN];
+Texture XBuster::xBusterSprite = cloneObject.textArr[TEXTURE_XBUSTER];
+Texture Creep::creepSprite = cloneObject.textArr[TEXTURE_CREEP];
+Texture CreepBullet::creepBulletSprite = cloneObject.textArr[TEXTURE_CREEP_BULLET];
+Texture LazerGun::lazerGunSprite = cloneObject.textArr[TEXTURE_LAZER_GUN];
+Texture LazerGun::lazerHeadSprite = cloneObject.textArr[TEXTURE_LAZER_HEAD];
+Texture LazerGun::lazerSprite = cloneObject.textArr[TEXTURE_LAZER];
+Texture DoorButton::doorbuttonSprite = cloneObject.textArr[TEXTURE_DOOR_BUTTON];
+Texture Boss::bossSprite = cloneObject.textArr[TEXTURE_DRAGON];
+Texture FireFlow::fireFlowSprite = cloneObject.textArr[TEXTURE_FIRE_FLOW];
+Texture FireBall::fireBallSprite = cloneObject.textArr[TEXTURE_FIRE_BALL];
+Texture FirePillar::firePillarSprite = cloneObject.textArr[TEXTURE_FIRE_PILLAR];
+Texture Saw::sawSprite = cloneObject.textArr[TEXTURE_SAW];
+Texture Robot1::robotSprite = cloneObject.textArr[TEXTURE_ROBOT];
+Texture Robot1::bullet1Sprite = cloneObject.textArr[TEXTURE_ROBOT_BULLET];
+Texture Robot1::bullet2Sprite = cloneObject.textArr[TEXTURE_ROBOT_BULLET_2];
+Texture Robot1::explosionBulletSprite = cloneObject.textArr[TEXTURE_EXPLOSION_BULLET];
+Texture Robot1::gatlingunBullet = cloneObject.textArr[TEXTURE_BULLET_GATLING_GUN];
+Texture Robot1::superLazerSprite = cloneObject.textArr[TEXTURE_SUPER_LAZER];
+Texture MagicCircle::magicCircleTexture = cloneObject.textArr[TEXTURE_LAVA_MAGIC_CIRCLE];
+Texture Tile::lavaOpaque = cloneObject.textArr[TEXTURE_OPAQUE_LAVA];
+Texture LavaBoss::lavaBossSprite = cloneObject.textArr[TEXTURE_LAVA_BOSS];
+Texture LavaFist::lavaFistSprite = cloneObject.textArr[TEXTURE_LAVA_FIST];
+Texture LavaBall::lavaBallSprite = cloneObject.textArr[TEXTURE_LAVA_FIRE_BALL];
+Texture LavaDroplet::lavaDropletSprite = cloneObject.textArr[TEXTURE_LAVA_DROPLET];
+Texture FireCircle::fireCircleSprite = cloneObject.textArr[TEXTURE_FIRE_CIRCLE];
+Texture LavaSun::lavaSunSprite = cloneObject.textArr[TEXTURE_SUN];
+Texture LavaSun::kneeTexture = cloneObject.textArr[TEXTURE_KNEE];
+Texture Sigma::sigmaSprite = cloneObject.textArr[TEXTURE_SIGMA];
+Texture SigmaBullet::sigmaBulletSprite = cloneObject.textArr[TEXTURE_SIGMA_BULLET];
+Texture SigmaElectricBall::electricBallSprite = cloneObject.textArr[TEXTURE_SIGMA_ELECTRIC_BALL];
+Texture SigmaLaze::sigmaLazeSprite = cloneObject.textArr[TEXTURE_SIGMA_LAZER];
+Texture StoredButton::storeBar = cloneObject.textArr[TEXTURE_STORE_BAR];
+Texture HealthStored::healthStoreSprite = cloneObject.textArr[TEXTURE_HEALTH_STORE];
+Texture ManaStored::manaStoreSprite = cloneObject.textArr[TEXTURE_MANA_STORE];
+Texture Heart::heartSprite = cloneObject.textArr[TEXTURE_HEART];
 bool SigmaLaze::stop = false;
 int SigmaLaze::frames = 0;
 int SigmaLaze::direction = -1;
 int FireFlow::stable = 0;
 int FireFlow::direction = -1;
-Texture SigmaCyclone::cycloneSprite = oobject.textArr[TEXTURE_SIGMA_CYCLONE];
-Texture Sigma::sigmaPower = oobject.textArr[TEXTURE_SIGMA_POWER];
-Mix_Chunk* Character::dashChunk = oobject.chunkArr[MIX_DASH];
-Mix_Chunk* Character::jumpChunk = oobject.chunkArr[MIX_JUMP];
-Mix_Chunk* Character::normal_attackChunk = oobject.chunkArr[MIX_NORMAL_ATTACK];
-Mix_Chunk* Character::jumpClimbChunk = oobject.chunkArr[MIX_JUMP_CLIMB];
-Mix_Chunk* Character::gigaChunk = oobject.chunkArr[MIX_GIGA];
-Mix_Chunk* Character::hurtChunk = oobject.chunkArr[MIX_HURT];
-Mix_Chunk* Character::chargingChunk = oobject.chunkArr[MIX_CHARGING];
-Mix_Chunk* Boss::fireBallChunk = oobject.chunkArr[MIX_FIRE_BALL];
-Mix_Chunk* Boss::fireFlowChunk = oobject.chunkArr[MIX_FIRE_FLOW];
-Mix_Chunk* Boss::firePillarChunk = oobject.chunkArr[MIX_FIRE_PILLAR];
-Mix_Chunk* Boss::fireSpearChunk = oobject.chunkArr[MIX_FIRE_SPEAR];
-Mix_Chunk* Bullet::gunShotChunk = oobject.chunkArr[MIX_GUN_SHOT];
-Mix_Chunk* Creep::creepShotChunk = oobject.chunkArr[MIX_CREEP_SHOT];
-Mix_Chunk* Diamond::diamondCollisionChunk = oobject.chunkArr[MIX_DIAMOND_COLLISION];
-Mix_Chunk* Robot1::robotChargingPower = oobject.chunkArr[MIX_ROBOT_CHARGING];
-Mix_Chunk* Robot1::robotDash = oobject.chunkArr[MIX_ROBOT_DASH];
-Mix_Chunk* Robot1::robotGatlingShot = oobject.chunkArr[MIX_ROBOT_GATLING];
-Mix_Chunk* Robot1::robotJump = oobject.chunkArr[MIX_ROBOT_JUMP];
-Mix_Chunk* Robot1::robotPower = oobject.chunkArr[MIX_ROBOT_POWER];
-Mix_Chunk* Robot1::robotSawAttack = oobject.chunkArr[MIX_ROBOT_SAW];
-Mix_Chunk* Robot1::robotShot = oobject.chunkArr[MIX_ROBOT_SHOT];
-Mix_Chunk* Robot1::robotWalk = oobject.chunkArr[MIX_ROBOT_WALK];
-Mix_Chunk* LavaBoss::lavaAppearing = oobject.chunkArr[MIX_LAVA_APPEAR];
-Mix_Chunk* LavaBoss::lavaBallChunk = oobject.chunkArr[MIX_LAVA_BALL];
-Mix_Chunk* FireCircle::lavaCircleChunk = oobject.chunkArr[MIX_LAVA_CIRCLE];
-Mix_Chunk* LavaBoss::lavaDisappearing = oobject.chunkArr[MIX_LAVA_DISAPPEAR];
-Mix_Chunk* LavaBoss::lavaDroped = oobject.chunkArr[MIX_LAVA_DROPED];
-Mix_Chunk* LavaBoss::lavaDropping = oobject.chunkArr[MIX_LAVA_DROPPING];
-Mix_Chunk* LavaBoss::lavaFistChunk = oobject.chunkArr[MIX_LAVA_FIST];
-Mix_Chunk* LavaSun::lavaKneeChunk = oobject.chunkArr[MIX_LAVA_KNEE];
-Mix_Chunk* Sigma::sigmaElectricBallChunk = oobject.chunkArr[MIX_SIGMA_ELECTRIC_BALL];
-Mix_Chunk* Sigma::sigmaBulletChunk = oobject.chunkArr[MIX_SIGMA_BULLET];
-Mix_Chunk* Sigma::sigmaCycloneChunk = oobject.chunkArr[MIX_SIGMA_CYCLONE];
-Mix_Chunk* Sigma::sigmaSuperLazerChunk = oobject.chunkArr[MIX_SIGMA_SUPER_LAZER];
-Mix_Chunk* Sigma::sigmaLazerChunk = oobject.chunkArr[MIX_SIGMA_LAZER];
+Texture SigmaCyclone::cycloneSprite = cloneObject.textArr[TEXTURE_SIGMA_CYCLONE];
+Texture Sigma::sigmaPower = cloneObject.textArr[TEXTURE_SIGMA_POWER];
+Mix_Chunk* Character::dashChunk = cloneObject.chunkArr[MIX_DASH];
+Mix_Chunk* Character::jumpChunk = cloneObject.chunkArr[MIX_JUMP];
+Mix_Chunk* Character::normal_attackChunk = cloneObject.chunkArr[MIX_NORMAL_ATTACK];
+Mix_Chunk* Character::jumpClimbChunk = cloneObject.chunkArr[MIX_JUMP_CLIMB];
+Mix_Chunk* Character::gigaChunk = cloneObject.chunkArr[MIX_GIGA];
+Mix_Chunk* Character::hurtChunk = cloneObject.chunkArr[MIX_HURT];
+Mix_Chunk* Character::chargingChunk = cloneObject.chunkArr[MIX_CHARGING];
+Mix_Chunk* Boss::fireBallChunk = cloneObject.chunkArr[MIX_FIRE_BALL];
+Mix_Chunk* Boss::fireFlowChunk = cloneObject.chunkArr[MIX_FIRE_FLOW];
+Mix_Chunk* Boss::firePillarChunk = cloneObject.chunkArr[MIX_FIRE_PILLAR];
+Mix_Chunk* Boss::fireSpearChunk = cloneObject.chunkArr[MIX_FIRE_SPEAR];
+Mix_Chunk* Bullet::gunShotChunk = cloneObject.chunkArr[MIX_GUN_SHOT];
+Mix_Chunk* Creep::creepShotChunk = cloneObject.chunkArr[MIX_CREEP_SHOT];
+Mix_Chunk* Diamond::diamondCollisionChunk = cloneObject.chunkArr[MIX_DIAMOND_COLLISION];
+Mix_Chunk* Robot1::robotChargingPower = cloneObject.chunkArr[MIX_ROBOT_CHARGING];
+Mix_Chunk* Robot1::robotDash = cloneObject.chunkArr[MIX_ROBOT_DASH];
+Mix_Chunk* Robot1::robotGatlingShot = cloneObject.chunkArr[MIX_ROBOT_GATLING];
+Mix_Chunk* Robot1::robotJump = cloneObject.chunkArr[MIX_ROBOT_JUMP];
+Mix_Chunk* Robot1::robotPower = cloneObject.chunkArr[MIX_ROBOT_POWER];
+Mix_Chunk* Robot1::robotSawAttack = cloneObject.chunkArr[MIX_ROBOT_SAW];
+Mix_Chunk* Robot1::robotShot = cloneObject.chunkArr[MIX_ROBOT_SHOT];
+Mix_Chunk* Robot1::robotWalk = cloneObject.chunkArr[MIX_ROBOT_WALK];
+Mix_Chunk* LavaBoss::lavaAppearing = cloneObject.chunkArr[MIX_LAVA_APPEAR];
+Mix_Chunk* LavaBoss::lavaBallChunk = cloneObject.chunkArr[MIX_LAVA_BALL];
+Mix_Chunk* FireCircle::lavaCircleChunk = cloneObject.chunkArr[MIX_LAVA_CIRCLE];
+Mix_Chunk* LavaBoss::lavaDisappearing = cloneObject.chunkArr[MIX_LAVA_DISAPPEAR];
+Mix_Chunk* LavaBoss::lavaDroped = cloneObject.chunkArr[MIX_LAVA_DROPED];
+Mix_Chunk* LavaBoss::lavaDropping = cloneObject.chunkArr[MIX_LAVA_DROPPING];
+Mix_Chunk* LavaBoss::lavaFistChunk = cloneObject.chunkArr[MIX_LAVA_FIST];
+Mix_Chunk* LavaSun::lavaKneeChunk = cloneObject.chunkArr[MIX_LAVA_KNEE];
+Mix_Chunk* Sigma::sigmaElectricBallChunk = cloneObject.chunkArr[MIX_SIGMA_ELECTRIC_BALL];
+Mix_Chunk* Sigma::sigmaBulletChunk = cloneObject.chunkArr[MIX_SIGMA_BULLET];
+Mix_Chunk* Sigma::sigmaCycloneChunk = cloneObject.chunkArr[MIX_SIGMA_CYCLONE];
+Mix_Chunk* Sigma::sigmaSuperLazerChunk = cloneObject.chunkArr[MIX_SIGMA_SUPER_LAZER];
+Mix_Chunk* Sigma::sigmaLazerChunk = cloneObject.chunkArr[MIX_SIGMA_LAZER];
 bool Game::loadMedia()
 {
     if(!object.window.init())logSDLError(cout, "Create Window", true);
     object.renderer = object.window.createRenderer();
     if(object.renderer == nullptr)logSDLError(cout, "Create Renderer", true);
-    ifstream file("media.txt");
+    object.font = TTF_OpenFont("Starcraft Normal.ttf", FONT_SIZE);
+    loadTexture();
+    loadMix();
+    setGameButton();
+    setStaticVariables();
+    return true;
+}
+
+void Game::loadTexture()
+{
+    object.x.setRenderer(object.renderer);
+    if(!object.x.loadCharacter("Texture/sprite.png"))logIMGError(cout, "Load Character Sprite", true);
+    ifstream input_texture("media.txt");
     bool quit = false;
     for(int i=0; i<TEXTURE_ID_TOTAL; i++)
     {
-        string s;
-        while(!file.eof())
+        string pathToTexture;
+        while(!input_texture.eof())
         {
             char c;
-            file >> c;
-            if(file.eof())break;
-            if(c != '|')s += c;
+            input_texture >> c;
+            if(input_texture.eof())break;
+            if(c != '|')pathToTexture += c;
             else break;
         }
-        if(file.eof())
+        if(input_texture.eof())
         {
             quit = true;
         }
         object.textArr[i].setRenderer(object.renderer);
-        if(!object.textArr[i].loadTextureFromImage(s.c_str()))logIMGError(cout, "Load texture", true);
+        if(!object.textArr[i].loadTextureFromImage(pathToTexture.c_str()))logIMGError(cout, "Load texture", true);
         if(i == TEXTURE_CHARGING)object.textArr[TEXTURE_CHARGING].setAlpha(180);
     }
-    ifstream file2("mixx.txt");
-    quit = false;
-    for(int i=0;i < MIX_ID_TOTAL; i++)
+}
+
+void Game::loadMix()
+{
+    object.backGroundMusic = Mix_LoadMUS("Mix/backgroundmusic.mp3");
+    ifstream input_mix("mixx.txt");
+    bool quit = false;
+    for(int i=0; i < MIX_ID_TOTAL; i++)
     {
-        string s;
-        while(!file2.eof())
+        string pathToMix;
+        while(!input_mix.eof())
         {
             char c;
-            file2 >> c;
-            if(file2.eof())break;
-            if(c != '|')s += c;
+            input_mix >> c;
+            if(input_mix.eof())break;
+            if(c != '|')pathToMix += c;
             else break;
         }
-        if(file2.eof())
+        if(input_mix.eof())
         {
             quit = true;
         }
-        object.chunkArr[i] = Mix_LoadWAV(s.c_str());
+        object.chunkArr[i] = Mix_LoadWAV(pathToMix.c_str());
     }
-    object.x.setRenderer(object.renderer);
-    if(!object.x.loadCharacter("Texture/sprite.png"))logIMGError(cout, "Load Character Sprite", true);
-    object.font = TTF_OpenFont("Starcraft Normal.ttf", 20);
-    object.defaultText.setRenderer(object.renderer);
-    object.defaultText.setFont(object.font);
-    object.backGroundMusic = Mix_LoadMUS("Mix/backgroundmusic.mp3");
-    if(!object.defaultText.loadTextureFromText("Welcome to Megaman Quest", object.textColor));
-    object.name.setRenderer(object.renderer);
-    object.name.setFont(object.font);
-    if(!object.name.loadTextureFromText("Nguyen Trung Hieu", object.textColor));
-    object.pointTexture.setRenderer(object.renderer);
-    object.pointTexture.setFont(object.font);
-    object.mCollisionBoxFire = {-1250, -200, 1250, 1000};
-    object.newGameButton = new GameButton(0, 0, 1, "Texture/gamebutton.png", "New Game", object.renderer, object.font, "NewGame");
-    object.continueGameButton = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Continue Game", object.renderer, object.font, "ContinueGame");
-    object.selectGameButton = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Select Game", object.renderer, object.font, "SelectGame");
-    object.quitGameButton = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Quit Game", object.renderer, object.font, "QuitGame");
-    object.backToMainMenu = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Back to main menu", object.renderer, object.font, "BackToMainMenu");
-    object.restart = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Restart Game", object.renderer, object.font, "Restart");
-    object.Stage[1] = new GameButton(0, 0, 2, "Texture/Stage1CutScene.png", "Texture/lock_stage_1.png", object.renderer, "Stage1");
-    object.Stage[2] = new GameButton(0, 0, 2, "Texture/Stage2CutScene.png", "Texture/lock_stage_2.png", object.renderer, "Stage2");
-    object.Stage[3] = new GameButton(0, 0, 2, "Texture/Stage3CutScene.png", "Texture/lock_stage_3.png", object.renderer, "Stage3");
-    object.Stage[4] = new GameButton(0, 0, 2, "Texture/Stage4CutScene.png", "Texture/lock_stage_4.png", object.renderer, "Stage4");
-    object.Stage[5] = new GameButton(0, 0, 2, "Texture/Stage5CutScene.png", "Texture/lock_stage_5.png", object.renderer, "Stage5");
-    object.healthStoredButton = new GameButton(70, 350, 2, "Texture/healthStoreIcon.png", object.renderer, "Healing");
-    object.manaStoredButton = new GameButton(400, 350, 2, "Texture/manaStoreIcon.png", object.renderer, "Restore Mana");
-    object.menu[1] = new Menu(object.renderer);
-    object.menu[2] = new Menu(object.renderer);
-    object.menu[3] = new Menu(object.renderer);
-    int height = object.newGameButton->getHeight();
-    object.newGameButton->setPos(250, 180);
-    object.continueGameButton->setPos(250, 250);
-    object.selectGameButton->setPos(250, 320);
-    object.quitGameButton->setPos(250, 390);
-    object.backToMainMenu->setPos(250, 100);
-    object.Stage[1]->setPos(80 + (200 - object.Stage[1]->getWidth())/2, 100);
-    object.Stage[2]->setPos(300 + (200 - object.Stage[2]->getWidth())/2, 100);
-    object.Stage[3]->setPos(520 + (200 - object.Stage[3]->getWidth())/2, 100);
-    object.Stage[4]->setPos(190 + (200 - object.Stage[4]->getWidth())/2, 300);
-    object.Stage[5]->setPos(410 + (200 - object.Stage[5]->getWidth())/2, 300);
-
-    object.menu[0] = new Menu(object.renderer);
-    object.menu[0]->AddGameButton(object.newGameButton);
-    object.menu[0]->AddGameButton(object.continueGameButton);
-    object.menu[0]->AddGameButton(object.selectGameButton);
-    object.menu[0]->AddGameButton(object.quitGameButton);
-    object.menu[0]->setBackGround(object.textArr[TEXTURE_MAIN_MENU_BACKGROUND]);
-
-    object.menu[1] = new Menu(object.renderer);
-    object.menu[1]->AddGameButton(object.backToMainMenu);
-    object.menu[1]->setBackGround(object.textArr[TEXTURE_PAUSE_MENU]);
-    object.selectGameButton = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Select Game", object.renderer, object.font, "SelectGame");
-    object.selectGameButton->setPos(250, 180);
-    object.menu[1]->AddGameButton(object.selectGameButton);
-    object.menu[1]->AddGameButton(object.healthStoredButton);
-    object.menu[1]->AddGameButton(object.manaStoredButton);
-    object.restart->setPos(250, 260);
-    object.menu[1]->AddGameButton(object.restart);
-
-    object.menu[2] = new Menu(object.renderer);
-    object.menu[2]->AddGameButton(object.Stage[1]);
-    object.menu[2]->AddGameButton(object.Stage[2]);
-    object.menu[2]->AddGameButton(object.Stage[3]);
-    object.menu[2]->AddGameButton(object.Stage[4]);
-    object.menu[2]->AddGameButton(object.Stage[5]);
-    object.menu[2]->setBackGround(object.textArr[TEXTURE_STAGE_SELECT]);
-
-
-    object.menu[3] = new Menu(object.renderer);
-    object.selectGameButton = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Select Game", object.renderer, object.font, "SelectGame");
-    object.quitGameButton = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Quit Game", object.renderer, object.font, "QuitGame");
-    object.backToMainMenu = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Back To Main Menu", object.renderer, object.font, "BackToMainMenu");
-    object.restart = new GameButton(0, 0, 1, "Texture/gamebutton.png", "Restart Game", object.renderer, object.font, "Restart");
-    object.backToMainMenu->setPos((SCREEN_WIDTH - object.backToMainMenu->getWidth())/2, 150);
-    object.menu[3]->AddGameButton(object.backToMainMenu);
-    object.selectGameButton->setPos((SCREEN_WIDTH - object.selectGameButton->getWidth())/2, 220);
-    object.menu[3]->AddGameButton(object.selectGameButton);
-    object.restart->setPos((SCREEN_WIDTH - object.restart->getWidth())/2, 290);
-    object.menu[3]->AddGameButton(object.restart);
-    object.quitGameButton->setPos((SCREEN_WIDTH - object.quitGameButton->getWidth())/2, 360);
-    object.menu[3]->AddGameButton(object.quitGameButton);
-    object.menu[3]->setBackGround(object.textArr[TEXTURE_LOSING_BACKGROUND]);
-
+}
+void Game::setStaticVariables()
+{
     object.x.setDoubleJumpSprite(object.textArr[TEXTURE_DOUBLE_JUMP]);
     object.x.setGigaAttackSprite(object.textArr[TEXTURE_GIGA_ATTACK]);
-    object.x.loadJumpChunk(object.chunkArr[MIX_JUMP]);
-    object.x.loadDashChunk(object.chunkArr[MIX_DASH]);
-    object.x.loadNormalAttackChunk(object.chunkArr[MIX_NORMAL_ATTACK]);
-    object.x.loadJumpClimbChunk(object.chunkArr[MIX_JUMP_CLIMB]);
-    object.x.loadHurtChunk(object.chunkArr[MIX_HURT]);
-    object.x.loadGigaChunk(object.chunkArr[MIX_GIGA]);
-    object.x.loadChargingChunk(object.chunkArr[MIX_CHARGING]);
-    Tile *clone = new Tile(0, 0, 1);
-    clone->setSprite(object.textArr[TEXTURE_TILE]);
-    clone->setOpaQueLava(object.textArr[TEXTURE_OPAQUE_LAVA]);
-    Diamond *clone2 = new Diamond(0, 0, 0);
-    clone2->setSprite(object.textArr[TEXTURE_DIAMOND]);
-    clone2->loadDiamondCollisionChunk(object.chunkArr[MIX_DIAMOND_COLLISION]);
-    string clon = "12312";
-    Portal *clone3 = new Portal(0, 0, clon, 0, 0, 0);
-    clone3->setSprite(object.textArr[TEXTURE_PORTAL]);
-    Thorns *clone4 = new Thorns(0, 0);
-    clone4->setSprite(object.textArr[TEXTURE_THORN]);
-    Gun *clone5 = new Gun(0, 0, 0);
-    clone5->setSprite(object.textArr[TEXTURE_GUN]);
-    Bullet *clone6 = new Bullet(0, 0, 0);
-    clone6->setSprite(object.textArr[TEXTURE_BULLET]);
-    clone6->loadGunShotChunk(object.chunkArr[MIX_GUN_SHOT]);
-    Fire *clone7 = new Fire(0, 0, 0);
-    clone7->setSprite(object.textArr[TEXTURE_FIRE]);
-    FireTurret *clone8 = new FireTurret(0, 0);
-    clone8->setSprite(object.textArr[TEXTURE_FIRE_TURRET]);
-    XBuster *clone9 = new XBuster(0, 0, 0);
-    clone9->setSprite(object.textArr[TEXTURE_XBUSTER]);
-    Creep * clone10 = new Creep(0, 0);
-    clone10->setSprite(object.textArr[TEXTURE_CREEP]);
-    clone10->loadCreepShotChunk(object.chunkArr[MIX_CREEP_SHOT]);
-    CreepBullet *clone11 = new CreepBullet(0, 0, 0,0.d, 0.d);
-    clone11->setSprite(object.textArr[TEXTURE_CREEP_BULLET]);
     object.x.setCharging(object.textArr[TEXTURE_CHARGING]);
-    LazerGun *clone12 = new LazerGun(0, 0, 0, 0);
-    clone12->setLazerGunSprite(object.textArr[TEXTURE_LAZER_GUN]);
-    clone12->setLazerHeadSprite(object.textArr[TEXTURE_LAZER_HEAD]);
-    clone12->setLazerSprite(object.textArr[TEXTURE_LAZER]);
-    DoorButton *clone13 = new DoorButton(0, 0, object.tile[0], object.tile[1]);
-    clone13->setSprite(object.textArr[TEXTURE_DOOR_BUTTON]);
-    Boss *clone14 = new Boss(0, 0);
-    clone14->setSprite(object.textArr[TEXTURE_DRAGON]);
-    clone14->loadFireBallChunk(object.chunkArr[MIX_FIRE_BALL]);
-    clone14->loadFireFlowChunk(object.chunkArr[MIX_FIRE_FLOW]);
-    clone14->loadFirePillarChunk(object.chunkArr[MIX_FIRE_PILLAR]);
-    clone14->loadFireSpearChunk(object.chunkArr[MIX_FIRE_SPEAR]);
-    FireBall *clone15 = new FireBall(0, 0, 0, 0);
-    clone15->setSprite(object.textArr[TEXTURE_FIRE_BALL]);
-    Saw *clone16 = new Saw(0, 0);
-    clone16->setSprite(object.textArr[TEXTURE_SAW]);
-    Robot1 *clone17 = new Robot1(0, 0);
-    clone17->setSprite(object.textArr[TEXTURE_ROBOT]);
-    clone17->setBullet1Sprite(object.textArr[TEXTURE_ROBOT_BULLET]);
-    clone17->setBullet2Sprite(object.textArr[TEXTURE_ROBOT_BULLET_2]);
-    clone17->setExplosionBullet(object.textArr[TEXTURE_EXPLOSION_BULLET]);
-    clone17->setGatlingunBullet(object.textArr[TEXTURE_BULLET_GATLING_GUN]);
-    clone17->setSuperLazer(object.textArr[TEXTURE_SUPER_LAZER]);
-    clone17->setShotChunk(object.chunkArr[MIX_ROBOT_SHOT]);
-    clone17->setChargingPowerChunk(object.chunkArr[MIX_ROBOT_CHARGING]);
-    clone17->setDashChunk(object.chunkArr[MIX_ROBOT_DASH]);
-    clone17->setGatlingChunk(object.chunkArr[MIX_ROBOT_GATLING]);
-    clone17->setWalkChunk(object.chunkArr[MIX_ROBOT_WALK]);
-    clone17->setPowerChunk(object.chunkArr[MIX_ROBOT_POWER]);
-    clone17->setJumpChunk(object.chunkArr[MIX_ROBOT_JUMP]);
-    clone17->setSawAttackChunk(object.chunkArr[MIX_ROBOT_SAW]);
-    MagicCircle *clone18 = new MagicCircle(0, 0, 0, 0, 0, 0);
-    clone18->setTexture(object.textArr[TEXTURE_LAVA_MAGIC_CIRCLE]);
-    LavaBoss *clone19 = new LavaBoss(0);
-    clone19->setSprite(object.textArr[TEXTURE_LAVA_BOSS]);
-    clone19->setFistChunk(object.chunkArr[MIX_LAVA_FIST]);
-    clone19->setAppearChunk(object.chunkArr[MIX_LAVA_APPEAR]);
-    clone19->setDisappearingChunk(object.chunkArr[MIX_LAVA_DISAPPEAR]);
-    clone19->setDropedChunk(object.chunkArr[MIX_LAVA_DROPED]);
-    clone19->setDroppingChunk(object.chunkArr[MIX_LAVA_DROPPING]);
-    clone19->setBallChunk(object.chunkArr[MIX_LAVA_BALL]);
-    LavaBall *clone20 = new LavaBall(0, 0, 0, 0, 0, 0);
-    clone20->setSprite(object.textArr[TEXTURE_LAVA_FIRE_BALL]);
-    LavaFist *clone21 = new LavaFist(0, 0, 0);
-    clone21->setSprite(object.textArr[TEXTURE_LAVA_FIST]);
-    LavaDroplet *clone22 = new LavaDroplet(0, 0);
-    clone22->setSprite(object.textArr[TEXTURE_LAVA_DROPLET]);
-    FireCircle *clone23 = new FireCircle(0, 0);
-    clone23->setSprite(object.textArr[TEXTURE_FIRE_CIRCLE]);
-    clone23->setCircleChunk(object.chunkArr[MIX_LAVA_CIRCLE]);
-    LavaSun *clone24 = new LavaSun(0, 0, 0);
-    clone24->setSprite(object.textArr[TEXTURE_SUN]);
-    clone24->setKneeChunk(object.chunkArr[MIX_LAVA_KNEE]);
-    clone24->setTexture(object.textArr[TEXTURE_KNEE]);
-    Sigma *clone25 = new Sigma(0, 0);
-    clone25->setSprite(object.textArr[TEXTURE_SIGMA]);
-    clone25->setPowerSprite(object.textArr[TEXTURE_SIGMA_POWER]);
-    clone25->setSigmaBulletChunk(object.chunkArr[MIX_SIGMA_BULLET]);
-    clone25->setSigmaCycloneChunk(object.chunkArr[MIX_SIGMA_CYCLONE]);
-    clone25->setSigmaElectricBallChunk(object.chunkArr[MIX_SIGMA_ELECTRIC_BALL]);
-    clone25->setSigmaLazerChunk(object.chunkArr[MIX_SIGMA_LAZER]);
-    clone25->setSigmaSuperLazerChunk(object.chunkArr[MIX_SIGMA_SUPER_LAZER]);
-    SigmaElectricBall *eball = new SigmaElectricBall(0, 0);
-    eball->setSprite(object.textArr[TEXTURE_SIGMA_ELECTRIC_BALL]);
-    SigmaBullet *sBullet = new SigmaBullet(0, 0, 0, 0);
-    sBullet->setSprite(object.textArr[TEXTURE_SIGMA_BULLET]);
-    SigmaLaze *clone26 = new SigmaLaze(0, 0);
-    clone26->setSprite(object.textArr[TEXTURE_SIGMA_LAZER]);
-    SigmaCyclone *clone27 = new SigmaCyclone(0, 0, 0,0);
-    clone27->setSprite(object.textArr[TEXTURE_SIGMA_CYCLONE]);
-    FireFlow *clone28 = new FireFlow(0, 0);
-    clone28->setSprite(object.textArr[TEXTURE_FIRE_FLOW]);
-    FirePillar *clone29 = new FirePillar(0, 0, 0);
-    clone29->setSprite(object.textArr[TEXTURE_FIRE_PILLAR]);
-    GameButton *clone30 = new GameButton();
-    clone30->setSprite(object.textArr[TEXTURE_STORE_BAR]);
-    HealthStored *clone31 = new HealthStored(0, 0);
-    clone31->setSprite(object.textArr[TEXTURE_HEALTH_STORE]);
-    ManaStored *clone32 = new ManaStored(0, 0);
-    clone32->setSprite(object.textArr[TEXTURE_MANA_STORE]);
-    Heart *clone33 = new Heart(0, 0);
-    clone33->setSprite(object.textArr[TEXTURE_HEART]);
-    delete clone33;
-    delete clone32;
-    delete clone31;
-    delete clone30;
-    delete clone29;
-    delete clone28;
-    delete clone27;
-    delete clone26;
-    delete sBullet;
-    delete eball;
-    delete clone25;
-    delete clone24;
-    delete clone18;
-    delete clone19;
-    delete clone20;
-    delete clone21;
-    delete clone22;
-    delete clone23;
-    delete clone15;
-    delete clone14;
-    delete clone;
-    delete clone2;
-    delete clone3;
-    delete clone4;
-    delete clone5;
-    delete clone6;
-    delete clone7;
-    delete clone8;
-    delete clone9;
-    delete clone10;
-    delete clone11;
-    delete clone12;
-    delete clone13;
-    delete clone16;
-    delete clone17;
-    return true;
+
+    Character::jumpChunk = object.chunkArr[MIX_JUMP];
+    Character::dashChunk = object.chunkArr[MIX_DASH];
+    Character::normal_attackChunk = object.chunkArr[MIX_NORMAL_ATTACK];
+    Character::jumpClimbChunk = object.chunkArr[MIX_JUMP_CLIMB];
+    Character::hurtChunk = object.chunkArr[MIX_HURT];
+    Character::gigaChunk = object.chunkArr[MIX_GIGA];
+    Character::chargingChunk = object.chunkArr[MIX_CHARGING];
+
+    Tile::tileSprite = object.textArr[TEXTURE_TILE];
+    Tile::lavaOpaque = object.textArr[TEXTURE_OPAQUE_LAVA];
+
+    Diamond::diamondSprite = object.textArr[TEXTURE_DIAMOND];
+    Diamond::diamondCollisionChunk = object.chunkArr[MIX_DIAMOND_COLLISION];
+
+    Portal::portalSprite = object.textArr[TEXTURE_PORTAL];
+
+    Thorns::thornSprite = object.textArr[TEXTURE_THORN];
+
+    Gun::gunSprite = object.textArr[TEXTURE_GUN];
+
+    Bullet::bulletSprite = object.textArr[TEXTURE_BULLET];
+    Bullet::gunShotChunk = object.chunkArr[MIX_GUN_SHOT];
+
+    Fire::fireSprite = object.textArr[TEXTURE_FIRE];
+
+    FireTurret::fireTurretSprite = object.textArr[TEXTURE_FIRE_TURRET];
+
+    XBuster::xBusterSprite = object.textArr[TEXTURE_XBUSTER];
+
+    Creep::creepSprite = object.textArr[TEXTURE_CREEP];
+    Creep::creepShotChunk = object.chunkArr[MIX_CREEP_SHOT];
+
+    CreepBullet::creepBulletSprite = object.textArr[TEXTURE_CREEP_BULLET];
+
+    LazerGun::lazerGunSprite = object.textArr[TEXTURE_LAZER_GUN];
+    LazerGun::lazerHeadSprite = object.textArr[TEXTURE_LAZER_HEAD];
+    LazerGun::lazerSprite = object.textArr[TEXTURE_LAZER];
+
+    DoorButton::doorbuttonSprite = object.textArr[TEXTURE_DOOR_BUTTON];
+
+    Boss::bossSprite = object.textArr[TEXTURE_DRAGON];
+    Boss::fireBallChunk = object.chunkArr[MIX_FIRE_BALL];
+    Boss::fireFlowChunk = object.chunkArr[MIX_FIRE_FLOW];
+    Boss::firePillarChunk = object.chunkArr[MIX_FIRE_PILLAR];
+    Boss::fireSpearChunk = object.chunkArr[MIX_FIRE_SPEAR];
+
+    FireBall::fireBallSprite = object.textArr[TEXTURE_FIRE_BALL];
+
+    Saw::sawSprite = object.textArr[TEXTURE_SAW];
+
+    Robot1::robotSprite = object.textArr[TEXTURE_ROBOT];
+    Robot1::bullet1Sprite = object.textArr[TEXTURE_ROBOT_BULLET];
+    Robot1::bullet2Sprite = object.textArr[TEXTURE_ROBOT_BULLET_2];
+    Robot1::explosionBulletSprite = object.textArr[TEXTURE_EXPLOSION_BULLET];
+    Robot1::gatlingunBullet = object.textArr[TEXTURE_BULLET_GATLING_GUN];
+    Robot1::superLazerSprite = object.textArr[TEXTURE_SUPER_LAZER];
+    Robot1::robotShot = object.chunkArr[MIX_ROBOT_SHOT];
+    Robot1::robotChargingPower = object.chunkArr[MIX_ROBOT_CHARGING];
+    Robot1::robotDash = object.chunkArr[MIX_ROBOT_DASH];
+    Robot1::robotGatlingShot = object.chunkArr[MIX_ROBOT_GATLING];
+    Robot1::robotWalk = object.chunkArr[MIX_ROBOT_WALK];
+    Robot1::robotPower = object.chunkArr[MIX_ROBOT_POWER];
+    Robot1::robotJump = object.chunkArr[MIX_ROBOT_JUMP];
+    Robot1::robotSawAttack = object.chunkArr[MIX_ROBOT_SAW];
+
+    MagicCircle::magicCircleTexture = object.textArr[TEXTURE_LAVA_MAGIC_CIRCLE];
+
+    LavaBoss::lavaBossSprite = object.textArr[TEXTURE_LAVA_BOSS];
+    LavaBoss::lavaFistChunk = object.chunkArr[MIX_LAVA_FIST];
+    LavaBoss::lavaAppearing = object.chunkArr[MIX_LAVA_APPEAR];
+    LavaBoss::lavaDisappearing = object.chunkArr[MIX_LAVA_DISAPPEAR];
+    LavaBoss::lavaDroped = object.chunkArr[MIX_LAVA_DROPED];
+    LavaBoss::lavaDropping = object.chunkArr[MIX_LAVA_DROPPING];
+    LavaBoss::lavaBallChunk = object.chunkArr[MIX_LAVA_BALL];
+
+    LavaBall::lavaBallSprite = object.textArr[TEXTURE_LAVA_FIRE_BALL];
+
+    LavaFist::lavaFistSprite = object.textArr[TEXTURE_LAVA_FIST];
+
+    LavaDroplet::lavaDropletSprite = object.textArr[TEXTURE_LAVA_DROPLET];
+
+    FireCircle::fireCircleSprite = object.textArr[TEXTURE_FIRE_CIRCLE];
+    FireCircle::lavaCircleChunk = object.chunkArr[MIX_LAVA_CIRCLE];
+
+    LavaSun::lavaSunSprite = object.textArr[TEXTURE_SUN];
+    LavaSun::lavaKneeChunk = object.chunkArr[MIX_LAVA_KNEE];
+    LavaSun::kneeTexture = object.textArr[TEXTURE_KNEE];
+
+    Sigma::sigmaSprite = object.textArr[TEXTURE_SIGMA];
+    Sigma::sigmaPower = object.textArr[TEXTURE_SIGMA_POWER];
+    Sigma::sigmaBulletChunk = object.chunkArr[MIX_SIGMA_BULLET];
+    Sigma::sigmaCycloneChunk = object.chunkArr[MIX_SIGMA_CYCLONE];
+    Sigma::sigmaElectricBallChunk = object.chunkArr[MIX_SIGMA_ELECTRIC_BALL];
+    Sigma::sigmaLazerChunk = object.chunkArr[MIX_SIGMA_LAZER];
+    Sigma::sigmaSuperLazerChunk = object.chunkArr[MIX_SIGMA_SUPER_LAZER];
+
+    SigmaElectricBall::electricBallSprite = object.textArr[TEXTURE_SIGMA_ELECTRIC_BALL];
+
+    SigmaBullet::sigmaBulletSprite = object.textArr[TEXTURE_SIGMA_BULLET];
+
+    SigmaLaze::sigmaLazeSprite = object.textArr[TEXTURE_SIGMA_LAZER];
+
+    SigmaCyclone::cycloneSprite = object.textArr[TEXTURE_SIGMA_CYCLONE];
+
+    FireFlow::fireFlowSprite = object.textArr[TEXTURE_FIRE_FLOW];
+
+    FirePillar::firePillarSprite = object.textArr[TEXTURE_FIRE_PILLAR];
+
+    StoredButton::storeBar = object.textArr[TEXTURE_STORE_BAR];
+
+    HealthStored::healthStoreSprite = object.textArr[TEXTURE_HEALTH_STORE];
+
+    ManaStored::manaStoreSprite = object.textArr[TEXTURE_MANA_STORE];
+
+    Heart::heartSprite = object.textArr[TEXTURE_HEART];
 }
+void Game::setGameButton()
+{
+    object.actionButton[NEW_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "New Game", object.font, "NewGame", object.renderer);
+    object.actionButton[CONTINUE_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Continue Game", object.font, "ContinueGame", object.renderer);
+    object.actionButton[SELECT_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Select Stage", object.font, "SelectStage", object.renderer);
+    object.actionButton[QUIT_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Quit Game", object.font, "QuitGame", object.renderer);
+    object.actionButton[RESTART_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Restart Game", object.font, "Restart", object.renderer);
+    object.actionButton[BACK_TO_MAIN_MENU_BUTTON] = new ActionButton("Texture/gamebutton.png", "Back To Main Menu", object.font, "BackToMainMenu", object.renderer);
+    object.actionButton[BACK_BUTTON] = new ActionButton("Texture/back_button.png", "Back", object.font, "Back", object.renderer);
+
+    object.stageButton[STAGE_1_BUTTON] = new StageButton("Texture/Stage1CutScene.png", "Texture/lock_stage_1.png", "Stage1", object.renderer);
+    object.stageButton[STAGE_2_BUTTON] = new StageButton("Texture/Stage2CutScene.png", "Texture/lock_stage_2.png", "Stage2", object.renderer);
+    object.stageButton[STAGE_3_BUTTON] = new StageButton("Texture/Stage3CutScene.png", "Texture/lock_stage_3.png", "Stage3", object.renderer);
+    object.stageButton[STAGE_4_BUTTON] = new StageButton("Texture/Stage4CutScene.png", "Texture/lock_stage_4.png", "Stage4", object.renderer);
+    object.stageButton[STAGE_5_BUTTON] = new StageButton("Texture/Stage5CutScene.png", "Texture/lock_stage_5.png", "Stage5", object.renderer);
+
+    object.storeButton[HEALTH_STORE_BUTTON] = new StoredButton("Texture/healthStoreIcon.png", "Healing", object.renderer);
+    object.storeButton[MANA_STORE_BUTTON] = new StoredButton("Texture/manaStoreIcon.png", "Restore Mana", object.renderer);
+
+    object.actionButton[NEW_GAME_BUTTON]->setPos((SCREEN_WIDTH - ACTION_BUTTON_WIDTH)/2, 190);
+    object.actionButton[CONTINUE_GAME_BUTTON]->setPos((SCREEN_WIDTH - ACTION_BUTTON_WIDTH)/2, 270);
+    object.actionButton[SELECT_GAME_BUTTON]->setPos((SCREEN_WIDTH - ACTION_BUTTON_WIDTH)/2, 350);
+    object.actionButton[QUIT_GAME_BUTTON]->setPos((SCREEN_WIDTH - ACTION_BUTTON_WIDTH)/2, 430);
+    object.menu[MAIN_MENU] = new Menu(object.renderer);
+    object.menu[MAIN_MENU]->AddGameButton(object.actionButton[NEW_GAME_BUTTON]);
+    object.menu[MAIN_MENU]->AddGameButton(object.actionButton[CONTINUE_GAME_BUTTON]);
+    object.menu[MAIN_MENU]->AddGameButton(object.actionButton[SELECT_GAME_BUTTON]);
+    object.menu[MAIN_MENU]->AddGameButton(object.actionButton[QUIT_GAME_BUTTON]);
+    object.menu[MAIN_MENU]->setBackGround(object.textArr[TEXTURE_MAIN_MENU_BACKGROUND]);
+
+    object.actionButton[BACK_TO_MAIN_MENU_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 110);
+    object.actionButton[SELECT_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Select Stage", object.font, "SelectStage", object.renderer);
+    object.actionButton[SELECT_GAME_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 195);
+    object.actionButton[RESTART_GAME_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 280);
+    object.actionButton[BACK_BUTTON]->setPos(0, 0);
+    object.storeButton[HEALTH_STORE_BUTTON]->setPos(120, 100);
+    object.storeButton[MANA_STORE_BUTTON]->setPos(710, 100);
+    object.menu[PAUSE_MENU] = new Menu(object.renderer);
+    object.menu[PAUSE_MENU]->AddGameButton(object.actionButton[BACK_BUTTON]);
+    object.menu[PAUSE_MENU]->AddGameButton(object.actionButton[BACK_TO_MAIN_MENU_BUTTON]);
+    object.menu[PAUSE_MENU]->AddGameButton(object.actionButton[SELECT_GAME_BUTTON]);
+    object.menu[PAUSE_MENU]->AddGameButton(object.actionButton[RESTART_GAME_BUTTON]);
+    object.menu[PAUSE_MENU]->AddGameButton(object.storeButton[HEALTH_STORE_BUTTON]);
+    object.menu[PAUSE_MENU]->AddGameButton(object.storeButton[MANA_STORE_BUTTON]);
+    object.menu[PAUSE_MENU]->setBackGround(object.textArr[TEXTURE_PAUSE_MENU]);
+
+    object.stageButton[STAGE_1_BUTTON]->setPos(160 + (200 - object.stageButton[STAGE_1_BUTTON]->getWidth())/2, 130);
+    object.stageButton[STAGE_2_BUTTON]->setPos(380 + (200 - object.stageButton[STAGE_2_BUTTON]->getWidth())/2, 130);
+    object.stageButton[STAGE_3_BUTTON]->setPos(600 + (200 - object.stageButton[STAGE_3_BUTTON]->getWidth())/2, 130);
+    object.stageButton[STAGE_4_BUTTON]->setPos(270 + (200 - object.stageButton[STAGE_4_BUTTON]->getWidth())/2, 350);
+    object.stageButton[STAGE_5_BUTTON]->setPos(490 + (200 - object.stageButton[STAGE_5_BUTTON]->getWidth())/2, 350);
+    object.actionButton[BACK_BUTTON] = new ActionButton("Texture/back_button.png", "Back", object.font, "Back", object.renderer);
+    object.menu[SELECT_STAGE] = new Menu(object.renderer);
+    object.actionButton[BACK_BUTTON]->setPos(0, 0);
+    object.menu[SELECT_STAGE]->AddGameButton(object.actionButton[BACK_BUTTON]);
+    object.menu[SELECT_STAGE]->AddGameButton(object.stageButton[STAGE_1_BUTTON]);
+    object.menu[SELECT_STAGE]->AddGameButton(object.stageButton[STAGE_2_BUTTON]);
+    object.menu[SELECT_STAGE]->AddGameButton(object.stageButton[STAGE_3_BUTTON]);
+    object.menu[SELECT_STAGE]->AddGameButton(object.stageButton[STAGE_4_BUTTON]);
+    object.menu[SELECT_STAGE]->AddGameButton(object.stageButton[STAGE_5_BUTTON]);
+    object.menu[SELECT_STAGE]->setBackGround(object.textArr[TEXTURE_STAGE_SELECT]);
+
+    object.actionButton[SELECT_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Select Stage", object.font, "SelectStage", object.renderer);
+    object.actionButton[QUIT_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Quit Game", object.font, "QuitGame", object.renderer);
+    object.actionButton[RESTART_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Restart Game", object.font, "Restart", object.renderer);
+    object.actionButton[BACK_TO_MAIN_MENU_BUTTON] = new ActionButton("Texture/gamebutton.png", "Back To Main Menu", object.font, "BackToMainMenu", object.renderer);
+    object.actionButton[BACK_TO_MAIN_MENU_BUTTON]->setPos((SCREEN_WIDTH - object.actionButton[BACK_TO_MAIN_MENU_BUTTON]->getWidth())/2, 210);
+    object.actionButton[SELECT_GAME_BUTTON]->setPos((SCREEN_WIDTH - object.actionButton[SELECT_GAME_BUTTON]->getWidth())/2, 290);
+    object.actionButton[RESTART_GAME_BUTTON]->setPos((SCREEN_WIDTH - object.actionButton[RESTART_GAME_BUTTON]->getWidth())/2, 370);
+    object.actionButton[QUIT_GAME_BUTTON]->setPos((SCREEN_WIDTH - object.actionButton[QUIT_GAME_BUTTON]->getWidth())/2, 450);
+    object.menu[LOSING_MENU] = new Menu(object.renderer);
+    object.menu[LOSING_MENU]->AddGameButton(object.actionButton[BACK_TO_MAIN_MENU_BUTTON]);
+    object.menu[LOSING_MENU]->AddGameButton(object.actionButton[SELECT_GAME_BUTTON]);
+    object.menu[LOSING_MENU]->AddGameButton(object.actionButton[RESTART_GAME_BUTTON]);
+    object.menu[LOSING_MENU]->AddGameButton(object.actionButton[QUIT_GAME_BUTTON]);
+    object.menu[LOSING_MENU]->setBackGround(object.textArr[TEXTURE_LOSING_BACKGROUND]);
+}
+
 bool Game::setMap(Tile *tiles[], string path)
 {
-    ifstream file(path.c_str());
-    if(file.fail())
+    ifstream input_map(path.c_str());
+    if(input_map.fail())
     {
         cout << "Unable to open map";
         return false;
     }
-    file >> object.currentMap;
+
+    input_map >> object.currentMap;
     int mPosX = 0;
     int mPosY = 0;
     for(int i=0; i<TOTAL_TILES; i++)
     {
         int tileType = -1;
-        file >> tileType;
-        if(file.fail())
+        input_map >> tileType;
+        if(input_map.fail())
         {
             cout << "Unable to load map tile";
             return false;
@@ -413,14 +390,15 @@ bool Game::setMap(Tile *tiles[], string path)
             mPosY += TILE_HEIGHT;
         }
     }
-    file >> object.hasGun;
-    if(object.hasGun)
+
+    input_map >> object.hasObject[GUN];
+    if(object.hasObject[GUN])
     {
-        for(int i=0; i<object.hasGun; i++)
+        for(int i=0; i<object.hasObject[GUN]; i++)
         {
             int pos = -1, type = -1, bulletType = -1;
-            file >> pos >> type >> bulletType;
-            if(file.fail())
+            input_map >> pos >> type >> bulletType;
+            if(input_map.fail())
             {
                 cout << "Unable to load gun map";
                 exit(0);
@@ -433,14 +411,15 @@ bool Game::setMap(Tile *tiles[], string path)
             }
         }
     }
-    file >> object.hasThorn;
-    if(object.hasThorn)
+
+    input_map >> object.hasObject[THORN];
+    if(object.hasObject[THORN])
     {
-        for(int i=0; i<object.hasThorn; i++)
+        for(int i=0; i<object.hasObject[THORN]; i++)
         {
             int pos = -1, type = -1;
-            file >> pos >> type;
-            if(file.fail())
+            input_map >> pos >> type;
+            if(input_map.fail())
             {
                 cout << "Unable to load thorn";
                 exit(0);
@@ -452,156 +431,176 @@ bool Game::setMap(Tile *tiles[], string path)
             }
         }
     }
-    file >> object.hasPortal;
-    if(object.hasPortal)
+
+    input_map >> object.hasObject[PORTAL];
+    if(object.hasObject[PORTAL])
     {
-        for(int i=0; i<object.hasPortal; i++)
+        for(int i=0; i<object.hasObject[PORTAL]; i++)
         {
             object.mPosPorX[i] = -1, object.mPosPorY[i] = -1;
             string round = "";
             bool type1, type2, type3;
-            file >> object.mPosPorX[i] >> object.mPosPorY[i] >> round >> type1 >> type2 >> type3;
+            input_map >> object.mPosPorX[i] >> object.mPosPorY[i] >> round >> type1 >> type2 >> type3;
             Portal *port = new Portal(5000, 5000, round, type1, type2, type3);
             object.por.push_back(port);
         }
     }
-    file >> object.hasFireTurret;
-    if(object.hasFireTurret)
+
+    input_map >> object.hasObject[FIRETURRET];
+    if(object.hasObject[FIRETURRET])
     {
-        for(int i=0; i < object.hasFireTurret; i ++)
+        for(int i=0; i < object.hasObject[FIRETURRET]; i ++)
         {
             int pos = -1, type = -1;
-            file >> pos >> type;
+            input_map >> pos >> type;
             FireTurret* fr = new FireTurret(pos, type);
             object.fireTurret.push_back(fr);
         }
     }
-    file >> object.hasDiamond;
-    if(object.hasDiamond)
+
+    input_map >> object.hasObject[DIAMOND];
+    int countPointDiamond = 0;
+    if(object.hasObject[DIAMOND])
     {
-        for(int i=0; i<object.hasDiamond; i++)
+        for(int i=0; i<object.hasObject[DIAMOND]; i++)
         {
-            object.diaPos[i] = -1;
-            int type = -1;
-            file >> object.diaPos[i] >> type;
-            if(file.fail())
+            int type = -1, pos = -1;
+            input_map >> pos >> type;
+            countPointDiamond += (type == 0);
+            if(input_map.fail())
             {
                 logSDLError(cout, "Load diamond pos", true);
             }
-            if(object.diaPos[i] >= 0 && object.diaPos[i] <= TOTAL_TILES)
+            if(pos >= 0 && pos <= TOTAL_TILES)
             {
-                SDL_Rect box = object.tile[object.diaPos[i]]->getBox();
-                Diamond *diamond = new Diamond(box.x + (TILE_WIDTH - DIAMOND_WIDTH)/2, box.y + (TILE_HEIGHT - DIAMOND_HEIGHT)/2, type);
+                SDL_Rect box = object.tile[pos]->getBox();
+                Diamond* diamond;
+                if(type == 0)diamond = new PointDiamond(box.x + (TILE_WIDTH - DIAMOND_WIDTH)/2, box.y + (TILE_HEIGHT - DIAMOND_HEIGHT)/2);
+                if(type == 1)diamond = new HealthDiamond(box.x + (TILE_WIDTH - DIAMOND_WIDTH)/2, box.y + (TILE_HEIGHT - DIAMOND_HEIGHT)/2);
+                if(type == 2)diamond = new ManaDiamond(box.x + (TILE_WIDTH - DIAMOND_WIDTH)/2, box.y + (TILE_HEIGHT - DIAMOND_HEIGHT)/2);
                 object.dia.push_back(diamond);
             }
         }
     }
-    file >> object.hasDoorButton;
-    if(object.hasDoorButton)
+    if(object.currentMap == "map/FinalMap.map")object.percent = 1;
+    object.numberOfDiamondToGoOverPortal = (countPointDiamond * object.percent)/100;
+
+    input_map >> object.hasObject[DOORBUTTON];
+    if(object.hasObject[DOORBUTTON])
     {
-        for(int i = 0; i<object.hasDoorButton; i++)
+        for(int i = 0; i<object.hasObject[DOORBUTTON]; i++)
         {
             int pos = -1, type = -1, index1 = -1, index2 = -1;
-            file >> pos >> type >> index1 >> index2;
+            input_map >> pos >> type >> index1 >> index2;
             DoorButton* doorr = new DoorButton(pos, type, tiles[index1], tiles[index2]);
             object.door.push_back(doorr);
         }
     }
-    file >> object.hasLazerGun;
-    if(object.hasLazerGun)
+
+    input_map >> object.hasObject[LAZERGUN];
+    if(object.hasObject[LAZERGUN])
     {
-        for(int i=0; i<object.hasLazerGun; i++)
+        for(int i=0; i<object.hasObject[LAZERGUN]; i++)
         {
             int pos = -1, lazerType = -1, headType = -1, typeGun = -1;
-            file >> pos >> typeGun >> lazerType >> headType;
+            input_map >> pos >> typeGun >> lazerType >> headType;
             LazerGun* lazer = new LazerGun(pos, typeGun, lazerType, headType);
             object.laz.push_back(lazer);
         }
     }
-    file >> object.hasCreep;
-    if(object.hasCreep)
+
+    input_map >> object.hasObject[CREEP];
+    if(object.hasObject[CREEP])
     {
-        for(int i=0; i<object.hasCreep; i++)
+        for(int i=0; i<object.hasObject[CREEP]; i++)
         {
             int pos = -1, type = -1;
-            file >> pos >> type;
-            Creep* cre = new Creep(pos, type);
+            input_map >> pos >> type;
+            int x = pos%64 * TILE_WIDTH;
+            int y = pos/64 * TILE_HEIGHT;
+            Creep* cre;
+            if(type == 0)cre = new CreepOnGround(x, y);
+            else
+            {
+                if(type == 1)cre = new CreepBat(x,y);
+                else
+                {
+                    cre = new CreepInAir(x,y);
+                }
+            }
             object.creep.push_back(cre);
         }
     }
-    file >> object.hasSaw;
-    if(object.hasSaw)
+
+    input_map >> object.hasObject[SAW];
+    if(object.hasObject[SAW])
     {
-        for(int i=0; i<object.hasSaw; i++)
+        for(int i=0; i<object.hasObject[SAW]; i++)
         {
             int pos = -1, direction = -1;
-            file >> pos >> direction;
+            input_map >> pos >> direction;
             Saw *s = new Saw(pos, direction);
             object.saw.push_back(s);
         }
     }
-    file >> object.hasMagicCircle;
-    if(object.hasMagicCircle)
+
+    input_map >> object.hasObject[MAGICCIRCLE];
+    if(object.hasObject[MAGICCIRCLE])
     {
-        for(int i=0; i<object.hasMagicCircle; i++)
+        for(int i=0; i<object.hasObject[MAGICCIRCLE]; i++)
         {
             int posX = -1, posY = -1, type = -1, nextX = -1, nextY = -1;
             double degree = -1;
-            file >> posX >> posY >> type >> nextX >> nextY >> degree;
+            input_map >> posX >> posY >> type >> nextX >> nextY >> degree;
             MagicCircle *maC = new MagicCircle(posX, posY, type, nextX, nextY, degree);
             object.magicC.push_back(maC);
         }
     }
-    file >> object.hasHeart;
-    if(object.hasHeart)
+
+    input_map >> object.hasObject[HEART];
+    if(object.hasObject[HEART])
     {
         int posX, posY;
-        file >> posX >> posY;
+        input_map >> posX >> posY;
         object.heart = new Heart(posX, posY);
     }
-    file >> object.currentBoss;
-    file >> object.posArenaX >> object.posArenaY >> object.arenaWidth >> object.arenaHeight;
+
+    input_map >> object.hasObject[HEALTHSTORED];
+    if(object.hasObject[HEALTHSTORED])
+    {
+        int posX = -1, posY = -1;
+        input_map >> posX >> posY;
+        object.healthS = new HealthStored(posX, posY);
+    }
+
+    input_map >> object.hasObject[MANASTORED];
+    if(object.hasObject[MANASTORED])
+    {
+        int posX = -1, posY = -1;
+        input_map >> posX >> posY;
+        object.manaS = new ManaStored(posX, posY);
+    }
+
+    input_map >> object.currentBoss;
+
+    input_map >> object.posArenaX >> object.posArenaY >> object.arenaWidth >> object.arenaHeight;
+
     int X = -1, Y = -1;
-    file >> X >> Y;
+    input_map >> X >> Y;
     object.x.setDefault();
     object.x.setX(X);
     object.x.setY(Y);
     object.x.setAppearing(true);
     object.x.setRow(32);
-    if(object.currentMap == "map/Maze.map")
-    {
-        if(!object.x.getHasHealthStored())
-        {
-            object.hasHealthStored = 1;
-            object.healthS = new HealthStored(1040, 600);
-        }
-    }
-    else
-    {
-        object.hasHealthStored = 0;
-        object.healthS = nullptr;
-    }
-    if(object.currentMap == "map/Vocalno.map")
-    {
-        if(!object.x.getHasManaStored())
-        {
-            object.hasManaStored = 1;
-            object.manaS = new ManaStored(1360, 200);
-        }
-    }
-    else
-    {
-        object.hasManaStored = 0;
-        object.manaS = nullptr;
-    }
-    file.close();
+
+    input_map.close();
     return true;
 }
 bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
 {
     bool behurted = false;
     bool isAppearing = object.x.getAppearing();
-    /*if(object.posArenaX <= object.x.getX() && object.x.getX() <= object.posArenaX + object.arenaWidth && object.posArenaY <= object.x.getY() && object.x.getY() <= object.posArenaY + object.arenaHeight)
+    if(object.posArenaX <= object.x.getX() && object.x.getX() <= object.posArenaX + object.arenaWidth && object.posArenaY <= object.x.getY() && object.x.getY() <= object.posArenaY + object.arenaHeight)
     {
         if(!object.battle_with_boss)object.timevsboss = SDL_GetTicks();
         object.battle_with_boss = true;
@@ -611,26 +610,35 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
         object.timevsboss = SDL_GetTicks();
         int posX = rand()%SCREEN_WIDTH + camera.x;
         int posY = rand()%SCREEN_HEIGHT + camera.y;
-        int col = posX / 80;
-        int row = posY / 80;
-        Creep* cree = new Creep(row*64 + col, rand()%2 + 1);
-        SDL_Rect rect = cree->getBox();
-        if(checkCollisionTile(rect, tile) == -1)
+        int col = posX / TILE_WIDTH;
+        int row = posY / TILE_HEIGHT;
+        int type = rand()%2 + 1;
+        Creep *addedCreep;
+        if(type == 0)addedCreep = new CreepBat(posX, posY);
+        else addedCreep = new CreepInAir(posX, posY);
+        SDL_Rect creepCollisionBox = addedCreep->getBox();
+        if(checkCollisionTile(creepCollisionBox, tile) == -1)
         {
-            object.hasCreep++;
-            object.creep.push_back(cree);
+            object.hasObject[CREEP]++;
+            object.creep.push_back(addedCreep);
         }
-    }*/
-    if(object.hasThorn)
+    }
+
+    if(object.hasObject[DOORBUTTON])
     {
-        for(int i=0; i<object.hasThorn; i++)
+        object.x.checkCollisionWithDoor(object.door);
+    }
+
+    if(object.hasObject[THORN])
+    {
+        for(int i=0; i<object.hasObject[THORN]; i++)
         {
             if(SDL_GetTicks() - startTime > 750.f && !object.x.getGiga() && !behurted && !isAppearing)
             {
                 if(checkCollisionBox(object.x.getBox(), object.thorn[i]->getBox()))
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 3);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 10);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -638,30 +646,28 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 }
             }
         }
-
     }
 
-    if(object.hasGun)
+    if(object.hasObject[GUN])
     {
-        for(int i=0; i<object.hasGun; i++)
+        for(int i=0; i<object.hasObject[GUN]; i++)
         {
             Bullet *bul = object.gun[i]->getBullet();
             if(SDL_GetTicks() - startTime > 750.f && !object.x.getGiga() && !behurted && !isAppearing)
             {
                 if(checkCollisionBox(object.x.getBox(), object.gun[i]->getBox()))
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 3);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 10);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
                     behurted = true;
                 }
-
                 if(checkCollisionBox(object.x.getBox(), bul->getBox()) && !behurted && !isAppearing)
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 3);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 10);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -672,69 +678,70 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             {
                 if(checkCollisionBox(object.x.getBox(), object.gun[i]->getBox()))
                 {
-                    int h = object.gun[i]->getHealth();
-                    object.gun[i]->setHealth(h - 20);
-                    if(h - 20 <= 0)
+                    int gunHealth = object.gun[i]->getHealth();
+                    object.gun[i]->setHealth(gunHealth - 20);
+                    if(gunHealth - 20 <= 0)
                     {
-                        SDL_Rect r = object.gun[i]->getBox();
-                        SDL_Point pt = {r.x, r.y};
-                        object.p.push_back({pt, 0});
+                        SDL_Rect gunRect = object.gun[i]->getBox();
+                        SDL_Point pt = {gunRect.x, gunRect.y};
+                        object.explosionPoint.push_back({pt, 0});
                         Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
                     }
                 }
                 if(checkCollisionBox(object.x.getBox(), bul->getBox()))
                 {
-                    int h = bul->getHealth();
-                    bul->setHealth(h - 20);
-                    if(h - 20 <= 0)
+                    int bulletHealth = bul->getHealth();
+                    bul->setHealth(bulletHealth - 20);
+                    if(bulletHealth - 20 <= 0)
                     {
                         SDL_Point pt = {bul->getBox().x, bul->getBox().y};
-                        object.p.push_back({pt, 0});
+                        object.explosionPoint.push_back({pt, 0});
                         Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
                     }
                 }
             }
             if(SDL_GetTicks() - object.gun[i]->getTime() > 150.f && object.gun[i]->getHealth() > 0)
             {
-                SDL_Rect rect1 = object.gun[i]->getBox();
-                int cnt = object.x.checkXBusterCollision(rect1, object.door);
-                int health = object.gun[i]->getHealth();
-                object.gun[i]->setHealth(health - cnt*3);
-                if(health - cnt*3 <= 0)
+                SDL_Rect gunRect = object.gun[i]->getBox();
+                int cnt = object.x.checkXBusterCollision(gunRect);
+                int gunHealth = object.gun[i]->getHealth();
+                object.gun[i]->setHealth(gunHealth - cnt*3);
+                if(gunHealth - cnt*3 <= 0)
                 {
                     Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
-                    SDL_Point point = {rect1.x, rect1.y};
-                    object.p.push_back({point, 0});
+                    SDL_Point point = {gunRect.x, gunRect.y};
+                    object.explosionPoint.push_back({point, 0});
                 }
                 object.gun[i]->setTime(SDL_GetTicks());
             }
             if(SDL_GetTicks() - bul->getTime() > 150.f && bul->getHealth() > 0)
             {
-                SDL_Rect rect1 = bul->getBox();
-                int cnt = object.x.checkXBusterCollision(rect1, object.door);
-                int health = bul->getHealth();
-                bul->setHealth(health - cnt*3);
-                if(health - cnt*3 <= 0)
+                SDL_Rect bulletRect = bul->getBox();
+                int cnt = object.x.checkXBusterCollision(bulletRect);
+                int bulletHealth = bul->getHealth();
+                bul->setHealth(bulletHealth - cnt*3);
+                if(bulletHealth - cnt*3 <= 0)
                 {
                     Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
-                    SDL_Point point = {rect1.x, rect1.y};
-                    object.p.push_back({point, 0});
+                    SDL_Point point = {bulletRect.x, bulletRect.y};
+                    object.explosionPoint.push_back({point, 0});
                 }
                 bul->setTime(SDL_GetTicks());
             }
         }
     }
-    if(object.hasFireTurret)
+
+    if(object.hasObject[FIRETURRET])
     {
-        for(int i=0; i< object.hasFireTurret; i++)
+        for(int i=0; i< object.hasObject[FIRETURRET]; i++)
         {
             if(SDL_GetTicks() - startTime > 750.f && !object.x.getGiga())
             {
                 Fire *fire = object.fireTurret[i]->getFire();
                 if(checkCollisionBox(fire->getBox(), object.x.getBox()) && !behurted && !isAppearing)
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 3);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 10);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -743,17 +750,18 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             }
         }
     }
-    if(object.hasLazerGun)
+
+    if(object.hasObject[LAZERGUN])
     {
-        for(int i=0; i<object.hasLazerGun; i++)
+        for(int i=0; i<object.hasObject[LAZERGUN]; i++)
         {
             if(SDL_GetTicks() - startTime > 750.f && !object.x.getGiga() && !behurted && !isAppearing)
             {
-                SDL_Rect rect = object.laz[i]->getBox();
-                if(checkCollisionBox(rect, object.x.getBox()))
+                SDL_Rect lazerRect = object.laz[i]->getBox();
+                if(checkCollisionBox(lazerRect, object.x.getBox()))
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 3);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 10);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -762,17 +770,18 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             }
         }
     }
-    if(object.hasCreep)
+
+    if(object.hasObject[CREEP])
     {
-        for(int i=0; i<object.hasCreep; i++)
+        for(int i=0; i<object.hasObject[CREEP]; i++)
         {
             if(SDL_GetTicks() - startTime > 750.f && !object.x.getGiga() && !behurted && !isAppearing)
             {
-                SDL_Rect rect = object.creep[i]->getBox();
-                if(checkCollisionBox(rect, object.x.getBox()))
+                SDL_Rect creepRect = object.creep[i]->getBox();
+                if(checkCollisionBox(creepRect, object.x.getBox()))
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 3);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 10);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -780,11 +789,11 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 }
                 for(int j=0; j<3; j++)
                 {
-                    SDL_Rect rect2 = object.creep[i]->getBox(j);
-                    if(checkCollisionBox(rect2, object.x.getBox()) && !behurted && !isAppearing)
+                    SDL_Rect creepBulletRect = object.creep[i]->getBox(j);
+                    if(checkCollisionBox(creepBulletRect, object.x.getBox()) && !behurted && !isAppearing)
                     {
-                        int h = object.x.getHealth();
-                        object.x.setHealth(h - 3);
+                        int charHealth = object.x.getHealth();
+                        object.x.setHealth(charHealth - 10);
                         object.x.setHurt(true);
                         Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                         startTime = SDL_GetTicks();
@@ -796,15 +805,15 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             Uint32 time = object.creep[i]->getTime2();
             if(SDL_GetTicks() - time >= 300.f && object.creep[i]->getHealth() > 0)
             {
-                SDL_Rect rect1 = object.creep[i]->getBox();
-                int cnt = object.x.checkXBusterCollision(rect1, object.door);
-                int health = object.creep[i]->getHealth();
-                object.creep[i]->setHealth(health - cnt*3);
-                if(health - cnt*3 <= 0)
+                SDL_Rect creepRect = object.creep[i]->getBox();
+                int cnt = object.x.checkXBusterCollision(creepRect);
+                int creepHealth = object.creep[i]->getHealth();
+                object.creep[i]->setHealth(creepHealth - cnt*3);
+                if(creepHealth - cnt*3 <= 0)
                 {
                     Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
-                    SDL_Point point = {rect1.x, rect1.y};
-                    object.p.push_back({point, 0});
+                    SDL_Point point = {creepRect.x, creepRect.y};
+                    object.explosionPoint.push_back({point, 0});
                 }
                 object.creep[i]->setTime2(SDL_GetTicks());
             }
@@ -812,13 +821,13 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             {
                 if(object.x.getGiga())
                 {
-                    int h = object.creep[i]->getHealth();
-                    object.creep[i]->setHealth(h - 20);
-                    if(h - 20 <= 0)
+                    int creepHealth = object.creep[i]->getHealth();
+                    object.creep[i]->setHealth(creepHealth - 20);
+                    if(creepHealth - 20 <= 0)
                     {
-                        SDL_Rect r = object.creep[i]->getBox();
-                        SDL_Point pt = {r.x, r.y};
-                        object.p.push_back({pt, 0});
+                        SDL_Rect creepRect = object.creep[i]->getBox();
+                        SDL_Point pt = {creepRect.x, creepRect.y};
+                        object.explosionPoint.push_back({pt, 0});
                         Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
                     }
                 }
@@ -826,17 +835,17 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
         }
     }
 
-    if(object.hasSaw)
+    if(object.hasObject[SAW])
     {
-        for(int i=0; i<object.hasSaw; i++)
+        for(int i=0; i<object.hasObject[SAW]; i++)
         {
             if(SDL_GetTicks() - startTime > 750.f && !object.x.getGiga() && !behurted && !isAppearing)
             {
-                SDL_Rect rect = object.saw[i]->getBox();
-                if(checkCollisionBox(rect, object.x.getBox()))
+                SDL_Rect sawRect = object.saw[i]->getBox();
+                if(checkCollisionBox(sawRect, object.x.getBox()))
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 3);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 10);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -847,13 +856,13 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             {
                 if(object.x.getGiga())
                 {
-                    int h = object.saw[i]->getHealth();
-                    object.saw[i]->setHealth(h - 20);
-                    if(h - 20 <= 0)
+                    int sawHealth = object.saw[i]->getHealth();
+                    object.saw[i]->setHealth(sawHealth - 20);
+                    if(sawHealth - 20 <= 0)
                     {
-                        SDL_Rect r = object.saw[i]->getBox();
-                        SDL_Point pt = {r.x, r.y};
-                        object.p.push_back({pt, 0});
+                        SDL_Rect sawRect = object.saw[i]->getBox();
+                        SDL_Point pt = {sawRect.x, sawRect.y};
+                        object.explosionPoint.push_back({pt, 0});
                         Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
                     }
                 }
@@ -861,41 +870,44 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             Uint32 time = object.saw[i]->getTime();
             if(SDL_GetTicks() - time >= 300.f && object.saw[i]->getHealth() > 0)
             {
-                SDL_Rect rect1 = object.saw[i]->getBox();
-                int cnt = object.x.checkXBusterCollision(rect1, object.door);
-                int health = object.saw[i]->getHealth();
-                object.saw[i]->setHealth(health - cnt*3);
-                if(health - cnt*3 <= 0)
+                SDL_Rect sawRect = object.saw[i]->getBox();
+                int cnt = object.x.checkXBusterCollision(sawRect);
+                int sawHealth = object.saw[i]->getHealth();
+                object.saw[i]->setHealth(sawHealth - cnt*3);
+                if(sawHealth - cnt*3 <= 0)
                 {
                     Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
-                    SDL_Point point = {rect1.x, rect1.y};
-                    object.p.push_back({point, 0});
+                    SDL_Point point = {sawRect.x, sawRect.y};
+                    object.explosionPoint.push_back({point, 0});
                 }
                 object.saw[i]->setTime(SDL_GetTicks());
             }
         }
     }
-    if(object.hasHealthStored)
+
+    if(object.hasObject[HEALTHSTORED])
     {
         SDL_Point pt = {object.x.getX(), object.x.getY()};
         if(object.healthS->checkCollision(pt))
         {
             Mix_PlayChannel(-1, object.chunkArr[MIX_DIAMOND_COLLISION], 0);
             object.x.setHasHealthStored(true);
-            object.healthStoredButton->setHasHealth();
+            object.storeButton[HEALTH_STORE_BUTTON]->setHasHealth(true);
         }
     }
-    if(object.hasManaStored)
+
+    if(object.hasObject[MANASTORED])
     {
         SDL_Point pt = {object.x.getX(), object.x.getY()};
         if(object.manaS->checkCollision(pt))
         {
             Mix_PlayChannel(-1, object.chunkArr[MIX_DIAMOND_COLLISION], 0);
             object.x.setHasManaStored(true);
-            object.manaStoredButton->setHasMana();
+            object.storeButton[MANA_STORE_BUTTON]->setHasMana(true);
         }
     }
-    if(object.hasHeart)
+
+    if(object.hasObject[HEART])
     {
         SDL_Point pt = {object.x.getX(), object.x.getY()};
         if(object.heart->checkCollision(pt))
@@ -904,6 +916,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             object.x.setMaxHealth(object.x.getMaxHealth() + 20);
         }
     }
+
     if(object.currentBoss == "dragon")
     {
         if(object.boss->getHealth() > 0)
@@ -918,8 +931,8 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                     {
                         if(!behurted && !isAppearing)
                         {
-                            int h = object.x.getHealth();
-                            object.x.setHealth(h - cnt);
+                            int charHealth = object.x.getHealth();
+                            object.x.setHealth(charHealth - cnt);
                             object.x.setHurt(true);
                             Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                             startTime = SDL_GetTicks();
@@ -928,31 +941,32 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                     }
                     else
                     {
-                        int h = object.boss->getHealth();
-                        object.boss->setHealth(h - 40);
+                        int dragonHealth = object.boss->getHealth();
+                        object.boss->setHealth(dragonHealth - 30);
                         startTime = SDL_GetTicks();
                     }
                 }
             }
-            if(SDL_GetTicks() - object.boss->getTime() > 500.f && object.boss->getHealth() > 0)
+            if(SDL_GetTicks() - object.boss->getHurtTime() > 500.f && object.boss->getHealth() > 0)
             {
-                SDL_Rect rect1 = object.boss->getBox();
-                int cnt = object.x.checkXBusterCollision(rect1, object.door);
-                int health = object.boss->getHealth();
-                object.boss->setHealth(health - cnt*4);
-                if(health - cnt*10 <= 0)
+                SDL_Rect bossRect = object.boss->getCollisionBox();
+                int cnt = object.x.checkXBusterCollision(bossRect);
+                int dragonHealth = object.boss->getHealth();
+                object.boss->setHealth(dragonHealth - cnt*4);
+                if(dragonHealth - cnt*10 <= 0)
                 {
-                    SDL_Point point = {rect1.x, rect1.y};
-                    SDL_Point point1 = {rect1.x + 30, rect1.y + 30};
-                    SDL_Point point2 = {rect1.x + 20, rect1.y + 100};
-                    object.p.push_back({point, 0});
-                    object.p.push_back({point1, 0});
-                    object.p.push_back({point2, 0});
+                    SDL_Point point = {bossRect.x, bossRect.y};
+                    SDL_Point point1 = {bossRect.x + 30, bossRect.y + 30};
+                    SDL_Point point2 = {bossRect.x + 20, bossRect.y + 100};
+                    object.explosionPoint.push_back({point, 0});
+                    object.explosionPoint.push_back({point1, 0});
+                    object.explosionPoint.push_back({point2, 0});
                 }
-                object.boss->setTime(SDL_GetTicks());
+                object.boss->setHurtTime(SDL_GetTicks());
             }
         }
     }
+
     if(object.currentBoss == "robot")
     {
         if(object.robot->getHealth() > 0)
@@ -967,8 +981,8 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                     {
                         if(!behurted && !isAppearing)
                         {
-                            int h = object.x.getHealth();
-                            object.x.setHealth(h - cnt);
+                            int charHealth = object.x.getHealth();
+                            object.x.setHealth(charHealth - cnt);
                             object.x.setHurt(true);
                             Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                             startTime = SDL_GetTicks();
@@ -978,30 +992,31 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 }
                 if(object.x.getGiga() && checkCollisionBox(object.x.getBox(), object.robot->getBox()))
                 {
-                    int h = object.robot->getHealth();
-                    object.robot->setHealth(h - 40);
+                    int robotHealth = object.robot->getHealth();
+                    object.robot->setHealth(robotHealth - 30);
                     startTime = SDL_GetTicks();
                 }
             }
             if(SDL_GetTicks() - object.robot->getTime() > 500.f && object.robot->getHealth() > 0)
             {
-                SDL_Rect rect1 = object.robot->getBox();
-                int cnt = object.x.checkXBusterCollision(rect1, object.door);
-                int health = object.robot->getHealth();
-                object.robot->setHealth(health - cnt*4);
-                if(health - cnt*4 <= 0)
+                SDL_Rect robotRect = object.robot->getBox();
+                int cnt = object.x.checkXBusterCollision(robotRect);
+                int robotHealth = object.robot->getHealth();
+                object.robot->setHealth(robotHealth - cnt*4);
+                if(robotHealth - cnt*4 <= 0)
                 {
-                    SDL_Point point = {rect1.x, rect1.y};
-                    SDL_Point point1 = {rect1.x + 30, rect1.y + 30};
-                    SDL_Point point2 = {rect1.x + 20, rect1.y + 100};
-                    object.p.push_back({point, 0});
-                    object.p.push_back({point1, 0});
-                    object.p.push_back({point2, 0});
+                    SDL_Point point = {robotRect.x, robotRect.y};
+                    SDL_Point point1 = {robotRect.x + 30, robotRect.y + 30};
+                    SDL_Point point2 = {robotRect.x + 20, robotRect.y + 100};
+                    object.explosionPoint.push_back({point, 0});
+                    object.explosionPoint.push_back({point1, 0});
+                    object.explosionPoint.push_back({point2, 0});
                 }
                 object.robot->setTime(SDL_GetTicks());
             }
         }
     }
+
     if(object.currentBoss == "lavaboss")
     {
         if(object.lavaboss->getHealth() > 0)
@@ -1011,7 +1026,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 object.textArr[TEXTURE_FIRE_ALL_MAP].setAlpha(150);
                 if(SDL_GetTicks() - startTime > 750.f)
                 {
-                    SDL_Rect r = {object.x.getBox().x - camera.x, object.x.getBox().y - camera.y, 60, 60};
+                    SDL_Rect r = {object.x.getBox().x - camera.x, object.x.getBox().y - camera.y, CHAR_WIDTH, CHAR_HEIGHT};
                     SDL_Rect newRect = r;
                     newRect.x -= 40;
                     newRect.x += camera.x;
@@ -1034,8 +1049,8 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 int st = object.lavaboss->checkCollision(pt);
                 if(st > 0 && !object.x.getGiga() && !behurted && !isAppearing)
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 5);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 5);
                     object.x.setHurt(true);
                     Mix_PlayChannel(01, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -1045,13 +1060,13 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 {
                     if(checkCollisionBox(object.lavaboss->getBox(), object.x.getBox()))
                     {
-                        int h = object.lavaboss->getHealth();
-                        object.lavaboss->setHealth(h - 50);
-                        if(h - 50 <= 0)
+                        int lavaBossHealth = object.lavaboss->getHealth();
+                        object.lavaboss->setHealth(lavaBossHealth - 30);
+                        if(lavaBossHealth - 50 <= 0)
                         {
-                            SDL_Rect r = object.lavaboss->getBox();
-                            SDL_Point pt = {r.x, r.y};
-                            object.p.push_back({pt, 0});
+                            SDL_Rect lavaBossRect = object.lavaboss->getBox();
+                            SDL_Point pt = {lavaBossRect.x, lavaBossRect.y};
+                            object.explosionPoint.push_back({pt, 0});
                             Mix_PlayChannel(-1, object.chunkArr[MIX_BOSS_DIED], 0);
                         }
                         startTime = SDL_GetTicks();
@@ -1061,23 +1076,24 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             Uint32 t = object.lavaboss->getTime();
             if(SDL_GetTicks() - t >= 500.f && object.lavaboss->getHealth() > 0 && object.lavaboss->getAppear())
             {
-                SDL_Rect rect1 = object.lavaboss->getBox();
-                int cnt = object.x.checkXBusterCollision(rect1, object.door);
-                int health = object.lavaboss->getHealth();
-                object.lavaboss->setHealth(health - cnt*4);
-                if(health - cnt*4 <= 0)
+                SDL_Rect lavaBossRect = object.lavaboss->getBox();
+                int cnt = object.x.checkXBusterCollision(lavaBossRect);
+                int lavaBossHealth = object.lavaboss->getHealth();
+                object.lavaboss->setHealth(lavaBossHealth - cnt*4);
+                if(lavaBossHealth - cnt*4 <= 0)
                 {
-                    SDL_Point point = {rect1.x, rect1.y};
-                    SDL_Point point1 = {rect1.x + 30, rect1.y + 30};
-                    SDL_Point point2 = {rect1.x + 20, rect1.y + 100};
-                    object.p.push_back({point, 0});
-                    object.p.push_back({point1, 0});
-                    object.p.push_back({point2, 0});
+                    SDL_Point point = {lavaBossRect.x, lavaBossRect.y};
+                    SDL_Point point1 = {lavaBossRect.x + 30, lavaBossRect.y + 30};
+                    SDL_Point point2 = {lavaBossRect.x + 20, lavaBossRect.y + 100};
+                    object.explosionPoint.push_back({point, 0});
+                    object.explosionPoint.push_back({point1, 0});
+                    object.explosionPoint.push_back({point2, 0});
                 }
                 object.lavaboss->setTime(SDL_GetTicks());
             }
         }
     }
+
     if(object.currentBoss == "sigma")
     {
         if(object.sigma->getHealth() > 0)
@@ -1088,8 +1104,8 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 int st = object.sigma->checkCollision(pt);
                 if(st > 0 && !object.x.getGiga() && !behurted && !isAppearing)
                 {
-                    int h = object.x.getHealth();
-                    object.x.setHealth(h - 5);
+                    int charHealth = object.x.getHealth();
+                    object.x.setHealth(charHealth - 5);
                     object.x.setHurt(true);
                     Mix_PlayChannel(01, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -1097,17 +1113,15 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 }
                 if(object.x.getGiga())
                 {
-
                     if(checkCollisionBox(object.sigma->getBox(), object.x.getBox()))
                     {
-                        int h = object.sigma->getHealth();
-                        object.sigma->setHealth(h - 50);
-                        //cout << h << '\n';
-                        if(h - 50 <= 0)
+                        int sigmaHealth = object.sigma->getHealth();
+                        object.sigma->setHealth(sigmaHealth - 30);
+                        if(sigmaHealth - 30 <= 0)
                         {
-                            SDL_Rect r = object.sigma->getBox();
-                            SDL_Point pt = {r.x, r.y};
-                            object.p.push_back({pt, 0});
+                            SDL_Rect sigmaRect = object.sigma->getBox();
+                            SDL_Point pt = {sigmaRect.x, sigmaRect.y};
+                            object.explosionPoint.push_back({pt, 0});
                             Mix_PlayChannel(-1, object.chunkArr[MIX_BOSS_DIED], 0);
                         }
                         startTime = SDL_GetTicks();
@@ -1117,36 +1131,38 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             Uint32 t = object.sigma->getTime();
             if(SDL_GetTicks() - t >= 500.f && object.sigma->getHealth() > 0)
             {
-                SDL_Rect rect1 = object.sigma->getBox();
-                int cnt = object.x.checkXBusterCollision(rect1, object.door);
-                int health = object.sigma->getHealth();
-                object.sigma->setHealth(health - cnt*4);
-                if(health - cnt*4 <= 0)
+                SDL_Rect sigmaRect = object.sigma->getBox();
+                int cnt = object.x.checkXBusterCollision(sigmaRect);
+                int sigmaHealth = object.sigma->getHealth();
+                object.sigma->setHealth(sigmaHealth - cnt*4);
+                if(sigmaHealth - cnt*4 <= 0)
                 {
-                    SDL_Point point = {rect1.x, rect1.y};
-                    SDL_Point point1 = {rect1.x + 30, rect1.y + 30};
-                    SDL_Point point2 = {rect1.x + 20, rect1.y + 100};
-                    object.p.push_back({point, 0});
-                    object.p.push_back({point1, 0});
-                    object.p.push_back({point2, 0});
+                    SDL_Point point = {sigmaRect.x, sigmaRect.y};
+                    SDL_Point point1 = {sigmaRect.x + 30, sigmaRect.y + 30};
+                    SDL_Point point2 = {sigmaRect.x + 20, sigmaRect.y + 100};
+                    object.explosionPoint.push_back({point, 0});
+                    object.explosionPoint.push_back({point1, 0});
+                    object.explosionPoint.push_back({point2, 0});
                 }
                 object.sigma->setTime(SDL_GetTicks());
             }
         }
     }
-    if(object.hasDiamond)
+
+    if(object.hasObject[DIAMOND])
     {
-        for(int i=0; i<object.hasDiamond; i++)
+        for(int i=0; i<object.hasObject[DIAMOND]; i++)
         {
             object.dia[i]->checkCollision(&object.x);
         }
     }
-    if(object.hasPortal)
+
+    if(object.hasObject[PORTAL])
     {
-        for(int i=0; i<object.hasPortal; i++)
+        for(int i=0; i<object.hasObject[PORTAL]; i++)
         {
             if(object.por[i]->getAppear() == false)continue;
-            if(object.por[i]->checkCollision(&object.x, object.hasDiamond))
+            if(object.por[i]->checkCollision(&object.x, object.numberOfDiamondToGoOverPortal))
             {
                 object.por[i]->setAppear(false);
                 if(object.por[i]->getLoad())
@@ -1172,15 +1188,16 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                     }
                     setDefault();
                     setMap(object.tile, next);
-                    object.countStage++;
+                    object.numberOfStage++;
                 }
                 return true;
             }
         }
     }
-    if(object.hasMagicCircle)
+
+    if(object.hasObject[MAGICCIRCLE])
     {
-        for(int i=0; i<object.hasMagicCircle; i++)
+        for(int i=0; i<object.hasObject[MAGICCIRCLE]; i++)
         {
             SDL_Point pt = {object.x.getX(), object.x.getY()};
             SDL_Point p = object.magicC[i]->checkCollision(pt);
@@ -1194,12 +1211,14 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
             }
         }
     }
+
     return behurted;
 }
 void Game::render(SDL_Rect &camera, int &ck)
 {
     SDL_SetRenderDrawColor(object.renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(object.renderer);
+
     vector < Tile* > opaqueL;
     for(int i=0; i<object.vTile.size(); i++)
     {
@@ -1209,76 +1228,90 @@ void Game::render(SDL_Rect &camera, int &ck)
             opaqueL.push_back(object.vTile[i]);
         }
     }
-    if(object.hasGun)
+
+    if(object.hasObject[GUN])
     {
-        for(int i=0; i<object.hasGun; i++)
+        for(int i=0; i<object.hasObject[GUN]; i++)
         {
             object.gun[i]->render(camera, object.vTile);
         }
     }
-    if(object.hasThorn)
+
+    if(object.hasObject[THORN])
     {
-        for(int i=0; i<object.hasThorn; i++)
+        for(int i=0; i<object.hasObject[THORN]; i++)
         {
             object.thorn[i]->render(camera);
         }
     }
-    if(object.hasFireTurret)
+
+    if(object.hasObject[FIRETURRET])
     {
-        for(int i=0; i<object.hasFireTurret; i++)
+        for(int i=0; i<object.hasObject[FIRETURRET]; i++)
         {
             object.fireTurret[i]->render(camera);
         }
     }
+
     object.x.render(camera, object.vTile);
+
     for(int i=0; i<opaqueL.size(); i++)
     {
         opaqueL[i]->render(camera);
     }
-    if(object.hasDiamond)
+
+    if(object.hasObject[DIAMOND])
     {
-        for(int i=0; i<object.hasDiamond; i++)
+        for(int i=0; i<object.hasObject[DIAMOND]; i++)
         {
             object.dia[i]->render(camera);
         }
     }
-    if(object.hasDoorButton)
+
+    if(object.hasObject[DOORBUTTON])
     {
-        for(int i=0; i<object.hasDoorButton; i++)
+        for(int i=0; i<object.hasObject[DOORBUTTON]; i++)
         {
             object.door[i]->render(camera);
         }
     }
-    if(object.hasLazerGun)
+
+    if(object.hasObject[LAZERGUN])
     {
-        for(int i=0; i<object.hasLazerGun; i++)
+        for(int i=0; i<object.hasObject[LAZERGUN]; i++)
         {
             object.laz[i]->render(camera, object.vTile);
         }
     }
 
-    if(object.hasCreep)
+    if(object.hasObject[CREEP])
     {
-        for(int i=0; i<object.hasCreep; i++)
+        for(int i=0; i<object.hasObject[CREEP]; i++)
         {
             object.creep[i]->render(camera, object.vTile);
         }
     }
-    if(object.hasHealthStored)object.healthS->render(camera);
-    if(object.hasManaStored)object.manaS->render(camera);
-    if(object.hasHeart)object.heart->render(camera);
+
+    if(object.hasObject[HEALTHSTORED])object.healthS->render(camera);
+
+    if(object.hasObject[MANASTORED])object.manaS->render(camera);
+
+    if(object.hasObject[HEART])object.heart->render(camera);
+
     if(object.currentBoss == "none")
     {
-        for(int i=0; i<object.hasPortal; i++)
+        for(int i=0; i<object.hasObject[PORTAL]; i++)
         {
             object.por[i]->setPos(object.mPosPorX[i], object.mPosPorY[i]);
             object.por[i]->render(camera);
         }
     }
+
     if(object.x.getX() >= object.posArenaX && object.x.getY() >= object.posArenaY && object.x.getY() <= object.posArenaY + object.arenaHeight  && object.x.getX() <= object.posArenaX + object.arenaWidth && !object.bossAppeared && !object.bossAppearing && object.warning == 0)
     {
         object.warning = SDL_GetTicks();
     }
+
     if(SDL_GetTicks() - object.warning > 5000.f && !object.bossAppeared && object.warning != 0)
     {
         object.bossAppearing = true;
@@ -1290,12 +1323,12 @@ void Game::render(SDL_Rect &camera, int &ck)
             Mix_PlayChannel(-1, object.chunkArr[MIX_WARNING], 0);
             if(object.cnt)
             {
-                SDL_Rect r = {0, 0, 800 - object.limX, 200};
+                SDL_Rect r = {0, 0, SCREEN_WIDTH - object.limX, 200};
                 object.textArr[TEXTURE_WARNING].render(0, 0, &r);
             }
             else
             {
-                SDL_Rect r = {0, 200, 800 - object.limX, 200};
+                SDL_Rect r = {0, 200, SCREEN_WIDTH - object.limX, 200};
                 object.textArr[TEXTURE_WARNING].render(0, 0, &r);
             }
             if(object.limX >= 10)object.limX -= 10;
@@ -1304,6 +1337,7 @@ void Game::render(SDL_Rect &camera, int &ck)
             return;
         }
     }
+
     if(object.currentBoss == "dragon")
     {
         if(!object.bossAppearing)
@@ -1318,14 +1352,14 @@ void Game::render(SDL_Rect &camera, int &ck)
                     {
                         object.boss->render(camera, pt, 1);
                         SDL_SetRenderDrawColor(object.renderer, 244, 115, 32, 0xFF);
-                        SDL_Rect heathBoss = { 800 - 450 - 8, 27, object.boss->getHealth(), 35};
+                        SDL_Rect heathBoss = {SCREEN_WIDTH - 458, 27, object.boss->getHealth(), 35};
                         SDL_RenderFillRect(object.renderer, &heathBoss);
-                        object.textArr[TEXTURE_DRAGON_HEALTH_BAR].render(300, 0, NULL);
+                        object.textArr[TEXTURE_DRAGON_HEALTH_BAR].render(SCREEN_WIDTH - 500, 0, NULL);
                     }
                 }
                 if(object.boss->getHealth() <= 0)
                 {
-                    for(int i=0; i<object.hasPortal; i++)
+                    for(int i=0; i<object.hasObject[PORTAL]; i++)
                     {
                         object.por[i]->setPos(object.mPosPorX[i], object.mPosPorY[i]);
                         object.por[i]->render(camera);
@@ -1343,11 +1377,11 @@ void Game::render(SDL_Rect &camera, int &ck)
             }
             SDL_Rect r = object.x.getBox();
             SDL_Point pt = {r.x, r.y};
-            SDL_Rect r1 = {object.frames_portal/5 * 52, 0, 52, 300};
-            SDL_Rect r2 = {object.frames_portal/5 * 52, 300, 52, 300};
+            SDL_Rect r1 = {object.frames_portal/5 * (DRAGON_PORTAL_WIDTH/2), 0, DRAGON_PORTAL_WIDTH/2, DRAGON_PORTAL_HEIGHT};
+            SDL_Rect r2 = {object.frames_portal/5 * (DRAGON_PORTAL_WIDTH/2), DRAGON_PORTAL_HEIGHT, DRAGON_PORTAL_WIDTH/2, DRAGON_PORTAL_HEIGHT};
             object.textArr[TEXTURE_DRAGON_PORTAL].render(4960 - camera.x, 240 - camera.y - 30, &r1);
             object.boss->render(camera, pt, 0);
-            object.textArr[TEXTURE_DRAGON_PORTAL].render(4960 - camera.x + 52, 240 - camera.y - 30, &r2);
+            object.textArr[TEXTURE_DRAGON_PORTAL].render(4960 - camera.x + DRAGON_PORTAL_WIDTH/2, 240 - camera.y - 30, &r2);
             object.frames_portal--;
             if(object.frames_portal < 0)
             {
@@ -1362,13 +1396,15 @@ void Game::render(SDL_Rect &camera, int &ck)
             return;
         }
     }
-    if(object.hasSaw)
+
+    if(object.hasObject[SAW])
     {
-        for(int i=0; i<object.hasSaw; i++)
+        for(int i=0; i<object.hasObject[SAW]; i++)
         {
             object.saw[i]->render(camera, object.vTile);
         }
     }
+
     if(object.currentBoss == "robot")
     {
         if(object.robot->getHealth() > 0)
@@ -1377,15 +1413,15 @@ void Game::render(SDL_Rect &camera, int &ck)
             SDL_Point pt = {r.x, r.y};
             object.robot->render(camera, pt);
             SDL_SetRenderDrawColor(object.renderer, 192, 192, 192, 0);
-            SDL_Rect healthRect = {800-450+30, 30, object.robot->getHealth(), 34};
+            SDL_Rect healthRect = {SCREEN_WIDTH - 420, 30, object.robot->getHealth(), 34};
             SDL_RenderFillRect(object.renderer, &healthRect);
-            object.textArr[TEXTURE_ROBOT_HEALTH_BAR].render(800 - 465 - 8, 0, nullptr);
+            object.textArr[TEXTURE_ROBOT_HEALTH_BAR].render(SCREEN_WIDTH - 473, 0, nullptr);
         }
         else
         {
             if(object.robot->getHealth() <= 0)
             {
-                for(int i=0; i<object.hasPortal; i++)
+                for(int i=0; i<object.hasObject[PORTAL]; i++)
                 {
                     object.por[i]->setPos(object.mPosPorX[i], object.mPosPorY[i]);
                     object.por[i]->render(camera);
@@ -1393,19 +1429,21 @@ void Game::render(SDL_Rect &camera, int &ck)
             }
         }
     }
-    if(object.hasMagicCircle)
+
+    if(object.hasObject[MAGICCIRCLE])
     {
-        for(int i=0; i<object.hasMagicCircle; i++)
+        for(int i=0; i<object.hasObject[MAGICCIRCLE]; i++)
         {
             object.magicC[i]->render(camera);
         }
     }
+
     if(object.currentMap == "map/Vocalno.map")
     {
         if(object.x.getX() <= 3420 && object.x.getY() >= 1680 && object.x.getY() <= 2560)
         {
             Mix_PlayChannel(-1, object.chunkArr[MIX_SIGMA_SUPER_LAZER], 0);
-            SDL_Rect r = {object.frames_fire_storm/5 * 1250, 0, 1250, 1000};
+            SDL_Rect r = {object.frames_fire_storm/5 * FIRE_ALL_MAP_WIDTH, 0, FIRE_ALL_MAP_WIDTH, FIRE_ALL_MAP_HEIGHT};
             object.textArr[TEXTURE_FIRE_ALL_MAP].render(object.mCollisionBoxFire.x, object.mCollisionBoxFire.y, &r);
             object.frames_fire_storm++;
             if(object.frames_fire_storm/5 >= 4)
@@ -1414,6 +1452,7 @@ void Game::render(SDL_Rect &camera, int &ck)
             }
         }
     }
+
     if(object.currentBoss == "lavaboss")
     {
         if(!object.bossAppearing)
@@ -1422,7 +1461,7 @@ void Game::render(SDL_Rect &camera, int &ck)
             {
                 if(object.currentBoss == "lavaboss")
                 {
-                    if(object.x.getX() >= object.posArenaX && object.x.getY() >= object.posArenaY && object.x.getY() <= object.posArenaY + object.arenaHeight  && object.x.getX() <= object.posArenaX + object.arenaWidth)
+                    if(object.x.getX() >= object.posArenaX && object.x.getY() >= object.posArenaY && object.x.getY() <= object.posArenaY + object.arenaHeight  && object.x.getX() <= object.posArenaX + object.arenaWidth && object.lavaboss->getHealth() > 0)
                     {
                         SDL_Rect r = object.x.getBox();
                         SDL_Point pt = {r.x, r.y};
@@ -1431,13 +1470,13 @@ void Game::render(SDL_Rect &camera, int &ck)
                             object.lavaboss->render(camera, pt);
                         }
                         SDL_SetRenderDrawColor(object.renderer, 192, 192, 192, 0);
-                        SDL_Rect healthRect = {800-450+30, 30, object.lavaboss->getHealth(), 34};
+                        SDL_Rect healthRect = {SCREEN_WIDTH - 420, 30, object.lavaboss->getHealth(), 34};
                         SDL_RenderFillRect(object.renderer, &healthRect);
-                        object.textArr[TEXTURE_LAVABOSS_HEALTH_BAR].render(800 - 465 - 8, 0, nullptr);
+                        object.textArr[TEXTURE_LAVABOSS_HEALTH_BAR].render(SCREEN_WIDTH - 473, 0, nullptr);
                     }
                     if(object.lavaboss->getHealth() <= 0)
                     {
-                        for(int i=0; i<object.hasPortal; i++)
+                        for(int i=0; i<object.hasObject[PORTAL]; i++)
                         {
                             object.por[i]->setPos(object.mPosPorX[i], object.mPosPorY[i]);
                             object.por[i]->render(camera);
@@ -1463,6 +1502,7 @@ void Game::render(SDL_Rect &camera, int &ck)
             object.lavaboss->render(camera, pt);
         }
     }
+
     if(object.currentBoss == "sigma")
     {
         if(object.sigma->getHealth() > 0)
@@ -1476,20 +1516,20 @@ void Game::render(SDL_Rect &camera, int &ck)
                 {
                     Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
                     SDL_Point pt = {1680 + i*80, 2340};
-                    object.p.push_back({pt,0});
+                    object.explosionPoint.push_back({pt,0});
                 }
                 object.sigma->setExplosioning(true);
             }
             SDL_SetRenderDrawColor(object.renderer, 192, 192, 192, 0);
-            SDL_Rect healthRect = {800-450+30, 30, object.sigma->getHealth(), 34};
+            SDL_Rect healthRect = {SCREEN_WIDTH - 420, 30, object.sigma->getHealth(), 34};
             SDL_RenderFillRect(object.renderer, &healthRect);
-            object.textArr[TEXTURE_SIGMA_HEALTH_BAR].render(800 - 465 - 8, 0, nullptr);
+            object.textArr[TEXTURE_SIGMA_HEALTH_BAR].render(SCREEN_WIDTH - 473, 0, nullptr);
         }
         else
         {
             if(object.sigma->getHealth() <= 0)
             {
-                for(int i=0; i<object.hasPortal; i++)
+                for(int i=0; i<object.hasObject[PORTAL]; i++)
                 {
                     object.por[i]->setPos(object.mPosPorX[i], object.mPosPorY[i]);
                     object.por[i]->render(camera);
@@ -1497,26 +1537,30 @@ void Game::render(SDL_Rect &camera, int &ck)
             }
         }
     }
+
     SDL_Point p = {object.x.getX(), object.x.getY()};
-    //object.robot->render(camera, object.vTile, p);
     SDL_Color c = {0, 160, 160};
-    stringstream ss("");
-    ss << object.x.getPoint();
-    if(!object.pointTexture.loadTextureFromText(ss.str().c_str(), c))logTTFError(cout, "load point", true);
     SDL_Rect r = {0, 0, 40, 40};
-    object.textArr[TEXTURE_DIAMOND].render(0, 95, &r);
-    object.pointTexture.render(42, 105, NULL);
+
     SDL_SetRenderDrawColor(object.renderer, 0xFF, 0, 0, 0);
     SDL_Rect healthRect = {50, 15, object.x.getHealth(), HEALTH_HEIGHT};
     SDL_RenderFillRect(object.renderer, &healthRect);
-    SDL_SetRenderDrawColor(object.renderer, 0, 0, 0xFF, 0);
-    SDL_Rect manaRect = {35, 61, object.x.getMana(), 20};
-    SDL_RenderFillRect(object.renderer, &manaRect);
     object.textArr[TEXTURE_HEALTH_BAR].render(0, 10, NULL);
     SDL_Rect rec = {230 - object.x.getMaxHealth(), 0, object.textArr[TEXTURE_HEALTH_BAR_REST].getWidth() - (230 - object.x.getMaxHealth()), object.textArr[TEXTURE_HEALTH_BAR_REST].getHeight()};
     object.textArr[TEXTURE_HEALTH_BAR_REST].render(84, 10, &rec);
+
+    SDL_SetRenderDrawColor(object.renderer, 0, 0, 0xFF, 0);
+    SDL_Rect manaRect = {35, 61, object.x.getMana(), 20};
+    SDL_RenderFillRect(object.renderer, &manaRect);
     object.textArr[TEXTURE_MANA_BAR].render(0, 55, NULL);
-    for(deque<pair<SDL_Point, int>>::iterator it = object.p.begin(); it != object.p.end(); it++)
+
+    SDL_SetRenderDrawColor(object.renderer, 13, 121, 138, 0);
+    int m = min(((double)object.x.getPoint()/(double)object.numberOfDiamondToGoOverPortal)*100,100.d);
+    SDL_Rect pointRect = {33, 108, m, 20};
+    SDL_RenderFillRect(object.renderer, &pointRect);
+    object.textArr[TEXTURE_DIAMOND_BAR].render(5, 100, nullptr);
+
+    for(deque<pair<SDL_Point, int>>::iterator it = object.explosionPoint.begin(); it != object.explosionPoint.end(); it++)
     {
         Mix_PlayChannel(-1, object.chunkArr[MIX_EXPLOSION], 0);
         SDL_Point point = (*it).first;
@@ -1532,14 +1576,14 @@ void Game::render(SDL_Rect &camera, int &ck)
         }
         frames++;
         (*it).second = frames;
-
     }
-    while(!object.p.empty())
+
+    while(!object.explosionPoint.empty())
     {
-        pair<SDL_Point, int> top = object.p.front();
+        pair<SDL_Point, int> top = object.explosionPoint.front();
         if(top.second >= 30)
         {
-            object.p.pop_front();
+            object.explosionPoint.pop_front();
         }
         else break;
     }
@@ -1547,24 +1591,24 @@ void Game::render(SDL_Rect &camera, int &ck)
 
 void Game::setTileVector(SDL_Rect &camera, vector < Tile* > &tiles)
 {
-    int st_x = camera.x / 80;
+    int st_x = camera.x / TILE_WIDTH;
     st_x = max(st_x - 5, 0);
-    int st_y = camera.y / 80;
+    int st_y = camera.y / TILE_HEIGHT;
     st_y = max(st_y - 5, 0);
     int ed_x;
     int ed_y;
     int edx = min(camera.x + SCREEN_WIDTH, LEVEL_WIDTH);
     int edy = min(camera.y + SCREEN_HEIGHT, LEVEL_HEIGHT);
-    if(edx%80 == 0)
+    if(edx%TILE_WIDTH == 0)
     {
-        ed_x = (edx - 80) / 80;
+        ed_x = (edx - TILE_WIDTH) / TILE_WIDTH;
     }
-    else ed_x = edx / 80;
-    if(edy%80 == 0)
+    else ed_x = edx / TILE_WIDTH;
+    if(edy%TILE_HEIGHT == 0)
     {
-        ed_y = (edy - 80) / 80;
+        ed_y = (edy - TILE_HEIGHT) / TILE_HEIGHT;
     }
-    else ed_y = edy / 80;
+    else ed_y = edy / TILE_HEIGHT;
     ed_x = min(ed_x + 5, 63);
     ed_y = min(ed_y + 5, 47);
     tiles.clear();
@@ -1611,33 +1655,41 @@ void Game::ObjectMove(SDL_Rect &camera)
     }
     SDL_Rect r = object.x.getBox();
     SDL_Point point = {r.x, r.y};
-    if(object.hasCreep)
+
+    if(object.hasObject[CREEP])
     {
-        for(int i=0; i<object.hasCreep; i++)
+        for(int i=0; i<object.hasObject[CREEP]; i++)
         {
             object.creep[i]->Move(point, object.vTile, camera);
         }
     }
+    SDL_Point pt = {object.x.getX(), object.x.getY()};
+    if(object.currentBoss == "dragon")object.boss->attack(pt);
+    if(object.currentBoss == "robot")object.robot->attack(pt);
+    if(object.currentBoss == "lavaboss")object.lavaboss->Attack(pt);
+    if(object.currentBoss == "sigma")object.sigma->move(pt);
 }
 void Game::saveGame()
 {
     ofstream file ("continue.txt");
     file << object.currentMap;
     file << ' ';
-    if(object.hasDiamond)
+
+    if(object.hasObject[DIAMOND])
     {
-        for(int i=0; i<object.hasDiamond; i++)
+        for(int i=0; i<object.hasObject[DIAMOND]; i++)
         {
             if(!object.dia[i]->getShown())
             {
                 file << i << ' ';
             }
         }
-        file << "-1 ";
+        file << -1 << ' ';
     }
-    if(object.hasGun)
+
+    if(object.hasObject[GUN])
     {
-        for(int i=0; i<object.hasGun; i++)
+        for(int i=0; i<object.hasObject[GUN]; i++)
         {
             if(object.gun[i]->getHealth() <= 0)
             {
@@ -1646,9 +1698,10 @@ void Game::saveGame()
         }
         file << "-1 ";
     }
-    if(object.hasCreep)
+
+    if(object.hasObject[CREEP])
     {
-        for(int i=0; i<object.hasCreep; i++)
+        for(int i=0; i<object.hasObject[CREEP]; i++)
         {
             if(object.creep[i]->getHealth() <= 0)
             {
@@ -1657,7 +1710,8 @@ void Game::saveGame()
         }
         file << "-1 ";
     }
-    if(object.hasPortal)
+
+    if(object.hasObject[PORTAL])
     {
         for(int i=0; i<object.por.size(); i++)
         {
@@ -1665,13 +1719,21 @@ void Game::saveGame()
         }
         file << "-1 ";
     }
+
     file << object.x.getHealth() << ' ' << object.x.getMana() << ' ' << object.x.getPoint() << ' ';
     file << object.x.getX() << ' ' << object.x.getY() << ' ';
+    file << object.x.getHasHealthStored() << ' ' << object.x.getHasManaStored() << ' ';
+    if(object.x.getHasHealthStored() == 1)file << object.x.getHealthStored() << ' ';
+    if(object.x.getHasManaStored() == 1)file << object.x.getManaStored() << ' ';
+    file << object.x.getMaxHealth() << ' ';
+
     if(object.currentBoss == "dragon")file << object.boss->getHealth();
     if(object.currentBoss == "robot")file << object.robot->getHealth();
     if(object.currentBoss == "lavaboss")file << object.lavaboss->getHealth();
     if(object.currentBoss == "sigma")file << object.sigma->getHealth();
+
     file.close();
+
     Texture savingTexture;
     savingTexture.setRenderer(object.renderer);
     savingTexture.setFont(object.font);
@@ -1705,14 +1767,16 @@ void Game::saveGame()
             width = 0;
         }
     }
+
 }
 void Game::loadGame()
 {
     ifstream file ("continue.txt");
     string currentmap = " ";
     file >> currentmap;
+
     int num = 0;
-    if(object.hasDiamond)
+    if(object.hasObject[DIAMOND])
     {
         while(num != -1)
         {
@@ -1721,7 +1785,8 @@ void Game::loadGame()
             object.dia[num]->setShown(false);
         }
     }
-    if(object.hasGun)
+
+    if(object.hasObject[GUN])
     {
         num = 0;
         while(num != -1)
@@ -1731,17 +1796,19 @@ void Game::loadGame()
             object.gun[num]->setHealth(-1);
         }
     }
-    if(object.hasCreep)
+
+    if(object.hasObject[CREEP])
     {
         num = 0;
         while(num != -1)
         {
             file >> num;
             if(num == -1)break;
-            object.creep[num]->setHealth(-1);
+            if(num < object.hasObject[CREEP])object.creep[num]->setHealth(-1);
         }
     }
-    if(object.hasPortal)
+
+    if(object.hasObject[PORTAL])
     {
         num = 0;
         int cnt = 0;
@@ -1751,39 +1818,51 @@ void Game::loadGame()
             file >> isAppear;
             if(isAppear == -1)break;
             object.por[cnt]->setAppear(isAppear);
+            num = isAppear;
             cnt++;
         }
     }
-    int h = 0, m = 0, p = 0, pX = 0, pY = 0;
-    file >> h >> m >> p;
 
-    /*bool hasHealthStored = false, hasManaStored = false;
+    int h = 0, m = 0, p = 0, pX = 0, pY = 0;
+    bool hasHealthStored = false, hasManaStored = false;
     int healthStored = -1, manaStored = -1;
     int maxHealth = -1;
-    file >> hasHealthStored >> hasManaStored;
+
+    file >> h >> m >> p;
+    file >> pX >> pY;
+    file >> hasHealthStored >>  hasManaStored;
     if(hasHealthStored)file >> healthStored;
     if(hasManaStored)file >> manaStored;
-    file >> maxHealth;*/
-    file >> pX >> pY;
-    /*object.x.setMaxHealth(maxHealth);
+    file >> maxHealth;
+    object.x.setMaxHealth(maxHealth);
     object.x.setHasHealthStored(hasHealthStored);
-    object.x.setHasManaStored(hasHealthStored);
-    if(hasHealthStored)object.x.setHealthStored(healthStored);
-    if(hasManaStored)object.x.setManaStored(manaStored);*/
+    object.x.setHasManaStored(hasManaStored);
+    if(hasHealthStored)
+    {
+        object.x.setHealthStored(healthStored);
+        object.storeButton[HEALTH_STORE_BUTTON]->setHasHealth(true);
+        object.storeButton[HEALTH_STORE_BUTTON]->setHealth(healthStored);
+    }
+    if(hasManaStored)
+    {
+        object.x.setManaStored(manaStored);
+        object.storeButton[MANA_STORE_BUTTON]->setHasMana(true);
+        object.storeButton[MANA_STORE_BUTTON]->setMana(manaStored);
+    }
     object.x.setHealth(h);
     object.x.setMana(m);
     object.x.setPoint(p);
     object.x.setX(pX);
     object.x.setY(pY);
+
     int health = -1;
     if(currentmap != "map/Maze.map")file >> health;
-    //cout << health << '\n';
     if(currentmap == "map/WarmUp.map")object.boss->setHealth(health);
-    //cout << currentmap << ' ' << object.boss->getHealth() << '\n';
     if(currentmap == "map/ArenaBoss.map")object.robot->setHealth(health);
     if(currentmap == "map/Volcano.map")object.lavaboss->setHealth(health);
     if(currentmap == "map/FinalMap.map")object.sigma->setHealth(health);
     file.close();
+
     Texture loadingTexture;
     loadingTexture.setRenderer(object.renderer);
     loadingTexture.setFont(object.font);
@@ -1824,7 +1903,7 @@ void Game::setDefault()
     object.warning = 0;
     object.bossAppeared = false;
     object.bossAppearing = false;
-    object.limX = 800;
+    object.limX = 960;
     object.cnt = 0;
     object.creep.clear();
     object.dia.clear();
@@ -1843,4 +1922,245 @@ void Game::setDefault()
     object.timevsboss = 0;
     object.battle_with_boss = false;
 }
-
+int Game::playGame()
+{
+    SDL_Event e;
+    bool quit = false;
+    while(!quit)
+    {
+        SDL_Rect r = {object.posArenaX, object.posArenaY, object.arenaWidth, object.arenaHeight};
+        object.x.setCamera(camera, r);
+        setTileVector(camera, object.vTile);
+        if(Mix_PlayingMusic() == 0)
+        {
+            Mix_PlayMusic(object.backGroundMusic, -1);
+        }
+        while(SDL_PollEvent(&e) != 0)
+        {
+            if(e.type == SDL_QUIT)
+            {
+                saveGame();
+                quit = true;
+                return -1;
+            }
+            else
+            {
+                if(e.type == SDL_KEYDOWN)
+                {
+                    if(e.key.keysym.sym == SDLK_p)
+                    {
+                        object.storeButton[HEALTH_STORE_BUTTON]->setHealth(object.x.getHealthStored());
+                        object.storeButton[MANA_STORE_BUTTON]->setMana(object.x.getManaStored());
+                        return 1;
+                    }
+                }
+                object.window.handleEvent(&e);
+                object.x.handleEvent(&e, object.vTile);
+            }
+        }
+        ObjectMove(camera);
+        collision(startTime, camera, object.vTile);
+        render(camera, ck);
+        if(object.x.getHealth() <= 0)
+        {
+            return 3;
+        }
+        if(object.x.getWinAll())
+        {
+            winGame();
+            return 0;
+        }
+        SDL_RenderPresent(object.renderer);
+    }
+}
+void Game::winGame()
+{
+    Texture credit;
+    credit.setRenderer(object.renderer);
+    if(!credit.loadTextureFromImage("Texture/credit_word.png"))logIMGError(cout, "Load credit", true);
+    bool quit = false;
+    double sX = 84, sY = SCREEN_HEIGHT;
+    while(!quit)
+    {
+        SDL_SetRenderDrawColor(object.renderer, 0, 0, 0, 0);
+        SDL_RenderClear(object.renderer);
+        object.textArr[TEXTURE_THUMB].render(80, 0, NULL);
+        credit.render(sX, sY, nullptr);
+        sY -= 0.75;
+        SDL_RenderPresent(object.renderer);
+        if(sY == 0)
+        {
+            SDL_Delay(5000);
+            quit = true;
+        }
+    }
+}
+void Game::PlayAllGame()
+{
+    bool quitGame = false;
+    SDL_Event eventWithMenu;
+    int currentMenu = 0;
+    ifstream inputNumberOfStage ("numofstage.txt");
+    inputNumberOfStage >> object.numberOfStage;
+    inputNumberOfStage.close();
+    int beforeMenu = 0;
+    while(!quitGame)
+    {
+        while(SDL_PollEvent(&eventWithMenu) != 0)
+        {
+            if(eventWithMenu.type == SDL_QUIT)
+            {
+                quitGame = true;
+                ofstream outputNumberOfStage("numofstage.txt");
+                outputNumberOfStage << object.numberOfStage;
+                outputNumberOfStage.close();
+            }
+            else
+            {
+                string command = object.menu[currentMenu]->handleEvent(&eventWithMenu);
+                if(command != "a")
+                {
+                    Mix_PlayChannel(-1, object.chunkArr[MIX_MENU_SELECTED], 0);
+                }
+                if((eventWithMenu.type == SDL_KEYDOWN && eventWithMenu.key.keysym.sym == SDLK_p && currentMenu == 1))
+                {
+                    beforeMenu = currentMenu;
+                    currentMenu = playGame();
+                }
+                if(command == "NewGame")
+                {
+                    object.numberOfStage = 4s;
+                    setDefault();
+                    setMap(object.tile, object.Map[STAGE_1]);
+                    beforeMenu = -1;
+                    currentMenu = playGame();
+                    if(currentMenu == -1)quitGame = true;
+                }
+                if(command== "ContinueGame")
+                {
+                    ifstream file("continue.txt");
+                    string continueMap = "";
+                    file >> continueMap;
+                    setDefault();
+                    setMap(object.tile, continueMap.c_str());
+                    loadGame();
+                    beforeMenu = -1;
+                    currentMenu = playGame();
+                    if(currentMenu == -1)quitGame = true;
+                }
+                if(command== "SelectStage")
+                {
+                    beforeMenu = currentMenu;
+                    currentMenu = 2;
+                    for(int i=0; i<=min(4, object.numberOfStage); i++)
+                    {
+                        object.stageButton[i]->setAble(true);
+                    }
+                    for(int i=min(4, object.numberOfStage) + 1; i<5; i++)
+                    {
+                        object.stageButton[i]->setAble(false);
+                    }
+                }
+                if(command== "QuitGame")
+                {
+                    quitGame = true;
+                    saveGame();
+                }
+                if(command== "BackToMainMenu")
+                {
+                    currentMenu = 0;
+                }
+                if(command== "Stage1" && object.stageButton[STAGE_1_BUTTON]->getAble())
+                {
+                    setDefault();
+                    setMap(object.tile, object.Map[STAGE_1]);
+                    beforeMenu = -1;
+                    currentMenu = playGame();
+                    if(currentMenu == -1)quitGame = true;
+                }
+                if(command== "Stage2" && object.stageButton[STAGE_2_BUTTON]->getAble())
+                {
+                    setDefault();
+                    setMap(object.tile, object.Map[STAGE_2]);
+                    beforeMenu = -1;
+                    currentMenu = playGame();
+                    if(currentMenu == -1)quitGame = true;
+                }
+                if(command== "Stage3"&& object.stageButton[STAGE_3_BUTTON]->getAble())
+                {
+                    setDefault();
+                    setMap(object.tile, object.Map[STAGE_3]);
+                    beforeMenu = -1;
+                    currentMenu = playGame();
+                    if(currentMenu == -1)quitGame = true;
+                }
+                if(command== "Stage4" && object.stageButton[STAGE_4_BUTTON]->getAble())
+                {
+                    setDefault();
+                    setMap(object.tile, object.Map[STAGE_4]);
+                    beforeMenu = -1;
+                    currentMenu = playGame();
+                    if(currentMenu == -1)quitGame = true;
+                }
+                if(command== "Stage5"&& object.stageButton[STAGE_5_BUTTON]->getAble())
+                {
+                    setDefault();
+                    setMap(object.tile, object.Map[STAGE_5]);
+                    beforeMenu = -1;
+                    currentMenu = playGame();
+                    if(currentMenu == 1)quitGame = true;
+                }
+                if(command== "Restart")
+                {
+                    setDefault();
+                    object.x.setDefault();
+                    setMap(object.tile, object.currentMap);
+                    beforeMenu = -1;
+                    currentMenu = playGame();
+                    if(currentMenu == -1)quitGame = true;
+                }
+                if(command== "Healing")
+                {
+                    int h = object.x.getHealth();
+                    object.x.setHealth(min(h + object.x.getHealthStored(),object.x.getMaxHealth()));
+                    object.x.setHealthStored(-object.x.getHealthStored());
+                    object.storeButton[HEALTH_STORE_BUTTON]->setHealth(0);
+                }
+                if(command== "Restore Mana")
+                {
+                    int h = object.x.getMana();
+                    object.x.setMana(min(h + object.x.getManaStored(),165));
+                    object.x.setManaStored(-object.x.getManaStored());
+                    object.storeButton[MANA_STORE_BUTTON]->setMana(0);
+                }
+                if(command== "Back")
+                {
+                    if(beforeMenu == -1)
+                    {
+                        currentMenu = playGame();
+                    }
+                    else
+                    {
+                        currentMenu = beforeMenu;
+                    }
+                }
+            }
+        }
+        if(currentMenu == -1)
+        {
+            quitGame = true;
+            ofstream file("numofstage.txt");
+            file << object.numberOfStage;
+            file.close();
+        }
+        if(Mix_PlayingMusic() == 1)
+        {
+            Mix_HaltChannel(-1);
+        }
+        SDL_SetRenderDrawColor(object.renderer, 0xFF, 0xFF, 0xFF, 0);
+        SDL_RenderClear(object.renderer);
+        object.menu[currentMenu]->render();
+        SDL_RenderPresent(object.renderer);
+    }
+    quitSDL();
+}

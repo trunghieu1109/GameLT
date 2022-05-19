@@ -20,6 +20,7 @@ public:
     static Texture lavaOpaque;
     Tile();
     Tile(int x, int y, int type);
+    ~Tile();
     void render(SDL_Rect &camera);
     int getType();
     SDL_Rect getBox();
@@ -28,5 +29,4 @@ public:
     void setType(int type);
     void setOpaQueLava(Texture &sprite);
 };
-void setTileType(int index, int type);
 #endif // TILE__H

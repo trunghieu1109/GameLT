@@ -1,15 +1,5 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include "texture.h"
-#include "tile.h"
-#include <vector>
-#include <deque>
-#include "collision.h"
-#include "sdl_utils.h"
-#include "constant_value.h"
-#include <iterator>
 #include "lazergun.h"
+
 using namespace std;
 
 LazerGun::LazerGun(int pos, int type, int lazerType, int headType)
@@ -44,6 +34,11 @@ LazerGun::LazerGun(int pos, int type, int lazerType, int headType)
     row = 0;
     frames = 0;
     lazer.clear();
+}
+LazerGun::~LazerGun()
+{
+    lazer.clear();
+    mCollisionBox = {0, 0, 0, 0};
 }
 void LazerGun::render(SDL_Rect &camera, vector < Tile* > &tile)
 {
@@ -210,7 +205,6 @@ void LazerGun::render(SDL_Rect &camera, vector < Tile* > &tile)
             {
                 pos = {mBox.x + 20, mBox.y + 2};
                 SDL_Rect rect4 = {120, 160 + row*40, 40, 40};
-                //cout << pos.x - camera.x << ' ' << pos.y - camera.y << '\n';
                 lazerHeadSprite.render(pos.x - camera.x, pos.y - camera.y, &rect4);
             }
             if(mType == 2)

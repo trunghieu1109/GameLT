@@ -1,6 +1,3 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
 #include "constant_value.h"
 #include "sdl_utils.h"
 #include "tile.h"
@@ -64,6 +61,11 @@ Tile::Tile(int x, int y, int type)
     if(mType == 47)mCollisionBox.w = TILE_HEIGHT/2;
     if(mType == 48)mCollisionBox.x += TILE_WIDTH/2;
 }
+Tile::~Tile()
+{
+    mBox = {0, 0, 0, 0};
+    mType = 0;
+}
 void Tile::render(SDL_Rect &camera)
 {
     int topA, topB, bottomA, bottomB, leftA, leftB, rightA, rightB;
@@ -119,10 +121,6 @@ void Tile::setType(int type)
         mCollisionBox.x += 60;
         mCollisionBox.w = 20;
     }
-
-}
-void setTileType(int index, int type)
-{
 
 }
 void Tile::setOpaQueLava(Texture &sprite)

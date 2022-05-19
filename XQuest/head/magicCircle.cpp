@@ -1,4 +1,3 @@
-#include <iostream>
 #include "magicCircle.h"
 
 using namespace std;
@@ -9,20 +8,24 @@ MagicCircle::MagicCircle(int x, int y, int type, int nextX, int nextY, double de
     {
         mCollisionBox.x = x;
         mCollisionBox.y = y;
-        mCollisionBox.w = 400;
-        mCollisionBox.h = 80;
+        mCollisionBox.w = MAGIC_CIRCLE_HORIZONTAL_WIDTH;
+        mCollisionBox.h = MAGIC_CIRCLE_HORIZONTAL_HEIGHT;
     }
     else
     {
         mCollisionBox.x = x;
         mCollisionBox.y = y;
-        mCollisionBox.w = 80;
-        mCollisionBox.h = 400;
+        mCollisionBox.w = MAGIC_CIRCLE_VERTICAL_WIDTH;
+        mCollisionBox.h = MAGIC_CIRCLE_VERTICAL_HEIGHT;
     }
     mDegree = degree;
     nextPos.x = nextX;
     nextPos.y = nextY;
     mType = type;
+}
+MagicCircle::~MagicCircle()
+{
+    mCollisionBox = {0, 0, 0, 0};
 }
 void MagicCircle::render(SDL_Rect &camera)
 {
@@ -34,7 +37,7 @@ void MagicCircle::render(SDL_Rect &camera)
 }
 SDL_Point MagicCircle::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(r, mCollisionBox))
     {
         return nextPos;

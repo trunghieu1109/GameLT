@@ -1,13 +1,16 @@
 #ifndef LAZERGUN__H
 #define LAZERGUN__H
 
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
+#include "constant_value.h"
+#include "collision.h"
+#include "sdl_utils.h"
 #include "texture.h"
 #include "tile.h"
 #include <utility>
 #include <vector>
+#include <deque>
+#include <iterator>
+
 using namespace std;
 
 class LazerGun
@@ -28,6 +31,7 @@ public:
     static Texture lazerSprite;
     static Texture lazerHeadSprite;
     LazerGun(int pos, int type, int lazerType, int mHeadType);
+    ~LazerGun();
     void render(SDL_Rect &camera, vector < Tile* > &tile);
     Uint32 getTime();
     void setTime(Uint32 time);

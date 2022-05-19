@@ -12,6 +12,7 @@ class Window
     bool mMinimized, mFullScreen, mMouseFocus, mKeyBoardFocus;
 public:
     Window();
+    ~Window();
     bool init();
     bool hasMouseFocus();
     bool hasKeyBoardFocus();

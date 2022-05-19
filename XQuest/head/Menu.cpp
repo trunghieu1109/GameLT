@@ -1,4 +1,3 @@
-#include <iostream>
 #include "menu.h"
 
 using namespace std;
@@ -10,6 +9,16 @@ Menu::Menu(SDL_Renderer* renderer)
 Menu::Menu()
 {
 
+}
+Menu::~Menu()
+{
+    mRenderer = nullptr;
+    backGround.free();
+    for(int i=0;i<buttonGame.size();i++)
+    {
+        delete buttonGame[i];
+    }
+    buttonGame.clear();
 }
 void Menu::render()
 {

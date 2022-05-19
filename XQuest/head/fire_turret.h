@@ -1,12 +1,11 @@
 #ifndef FIRE_TURRET__H
 #define FIRE_TURRET__H
 
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
+#include "collision.h"
 #include "texture.h"
 #include "sdl_utils.h"
 #include "constant_value.h"
+
 using namespace std;
 
 class Fire
@@ -20,6 +19,7 @@ class Fire
 public:
     static Texture fireSprite;
     Fire(int x, int y, int type);
+    ~Fire();
     void render(SDL_Rect &camera, SDL_Rect *spos);
     void setSprite(Texture &sprite);
     void nextFrame();
@@ -38,6 +38,7 @@ class FireTurret
 public:
     static Texture fireTurretSprite;
     FireTurret(int pos, int type);
+    ~FireTurret();
     void setSprite(Texture &sprite);
     void render(SDL_Rect &camera);
     Fire *getFire();

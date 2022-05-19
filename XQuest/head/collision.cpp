@@ -1,9 +1,5 @@
-#include <iostream>
-#include <SDL.h>
-#include "sdl_utils.h"
-#include "tile.h"
 #include "collision.h"
-#include "vector"
+
 using namespace std;
 
 bool checkCollisionBox(SDL_Rect a, SDL_Rect b)

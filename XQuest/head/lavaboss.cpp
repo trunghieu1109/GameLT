@@ -1,11 +1,10 @@
-#include <iostream>
 #include "lavaboss.h"
 #include <cmath>
 using namespace std;
 
 LavaBoss::LavaBoss(int pos)
 {
-    mCollisionBox = {pos%64 * 80, pos/64 * 80, 320, 320};
+    mCollisionBox = {pos%64 * TILE_WIDTH, pos/64 * TILE_HEIGHT, LAVABOSS_WIDTH, LAVABOSS_HEIGHT};
     fist = nullptr;
     for(int i=0; i<5; i++)sun[i] = nullptr;
     for(int i=0; i<20; i++)droplet[i] = nullptr;
@@ -32,22 +31,36 @@ LavaBoss::LavaBoss(int pos)
     meanX = 0;
     circle = nullptr;
 }
+LavaBoss::~LavaBoss()
+{
+    delete fist;
+    mCollisionBox = {0, 0, 0, 0};
+    for(int i=0;i<5;i++)
+    {
+        delete sun[i];
+    }
+    for(int i=0;i<20;i++)delete droplet[i];
+    delete circle;
+    lavaDeque.clear();
+}
 void LavaBoss::render(SDL_Rect &camera, SDL_Point &pt)
 {
-    //cout << attackType << ' ' << row << ' ' << frames << '\n';
-    //cout << row << ' ' << countFireBall << '\n';
-    Attack(pt);
-    int lenX = mCollisionBox.x - pt.x - 30;
+    if(mHealth <= 0)
+    {
+        mCollisionBox.x = -1000;
+        mCollisionBox.y = -1000;
+        return;
+    }
+    int lenX = mCollisionBox.x - pt.x - CHAR_WIDTH/2;
     if(appear || appearing)
     {
         if(checkCollisionBox(camera, mCollisionBox))
         {
-            SDL_Rect r = {frames/8 * 320, row*320, 320, 320};
+            SDL_Rect r = {frames/8 * LAVABOSS_WIDTH, row * LAVABOSS_HEIGHT, LAVABOSS_WIDTH, LAVABOSS_HEIGHT};
             if(lenX > 0)lavaBossSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r);
             else lavaBossSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r, 0, NULL, SDL_FLIP_HORIZONTAL);
         }
     }
-    //cout << row << '\n';
     frames++;
     if(frames/8 >= 6)
     {
@@ -130,11 +143,11 @@ void LavaBoss::render(SDL_Rect &camera, SDL_Point &pt)
             mTimeAttack = SDL_GetTicks();
             if(pt.x <= 4540)
             {
-                mCollisionBox.x = pt.x + 60 + 100;
+                mCollisionBox.x = pt.x + CHAR_WIDTH + 100;
             }
             else
             {
-                mCollisionBox.x = pt.x - 100 - 320;
+                mCollisionBox.x = pt.x - 100 - LAVABOSS_WIDTH;
             }
             frames = 0;
         }
@@ -164,11 +177,11 @@ void LavaBoss::render(SDL_Rect &camera, SDL_Point &pt)
             mTimeAttack = SDL_GetTicks();
             if(pt.x <= 4540)
             {
-                mCollisionBox.x = pt.x + 60 + 100;
+                mCollisionBox.x = pt.x + CHARGE_WIDTH + 100;
             }
             else
             {
-                mCollisionBox.x = pt.x - 100 - 320;
+                mCollisionBox.x = pt.x - 100 - LAVABOSS_WIDTH;
             }
             frames = 0;
         }
@@ -183,7 +196,6 @@ void LavaBoss::render(SDL_Rect &camera, SDL_Point &pt)
     }
     if(sun[0] != nullptr)
     {
-        //scout << 1 << '\n';
         for(int i=0; i<5; i++)sun[i]->render(camera, pt);
         if(sun[0]->getDead())
         {
@@ -202,7 +214,7 @@ void LavaBoss::render(SDL_Rect &camera, SDL_Point &pt)
             double XX = radius*cos(angle);
             double YY = sqrt(radius*radius - XX*XX);
             if(u > 180)YY = -YY;
-            sun[i]->setPos(XX + mCollisionBox.x + 160, mCollisionBox.y + YY + 160);
+            sun[i]->setPos(XX + mCollisionBox.x + LAVABOSS_WIDTH/2, mCollisionBox.y + YY + LAVABOSS_HEIGHT/2);
             u++;
             if(u >= 360)u = 0;
             sun[i]->setType(u);
@@ -227,9 +239,12 @@ int LavaBoss::getHealth()
 }
 void LavaBoss::Attack(SDL_Point &pt)
 {
-    //cout << lavaDeque.size() << '\n';
-    int lenX = mCollisionBox.x + 160 - (pt.x + 30);
-    int lenY = mCollisionBox.y + 160 - (pt.y + 30);
+    if(mHealth <= 0)
+    {
+        return;
+    }
+    int lenX = mCollisionBox.x + LAVABOSS_WIDTH/2 - (pt.x + CHAR_WIDTH/2);
+    int lenY = mCollisionBox.y + LAVABOSS_HEIGHT/2 - (pt.y + CHAR_HEIGHT/2);
     if(lenX > 0)
     {
         mDirection = -1;
@@ -254,10 +269,8 @@ void LavaBoss::Attack(SDL_Point &pt)
                 attackType_bf = attackType;
             }
         }
-        //attackType = 4;
         if(attackType == 0)
         {
-            //row = 2;
             if(!appearing)
             {
                 if(abs(lenX) > 500 && !shotting)
@@ -289,20 +302,20 @@ void LavaBoss::Attack(SDL_Point &pt)
                     int direct = 1;
                     if(lenX > 0)direct = -1;
 
-                    double mGoalX = (double)(pt.x + 30 - mCollisionBox.x)/40;
-                    double mGoalY = (double)(pt.y + 30 - (mCollisionBox.y + 113))/40;
-                    if(lenX < 0)mGoalX = (double)(pt.x + 30 - mCollisionBox.x - 320)/40;
+                    double mGoalX = (double)(pt.x + CHAR_WIDTH/2 - mCollisionBox.x)/40;
+                    double mGoalY = (double)(pt.y + CHAR_HEIGHT/2 - (mCollisionBox.y + 113))/40;
+                    if(lenX < 0)mGoalX = (double)(pt.x + CHAR_WIDTH/2 - mCollisionBox.x - LAVABOSS_WIDTH)/40;
                     if(lenX > 0)
                     {
                         Mix_PlayChannel(-1, lavaBallChunk, 0);
-                        LavaBall *lb = new LavaBall(mCollisionBox.x, mCollisionBox.y + 113, pt.x - 30, pt.y + 30, mGoalX, mGoalY);
+                        LavaBall *lb = new LavaBall(mCollisionBox.x, mCollisionBox.y + 113, pt.x - CHAR_WIDTH/2, pt.y + CHAR_HEIGHT/2, mGoalX, mGoalY);
                         lavaDeque.push_back(lb);
                         mTime3 = SDL_GetTicks();
                     }
                     else
                     {
                         Mix_PlayChannel(-1, lavaBallChunk, 0);
-                        LavaBall *lb = new LavaBall(mCollisionBox.x + 320, mCollisionBox.y + 113, pt.x + 60, pt.y + 30, mGoalX, mGoalY);
+                        LavaBall *lb = new LavaBall(mCollisionBox.x + LAVABOSS_WIDTH, mCollisionBox.y + 113, pt.x + CHAR_WIDTH, pt.y + CHAR_HEIGHT/2, mGoalX, mGoalY);
                         lavaDeque.push_back(lb);
                         mTime3 = SDL_GetTicks();
                     }
@@ -325,16 +338,16 @@ void LavaBoss::Attack(SDL_Point &pt)
             {
                 if(fist == nullptr)
                 {
-                    SDL_Rect r = {pt.x/80, pt.y/80, 0, 0};
+                    SDL_Rect r = {pt.x/TILE_WIDTH, pt.y/TILE_HEIGHT, 0, 0};
                     Mix_PlayChannel(-1, lavaFistChunk, 0);
                     if(pt.x <= 3360)
                     {
-                        fist = new LavaFist(3100, (r.y - 2)*80, 1);
+                        fist = new LavaFist(3100, (r.y - 2)*TILE_HEIGHT, 1);
                         return;
                     }
 
-                    if(pt.y >= 480)fist = new LavaFist(r.x*80, 480, 0);
-                    else fist = new LavaFist(r.x*80, 80, 2);
+                    if(pt.y >= 480)fist = new LavaFist(r.x*TILE_WIDTH, 480, 0);
+                    else fist = new LavaFist(r.x*TILE_WIDTH, TILE_HEIGHT, 2);
                 }
 
             }
@@ -405,7 +418,6 @@ void LavaBoss::Attack(SDL_Point &pt)
         {
             if(sun[0] == nullptr)
             {
-                //cout << mCollisionBox.x - 300 << ' ' << mCollisionBox.y + 80 << '\n';
                 sun[0] = new LavaSun(mCollisionBox.x, mCollisionBox.y, 0);
                 sun[1] = new LavaSun(mCollisionBox.x, mCollisionBox.y, 72);
                 sun[2] = new LavaSun(mCollisionBox.x, mCollisionBox.y, 144);
@@ -436,43 +448,54 @@ int LavaBoss::checkCollision(SDL_Point &pt)
     {
         for(deque<LavaBall*>::iterator it = lavaDeque.begin(); it != lavaDeque.end(); it ++)
         {
-            cnt += (*it)->checkCollision(pt);
+            if((*it)->checkCollision(pt))
+            {
+                return 10;
+            }
         }
     }
 
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(mCollisionBox, r) && appear)
     {
-        return 1;
+        return 15;
     }
     if(fist != nullptr)
     {
         if(checkCollisionBox(r, fist->getBox()))
         {
-            return 1;
+            return 10;
         }
     }
     for(int i=0; i<20; i++)
     {
         if(droplet[i] != nullptr)
         {
-            cnt += droplet[i]->checkCollision(pt);
+            if(droplet[i]->checkCollision(pt))
+            {
+                return 10;
+            }
         }
     }
 
     if(circle != nullptr)
     {
-        cnt += circle->checkCollision(pt);
+        if(circle->checkCollision(pt))
+        {
+            return 10;
+        }
     }
     if(sun[0] != nullptr)
     {
-
         for(int i=0; i<5; i++)
         {
-            cnt += sun[i]->checkCollision(pt);
+            if(sun[i]->checkCollision(pt))
+            {
+                return 10;
+            }
         }
     }
-    return cnt;
+    return 0;
 }
 Uint32 LavaBoss::getTime()
 {
@@ -482,10 +505,35 @@ void LavaBoss::setTime(Uint32 t)
 {
     mTime5 = t;
 }
+void LavaBoss::setFistChunk(Mix_Chunk* chunk)
+{
+    lavaFistChunk = chunk;
+}
+void LavaBoss::setBallChunk(Mix_Chunk* chunk)
+{
+    lavaBallChunk = chunk;
+}
+void LavaBoss::setDroppingChunk(Mix_Chunk* chunk)
+{
+    lavaDropping = chunk;
+}
+void LavaBoss::setDropedChunk(Mix_Chunk* chunk)
+{
+    lavaDroped = chunk;
+}
+void LavaBoss::setDisappearingChunk(Mix_Chunk *chunk)
+{
+    lavaDisappearing = chunk;
+}
+void LavaBoss::setAppearChunk(Mix_Chunk* chunk)
+{
+    lavaAppearing = chunk;
+}
 
+//FireCircle Class
 FireCircle::FireCircle(int posX, int posY)
 {
-    mCollisionBox = {posX, posY, 200, 200};
+    mCollisionBox = {posX, posY, FIRE_CIRCLE_WIDTH, FIRE_CIRCLE_HEIGHT};
     for(int i=0; i<20; i++)ball[i] = nullptr;
     frames = 0;
     isDead = false;
@@ -493,11 +541,20 @@ FireCircle::FireCircle(int posX, int posY)
     mTime = SDL_GetTicks();
     mTime2 = SDL_GetTicks();
 }
+FireCircle::~FireCircle()
+{
+    mCollisionBox = {0, 0, 0, 0};
+    for(int i=0;i<20;i++)
+    {
+        delete ball[i];
+    }
+    isDead = false;
+}
 void FireCircle::render(SDL_Rect &camera, SDL_Point &pt)
 {
     if(checkCollisionBox(mCollisionBox, camera))
     {
-        SDL_Rect r = {frames/7 * 200, 0, 200, 200};
+        SDL_Rect r = {frames/7 * FIRE_CIRCLE_WIDTH, 0, FIRE_CIRCLE_WIDTH, FIRE_CIRCLE_HEIGHT};
         fireCircleSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r);
     }
     for(int i=0; i<20; i++)
@@ -519,15 +576,15 @@ void FireCircle::render(SDL_Rect &camera, SDL_Point &pt)
         Mix_PlayChannel(-1, lavaCircleChunk, 0);
         if(mCollisionBox.x - pt.x > 0)
         {
-            double mVelX = (pt.x + 30 - 60 - mCollisionBox.x - 100 + 40)/40;
-            double mVelY = (pt.y + 30 - mCollisionBox.y - 100 + 40)/40;
-            ball[countLavaBall] = new LavaBall(mCollisionBox.x + 100 - 40, mCollisionBox.y + 100 - 40, pt.x + 30 - 60, pt.y + 30, mVelX, mVelY);
+            double mVelX = (pt.x - CHAR_WIDTH/2 - mCollisionBox.x - FIRE_CIRCLE_WIDTH/2 + 40)/40;
+            double mVelY = (pt.y + CHAR_HEIGHT/2 - mCollisionBox.y - FIRE_CIRCLE_HEIGHT/2 + 40)/40;
+            ball[countLavaBall] = new LavaBall(mCollisionBox.x + FIRE_CIRCLE_WIDTH/2 - 40, mCollisionBox.y + FIRE_CIRCLE_HEIGHT/2 - 40, pt.x - CHAR_WIDTH/2, pt.y + CHAR_HEIGHT/2, mVelX, mVelY);
         }
         else
         {
-            double mVelX = (pt.x + 50 - mCollisionBox.x - 100 + 40)/40;
-            double mVelY = (pt.y + 30 - mCollisionBox.y - 100 + 40)/40;
-            ball[countLavaBall] = new LavaBall(mCollisionBox.x + 100 - 40, mCollisionBox.y + 100 - 40, pt.x + 50, pt.y + 30, mVelX, mVelY);
+            double mVelX = (pt.x + 50 - mCollisionBox.x - FIRE_CIRCLE_WIDTH/2 + 40)/40;
+            double mVelY = (pt.y + 30 - mCollisionBox.y - FIRE_CIRCLE_HEIGHT/2 + 40)/40;
+            ball[countLavaBall] = new LavaBall(mCollisionBox.x + FIRE_CIRCLE_WIDTH/2 - 40, mCollisionBox.y + FIRE_CIRCLE_HEIGHT/2 - 40, pt.x + 50, pt.y + 30, mVelX, mVelY);
         }
     }
     if(countLavaBall == 20 && ball[countLavaBall - 1] == nullptr)
@@ -542,7 +599,7 @@ void FireCircle::render(SDL_Rect &camera, SDL_Point &pt)
 }
 bool FireCircle::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(r, mCollisionBox))
     {
         return 1;
@@ -567,10 +624,15 @@ bool FireCircle::getDead()
 {
     return isDead;
 }
+void FireCircle::setCircleChunk(Mix_Chunk* chunk)
+{
+    lavaCircleChunk = chunk;
+}
 
+// LavaBall Class
 LavaBall::LavaBall(int posX, int posY, int _limX, int _limY, double _velX, double _velY)
 {
-    mCollisionBox = {posX, posY, 80, 80};
+    mCollisionBox = {posX, posY, LAVA_BALL_WIDTH, LAVA_BALL_HEIGHT};
     mPosX_bf = posX;
     mPosY_bf = posY;
     isDead = false;
@@ -580,13 +642,16 @@ LavaBall::LavaBall(int posX, int posY, int _limX, int _limY, double _velX, doubl
     velX = _velX;
     velY = _velY;
 }
+LavaBall::~LavaBall()
+{
+    mCollisionBox = {0, 0, 0, 0};
+    isDead = false;
+}
 void LavaBall::render(SDL_Rect &camera)
 {
-    //int x = 3, y = 3, z= 3, w = 3;
-    //cout << x << ' ' << y << ' ' << z << ' ' << w << '\n';
     if(checkCollisionBox(camera, mCollisionBox))
     {
-        SDL_Rect r = {frames/5 * 80, 0, 80, 80};
+        SDL_Rect r = {frames/5 * LAVA_BALL_WIDTH, 0, LAVA_BALL_WIDTH, LAVA_BALL_HEIGHT};
         lavaBallSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r);
     }
     frames++;
@@ -603,7 +668,7 @@ void LavaBall::render(SDL_Rect &camera)
 }
 bool LavaBall::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     if(checkCollisionBox(mCollisionBox, r))return 1;
     else return 0;
 }
@@ -616,20 +681,25 @@ void LavaBall::setSprite(Texture &sprite)
     lavaBallSprite = sprite;
 }
 
+//LavaFist Class
 LavaFist::LavaFist(int posX, int posY, int direct)
 {
-    mCollisionBox = {posX, posY, 160, 320};
-
+    mCollisionBox = {posX, posY, LAVA_FIST_WIDTH, LAVA_FIST_HEIGHT};
     mDirection = direct;
     frames = 0;
     row = 0;
+    isDead = false;
+}
+LavaFist::~LavaFist()
+{
+    mCollisionBox = {0, 0, 0, 0};
     isDead = false;
 }
 void LavaFist::render(SDL_Rect &camera)
 {
     if(checkCollisionBox(camera, mCollisionBox))
     {
-        SDL_Rect r = {frames/5 * 160, row *320, 160, 320};
+        SDL_Rect r = {frames/5 * LAVA_FIST_WIDTH, row * LAVA_FIST_HEIGHT, LAVA_FIST_WIDTH, LAVA_FIST_HEIGHT};
         lavaFistSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &r, mDirection*90, 0,SDL_FLIP_HORIZONTAL);
     }
     frames ++;
@@ -661,6 +731,7 @@ LavaFist::LavaFist()
 
 }
 
+// LavaSun Class
 LavaSun::LavaSun(int posX, int posY, int type)
 {
     sunX = posX;
@@ -673,6 +744,13 @@ LavaSun::LavaSun(int posX, int posY, int type)
     radius = 160*sqrt(2);
     mTime = SDL_GetTicks();
     mType = type;
+}
+LavaSun::~LavaSun()
+{
+    sunX = 0;
+    sunY = 0;
+    isDead = false;
+    shoting = false;
 }
 void LavaSun::render(SDL_Rect &camera, SDL_Point &pt)
 {
@@ -688,12 +766,12 @@ void LavaSun::render(SDL_Rect &camera, SDL_Point &pt)
     leftA = camera.x;
     rightA = camera.x + camera.w;
     topB = sunY;
-    bottomB = sunY + 50;
+    bottomB = sunY + LAVA_SUN_WIDTH;
     leftB = sunX;
-    rightB = sunX + 50;
+    rightB = sunX + LAVA_SUN_HEIGHT;
     if(topA < bottomB && topB < bottomA && leftA < rightB && leftB < rightA)
     {
-        SDL_Rect r = {frames/5 * 50, 0, 50, 50};
+        SDL_Rect r = {frames/5 * LAVA_SUN_WIDTH, 0, LAVA_SUN_WIDTH, LAVA_SUN_HEIGHT};
         lavaSunSprite.render(sunX - camera.x, sunY - camera.y, &r);
     }
     if(SDL_GetTicks() - mTime2 >= 2000.f && !shoting)
@@ -708,7 +786,7 @@ void LavaSun::render(SDL_Rect &camera, SDL_Point &pt)
     {
         if(SDL_GetTicks() - mTime3 <= 500.f)
         {
-            SDL_Rect mCollisionBoxKnee = {kneeX, kneeY, 80, 20};
+            SDL_Rect mCollisionBoxKnee = {kneeX, kneeY, KNEE_WIDTH, KNEE_HEIGHT};
             if(checkCollisionBox(mCollisionBoxKnee, camera))
             {
                 if(pt.x - sunX < 0)
@@ -738,13 +816,13 @@ void LavaSun::render(SDL_Rect &camera, SDL_Point &pt)
 }
 bool LavaSun::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
-    SDL_Rect mCollisionBox = {sunX, sunY, 50, 50};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
+    SDL_Rect mCollisionBox = {sunX, sunY, LAVA_SUN_WIDTH, LAVA_SUN_HEIGHT};
     if(checkCollisionBox(mCollisionBox, r))
     {
         return 1;
     }
-    SDL_Rect rect = {kneeX, kneeY, 80, 20};
+    SDL_Rect rect = {kneeX, kneeY, KNEE_WIDTH, KNEE_HEIGHT};
     if(checkCollisionBox(rect, r))
     {
         return 1;
@@ -784,12 +862,20 @@ void LavaSun::setKneeChunk(Mix_Chunk* chunk)
 {
     lavaKneeChunk = chunk;
 }
+// LavaDroplet Class
 LavaDroplet::LavaDroplet(int posX,int posY)
 {
-    mCollisionBox = {posX, posY,  80, 80};
+    mCollisionBox = {posX, posY,  LAVA_DROPLET_WIDTH, LAVA_DROPLET_HEIGHT};
     frames = 0;
     row = 0;
     isDead = false;
+}
+LavaDroplet::~LavaDroplet()
+{
+    mCollisionBox = {0, 0, 0, 0};
+    isDead = false;
+    frames = 0;
+    row = 0;
 }
 void LavaDroplet::setSprite(Texture &sprite)
 {
@@ -801,12 +887,12 @@ void LavaDroplet::render(SDL_Rect &camera)
     {
         if(row == 0)
         {
-            SDL_Rect r = {frames/5*80, 0, 80, 80};
+            SDL_Rect r = {frames/5*LAVA_DROPLET_WIDTH, 0, LAVA_DROPLET_WIDTH, LAVA_DROPLET_HEIGHT};
             lavaDropletSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y -camera.y, &r);
         }
         else
         {
-            SDL_Rect r = {frames/10*80, 80, 80, 80};
+            SDL_Rect r = {frames/10*LAVA_DROPLET_WIDTH, LAVA_DROPLET_HEIGHT, LAVA_DROPLET_WIDTH, LAVA_DROPLET_HEIGHT};
             lavaDropletSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y -camera.y, &r);
         }
     }
@@ -840,7 +926,7 @@ void LavaDroplet::render(SDL_Rect &camera)
 }
 bool LavaDroplet::checkCollision(SDL_Point &pt)
 {
-    SDL_Rect r = {pt.x, pt.y, 60, 60};
+    SDL_Rect r = {pt.x, pt.y, CHAR_WIDTH, CHAR_HEIGHT};
     int topA, topB, bottomA, bottomB, leftA, leftB, rightA, rightB;
     topA = r.y;
     bottomA = r.y + r.h;
@@ -857,31 +943,4 @@ bool LavaDroplet::getDead()
 {
     return isDead;
 }
-void LavaBoss::setFistChunk(Mix_Chunk* chunk)
-{
-    lavaFistChunk = chunk;
-}
-void FireCircle::setCircleChunk(Mix_Chunk* chunk)
-{
-    lavaCircleChunk = chunk;
-}
-void LavaBoss::setBallChunk(Mix_Chunk* chunk)
-{
-    lavaBallChunk = chunk;
-}
-void LavaBoss::setDroppingChunk(Mix_Chunk* chunk)
-{
-    lavaDropping = chunk;
-}
-void LavaBoss::setDropedChunk(Mix_Chunk* chunk)
-{
-    lavaDroped = chunk;
-}
-void LavaBoss::setDisappearingChunk(Mix_Chunk *chunk)
-{
-    lavaDisappearing = chunk;
-}
-void LavaBoss::setAppearChunk(Mix_Chunk* chunk)
-{
-    lavaAppearing = chunk;
-}
+

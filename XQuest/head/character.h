@@ -1,20 +1,32 @@
 #ifndef CHARACTER__H
-#define CHARACTER__h
+#define CHARACTER__H
 
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include "sdl_utils.h"
 #include "constant_value.h"
-#include "texture.h"
-#include "tile.h"
 #include "collision.h"
-#include "xbuster.h"
 #include <deque>
-#include "door_button.h"
 #include <vector>
+#include "door_button.h"
+
 using namespace std;
+
+class XBuster
+{
+    SDL_Rect mBox;
+    SDL_Rect mCollisionBox[9];
+    int row;
+    int frames;
+    int mType;
+    bool isDead;
+public:
+    static Texture xBusterSprite;
+    XBuster(int x, int y, int type);
+    ~XBuster();
+    void setSprite(Texture &sprite);
+    void render(SDL_Rect &camera, vector <Tile*> &tile);
+    bool getDead();
+    SDL_Rect getBox();
+    int getType();
+};
 
 class Character
 {
@@ -67,6 +79,7 @@ public:
     static Mix_Chunk* gigaChunk;
     static Mix_Chunk* chargingChunk;
     Character();
+    ~Character();
     void handleEvent(SDL_Event* e, vector <Tile*> &tile);
     void move(vector <Tile*> &tile);
     void setCamera(SDL_Rect &camera, SDL_Rect &rect);
@@ -89,7 +102,8 @@ public:
     void setY(int y);
     void setHealth(int h);
     int getHealth();
-    int checkXBusterCollision(SDL_Rect &rect,vector<DoorButton*> door);
+    int checkXBusterCollision(SDL_Rect &rect);
+    void checkCollisionWithDoor(vector < DoorButton* > &door);
     void setCharging(Texture &sprite);
     void setDoubleJumpSprite(Texture &sprite);
     void setGigaAttackSprite(Texture &sprite);
@@ -123,6 +137,7 @@ public:
     void setManaStored(int h);
     int getMaxHealth();
     void setMaxHealth(int h);
+    void setDefaultState();
 };
 
 #endif // CHARACTER__H

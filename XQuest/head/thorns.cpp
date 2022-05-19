@@ -1,6 +1,3 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
 #include "texture.h"
 #include "constant_value.h"
 #include "sdl_utils.h"
@@ -13,6 +10,11 @@ Thorns::Thorns(int pos, int type)
 {
     mBox = {pos%64 * THORN_WIDTH, pos/64 * THORN_HEIGHT, THORN_WIDTH, THORN_HEIGHT};
     mType = type;
+}
+Thorns::~Thorns()
+{
+    mBox = {0, 0, 0, 0};
+    mType = 0;
 }
 void Thorns::setSprite(Texture &sprite)
 {

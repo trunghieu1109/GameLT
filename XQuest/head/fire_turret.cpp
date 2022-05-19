@@ -1,8 +1,4 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
 #include "fire_turret.h"
-#include "collision.h"
 
 using namespace std;
 
@@ -11,6 +7,13 @@ FireTurret::FireTurret(int pos, int type)
     mBox = {pos%64 * GUN_WIDTH, pos/64 * GUN_HEIGHT, GUN_WIDTH, GUN_HEIGHT};
     mType = type;
     mFire = new Fire(mBox.x, mBox.y, mType);
+    mTime = 0;
+}
+FireTurret::~FireTurret()
+{
+    mBox = {0, 0, 0, 0};
+    mType = 0;
+    delete mFire;
     mTime = 0;
 }
 void FireTurret::setSprite(Texture &sprite)
@@ -95,6 +98,12 @@ Fire::Fire(int x, int y, int type)
         mCollisionBox[7] = {x - FIRE_HEIGHT, y, 0, FIRE_WIDTH};
         mCollisionBox[8] = {x - FIRE_HEIGHT, y, 0, FIRE_WIDTH};
     }
+}
+Fire::~Fire()
+{
+    isDead = false;
+    frames = 0;
+    mType = 0;
 }
 void Fire::render(SDL_Rect &camera, SDL_Rect *pos)
 {

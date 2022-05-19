@@ -1,14 +1,13 @@
 #ifndef BOSS__H
 #define BOSS__H
 
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
+#include "collision.h"
 #include "texture.h"
 #include "sdl_utils.h"
 #include "constant_value.h"
 #include "tile.h"
 #include <deque>
+#include <cmath>
 #include <vector>
 
 using namespace std;
@@ -16,12 +15,13 @@ using namespace std;
 class FirePillar
 {
     SDL_Rect mCollisionBox;
-    int frames;
+    int column;
     int mType;
     bool isDead;
 public:
     static Texture firePillarSprite;
     FirePillar(int posX, int posY, int type);
+    ~FirePillar();
     void render(SDL_Rect &camera, SDL_Point &pt);
     bool checkCollision(SDL_Point &pt);
     void setSprite(Texture &sprite);
@@ -31,12 +31,13 @@ public:
 class FireFlow
 {
     SDL_Rect mCollisionBox;
-    int frames;
+    int column;
 public:
     static Texture fireFlowSprite;
     static int stable;
     static int direction;
     FireFlow(int posX,int posY);
+    ~FireFlow();
     void render(SDL_Rect &camera, SDL_Point &pt);
     bool checkCollision(SDL_Point &pt);
     void setSprite(Texture &sprite);
@@ -44,15 +45,16 @@ public:
 
 class FireBall
 {
-    double vX, vY;
+    double velX, velY;
     double goalX, goalY;
-    double stX, stY;
-    int frames;
+    double positionX, positionY;
+    int column;
     SDL_Rect mCollisionBox;
     bool isDead;
 public:
     static Texture fireBallSprite;
     FireBall(int posX, int posY, int gX, int gY);
+    ~FireBall();
     void render(SDL_Rect &camera);
     void setSprite(Texture &sprite);
     bool getDead();
@@ -62,11 +64,11 @@ public:
 class Boss
 {
     SDL_Rect mCollisionBox;
-    double sX, sY;
+    double positionX, positionY;
     int health;
-    Uint32 mTime;
+    Uint32 timeCastSkill;
     int attackType;
-    int frames;
+    int column;
     int row;
     int mDirection;
     double goalY, goalX;
@@ -75,10 +77,11 @@ class Boss
     deque < FireFlow* > fireFlow;
     deque < FirePillar* > firePillar;
     Uint32 timeForFireFlow;
-    int posFirePillar;
+    int positionFirePillar;
     int phaseFire;
     Uint32 timeForFirePillar;
     Uint32 mTimeBeHurt;
+    bool appeared;
 public:
     static Texture bossSprite;
     static Mix_Chunk* fireBallChunk;
@@ -86,6 +89,7 @@ public:
     static Mix_Chunk* firePillarChunk;
     static Mix_Chunk* fireSpearChunk;
     Boss(double posX, double posY);
+    ~Boss();
     void render(SDL_Rect &camera, SDL_Point &pt, int isAppear);
     void attack(SDL_Point &pt);
     int checkCollision(SDL_Point &pt);
@@ -96,14 +100,8 @@ public:
     int getY();
     void setX(double x);
     void setY(double y);
-    Uint32 getTime();
-    void setTime(Uint32 t);
-    SDL_Rect getBox();
-    //Set sprite, mix chunk
-    void setSprite(Texture &sprite);
-    void loadFireBallChunk(Mix_Chunk* fbc);
-    void loadFireFlowChunk(Mix_Chunk* ffc);
-    void loadFirePillarChunk(Mix_Chunk* fpc);
-    void loadFireSpearChunk(Mix_Chunk* fsc);
+    Uint32 getHurtTime();
+    void setHurtTime(Uint32 t);
+    SDL_Rect getCollisionBox();
 };
 #endif // BOSS__H

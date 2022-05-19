@@ -15,6 +15,7 @@ class Thorns
 public:
     static Texture thornSprite;
     Thorns(int pos, int type);
+    ~Thorns();
     void render(SDL_Rect &camera);
     void setSprite(Texture &sprite);
     SDL_Rect getBox();

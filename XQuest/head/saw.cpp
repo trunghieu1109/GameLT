@@ -1,4 +1,3 @@
-#include <iostream>
 #include "saw.h"
 #include "collision.h"
 
@@ -6,7 +5,7 @@ using namespace std;
 
 Saw::Saw(int pos, int direction)
 {
-    mCollisionBox = {pos%64 * 80, pos/64 * 80, 80, 80};
+    mCollisionBox = {pos%64 * TILE_WIDTH, pos/64 * TILE_HEIGHT, SAW_WIDTH, SAW_HEIGHT};
     mCollisionBox_default = mCollisionBox;
     frames = 0;
     mTime = 0;
@@ -15,6 +14,13 @@ Saw::Saw(int pos, int direction)
     mDirection = direction;
 }
 
+Saw::~Saw()
+{
+    mCollisionBox = {0, 0, 0, 0};
+    frames = 0;
+    mTime = 0;
+    mTime2 = 0;
+}
 void Saw::render(SDL_Rect &camera, vector < Tile* > &tile)
 {
     if(mHealth <= 0)
@@ -25,7 +31,7 @@ void Saw::render(SDL_Rect &camera, vector < Tile* > &tile)
     }
     if(checkCollisionBox(mCollisionBox, camera))
     {
-        SDL_Rect rect = {80*(frames/5), 0, 80, 80};
+        SDL_Rect rect = {SAW_WIDTH*(frames/5), 0, SAW_WIDTH, SAW_HEIGHT};
         sawSprite.render(mCollisionBox.x - camera.x, mCollisionBox.y - camera.y, &rect);
     }
     if(SDL_GetTicks() - mTime > 2000.f)

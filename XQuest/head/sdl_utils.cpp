@@ -60,13 +60,6 @@ void initSDL()
 }
 void quitSDL()
 {
-    //tileSprite.free();
-    //SDL_DestroyTexture(tileSprite);
-    //charSprite.free();
-    //SDL_DestroyTexture(charSprite);
-    //SDL_DestroyRenderer(renderer);
-    //defaultTexture.free();
-    //SDL_DestroyTexture(defaultTexture);
     SDL_Quit();
     TTF_Quit();
     IMG_Quit();

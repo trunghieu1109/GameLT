@@ -30,6 +30,7 @@ public:
     static Texture kneeTexture;
     static Mix_Chunk* lavaKneeChunk;
     LavaSun(int posX, int posY, int type);
+    ~LavaSun();
     void render(SDL_Rect &camera, SDL_Point &pt);
     bool checkCollision(SDL_Point &pt);
     void setSprite(Texture &sprite);
@@ -53,6 +54,7 @@ class LavaBall
 public:
     static Texture lavaBallSprite;
     LavaBall(int posX, int posY, int limX, int limY, double _velX, double _velY);
+    ~LavaBall();
     void render(SDL_Rect &camera);
     bool checkCollision(SDL_Point &pt);
     bool getDead();
@@ -69,6 +71,7 @@ public:
     static Texture lavaFistSprite;
     LavaFist(int posX, int posY, int direct);
     LavaFist();
+    ~LavaFist();
     void render(SDL_Rect &camera);
     SDL_Rect getBox();
     void setSprite(Texture &sprite);
@@ -83,6 +86,7 @@ class LavaDroplet
 public:
     static Texture lavaDropletSprite;
     LavaDroplet(int posX, int posY);
+    ~LavaDroplet();
     void render(SDL_Rect &camera);
     bool checkCollision(SDL_Point &pt);
     bool getDead();
@@ -101,6 +105,7 @@ public:
     static Texture fireCircleSprite;
     static Mix_Chunk* lavaCircleChunk;
     FireCircle(int posX, int posY);
+    ~FireCircle();
     void render(SDL_Rect &camera, SDL_Point &pt);
     void setSprite(Texture &sprite);
     bool checkCollision(SDL_Point &pt);
@@ -140,6 +145,7 @@ public:
     static Mix_Chunk* lavaDisappearing;
     static Mix_Chunk* lavaAppearing;
     LavaBoss(int pos);
+    ~LavaBoss();
     void render(SDL_Rect &camera, SDL_Point &pt);
     void setSprite(Texture &sprite);
     int checkCollision(SDL_Point &pt);

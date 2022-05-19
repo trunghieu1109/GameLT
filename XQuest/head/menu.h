@@ -17,6 +17,7 @@ class Menu
 public:
     Menu(SDL_Renderer* renderer);
     Menu();
+    ~Menu();
     void render();
     string handleEvent(SDL_Event *e);
     void AddGameButton(GameButton *gameButton);

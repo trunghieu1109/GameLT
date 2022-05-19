@@ -1,9 +1,10 @@
 #ifndef PORTAL__H
 #define PORTAL__H
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
+
 #include "texture.h"
+#include "constant_value.h"
+#include "character.h"
+#include "collision.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ class Portal
 public:
     static Texture portalSprite;
     Portal(int x, int y, string &round, int type1, int type2, int type3);
+    ~Portal();
     int getX();
     int getY();
     bool checkCollision(Character *crt, int numOfDiamond);
