@@ -189,6 +189,9 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
                     isFlying = false;
                     fly_up = false;
                     gigaattack = false;
+                    setDefaultState();
+                    left = false;
+                    right = false;
                 }
             }
             break;

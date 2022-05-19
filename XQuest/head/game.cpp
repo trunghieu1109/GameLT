@@ -624,6 +624,20 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
         }
     }
 
+    if(!object.x.getGiga())
+    {
+        for(int i=0; i<tile.size(); i++)
+        {
+            if(checkCollisionBox(object.x.getBox(), tile[i]->getBox()))
+            {
+                if(tile[i]->getType() == 10)
+                {
+                    object.x.setHealth(-1);
+                }
+            }
+        }
+
+    }
     if(object.hasObject[DOORBUTTON])
     {
         object.x.checkCollisionWithDoor(object.door);
@@ -2029,7 +2043,7 @@ void Game::PlayAllGame()
                 }
                 if(command == "NewGame")
                 {
-                    object.numberOfStage = 4s;
+                    object.numberOfStage = 0;
                     setDefault();
                     setMap(object.tile, object.Map[STAGE_1]);
                     beforeMenu = -1;
