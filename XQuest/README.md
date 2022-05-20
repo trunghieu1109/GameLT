@@ -5,13 +5,13 @@ In this game, the character need collecting the diamond, combat against all the 
 
 **Demo**
 
-<img src=[https://imgur.com/i7f4DND](https://imgur.com/i7f4DND)>
+<img src="https://drive.google.com/file/d/1ytXkMJsWvZxRwtfooD0U2izA1XOyJDzR/view?usp=sharing">
 
 **Game Scece**
 
-<img src=[https://imgur.com/VggNEMq](https://imgur.com/VggNEMq)>
+<img src="https://drive.google.com/file/d/14yNMHMHTLY3d9WvW_ReTTYsCAZBIG3-w/view?usp=sharing">
 
-<img src=[https://imgur.com/LDrTV7I](https://imgur.com/LDrTV7I)>
+<img src="https://drive.google.com/file/d/1KD3xsSW0uElZRbYF6bvzfMc8QW9i1goG/view?usp=sharing">
 
 
 **Prerequisites**
