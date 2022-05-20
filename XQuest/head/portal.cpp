@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Portal::Portal(int x, int y, string &round, int type1, int type2, int type3)
+Portal::Portal(int x, int y, string &round, int type1, int type2, int type3, int _hasCondition)
 {
     mBox = {x, y, PORTAL_WIDTH, PORTAL_HEIGHT};
     frames = 0;
@@ -13,6 +13,7 @@ Portal::Portal(int x, int y, string &round, int type1, int type2, int type3)
     isLoad = type1;
     isSave = type2;
     isWin = type3;
+    hasCondition = _hasCondition;
 }
 Portal::~Portal()
 {
@@ -28,8 +29,24 @@ bool Portal::checkCollision(Character *crt, int numOfDiamond)
     if(checkCollisionBox(mBox, crt->getBox()))
     {
         int poi = crt->getPoint();
-        if(isWin)if(poi >= numOfDiamond)crt->setWin(true);
-        return true;
+        if(isWin)
+        {
+            if(poi >= numOfDiamond)
+            {
+                crt->setWin(true);
+                return true;
+            }
+            else
+            {
+                if(hasCondition == false)
+                {
+                    crt->setWin(true);
+                    return true;
+                }
+                else return false;
+            }
+        }
+        else return true;
     }
     return false;
 }

@@ -70,14 +70,7 @@ Character::~Character()
 }
 void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
 {
-
     if(appearing)return;
-    if(SDL_GetTicks() - chargeTime > 300.f && isCharging == false && shot)
-    {
-        Mix_PlayChannel(1, chargingChunk, 0);
-        isCharging = true;
-        frames_charge = 0;
-    }
     if((e->type) == SDL_KEYDOWN)
     {
         switch((e->key).keysym.sym)
@@ -170,10 +163,6 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
             }
             break;
         case SDLK_c:
-            if((e->key).repeat == 0)
-            {
-                chargeTime = SDL_GetTicks();
-            }
             shot = true;
             break;
         case SDLK_o:
@@ -183,9 +172,11 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
                 if(!isFlying)
                 {
                     isFlying = true;
+                    //gigaAttackSprite.setColor(255, 0, 0);
                 }
                 else
                 {
+                    //gigaAttackSprite.setColor(255, 255, 0);
                     isFlying = false;
                     fly_up = false;
                     gigaattack = false;
@@ -230,6 +221,7 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
                     newBuster = new XBuster(mPosX, mPosY, type);
                     buster.push_back(newBuster);
                 }
+                chargeTime = SDL_GetTicks();
                 break;
             case SDLK_v:
                 up = false;
@@ -247,6 +239,12 @@ void Character::handleEvent(SDL_Event* e, vector <Tile*> &tile)
 void Character::move(vector <Tile*> &tile)
 {
     if(appearing)return;
+    if(SDL_GetTicks() - chargeTime > 300.f && isCharging == false)
+    {
+        Mix_PlayChannel(1, chargingChunk, 0);
+        isCharging = true;
+        frames_charge = 0;
+    }
     if(fly_up)
     {
         gigaattack = true;
@@ -439,7 +437,7 @@ void Character::move(vector <Tile*> &tile)
     if(left || right)
     {
         SDL_Rect under = {mPosX, mPosY + CHAR_HEIGHT, CHAR_WIDTH, 3};
-        SDL_Rect beside = {mPosX + CHAR_WIDTH, mPosY, 2, CHAR_HEIGHT};
+        SDL_Rect beside = {mPosX + CHAR_WIDTH, mPosY, 5, CHAR_HEIGHT};
         if(mDirection == -1)
         {
             beside = {mPosX - 10, mPosY, 5, 2};
@@ -511,10 +509,10 @@ void Character::move(vector <Tile*> &tile)
         }
         else
         {
-            SDL_Rect beside = {mPosX + CHAR_WIDTH, mPosY, 2, CHAR_HEIGHT};
+            SDL_Rect beside = {mPosX + CHAR_WIDTH, mPosY, 5, CHAR_HEIGHT};
             if(mDirection == -1)
             {
-                beside = {mPosX - 2, mPosY, 2, 2};
+                beside = {mPosX - 10, mPosY, 5, 2};
             }
             if(checkCollisionTile(beside, tile) == -1)
             {
@@ -548,10 +546,12 @@ void Character::render(SDL_Rect &camera, vector <Tile*> &tile)
     if(gigaattack)
     {
         SDL_Rect r = {frames_giga/5 * GIGA_WIDTH, 0, GIGA_WIDTH, GIGA_HEIGHT};
+
         if(frames_giga/5 == 7)
         {
             r = {frames_giga/5 * GIGA_WIDTH, 0, GIGA_WIDTH + GIGA_HEIGHT, GIGA_HEIGHT};
         }
+        if(fly_up)r.y = GIGA_HEIGHT;
         if(!fly_up)
         {
             if(mDirection_bf == -1)
@@ -571,6 +571,10 @@ void Character::render(SDL_Rect &camera, vector <Tile*> &tile)
         if(frames_giga/5 >= 8)
         {
             frames_giga = 0;
+            if(fly_up)
+            {
+                frames_giga = 7*5;
+            }
             gigaattack = false;
             mPosX_bf = 0;
             mPosY_bf = 0;
@@ -973,6 +977,7 @@ XBuster::XBuster(int x, int y, int type)
         mCollisionBox[7] = {0, 0, 80, 64};
         mCollisionBox[8] = {0, 0, 80, 64};
     }
+    mPosX_bf = x;
     frames = 0;
     row = 0;
     mType = type;
@@ -1063,13 +1068,16 @@ void XBuster::render(SDL_Rect &camera, vector <Tile*> &tile)
             xBusterSprite.render(mBox.x - camera.x - CHAR_WIDTH, mBox.y - camera.y - 2, &rect);
         }
     }
-    if(mType == 0 || mType == 2 || mType == 4)mBox.x += 7;
-    else mBox.x -= 7;
+    if(mType == 0 || mType == 2 || mType == 4)mBox.x += 10;
+    else mBox.x -= 10;
     frames++;
     if(frames/5 >= 9)
     {
+        frames = 7*5;
+    }
+    if(abs(mPosX_bf - mBox.x) > 600.f || checkCollisionTile(mBox, tile) != -1)
+    {
         isDead = true;
-        frames = 0;
     }
 }
 bool XBuster::getDead()

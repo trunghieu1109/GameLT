@@ -13,6 +13,7 @@ class XBuster
 {
     SDL_Rect mBox;
     SDL_Rect mCollisionBox[9];
+    int mPosX_bf = 0;
     int row;
     int frames;
     int mType;

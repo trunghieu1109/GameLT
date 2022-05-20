@@ -118,7 +118,7 @@ struct Object
         battle_with_boss = false;
         numberOfStage = 0;
         mCollisionBoxFire = {-1250, -200, 1250, 1000};
-        percent = 90;
+        percent = 50;
     }
 };
 

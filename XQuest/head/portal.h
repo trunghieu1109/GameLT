@@ -17,9 +17,10 @@ class Portal
     string nextRound;
     bool appear;
     bool isLoad, isSave, isWin;
+    bool hasCondition;
 public:
     static Texture portalSprite;
-    Portal(int x, int y, string &round, int type1, int type2, int type3);
+    Portal(int x, int y, string &round, int type1, int type2, int type3, int _hasCondition);
     ~Portal();
     int getX();
     int getY();
@@ -36,6 +37,7 @@ public:
     void setLoad(bool l);
     void setSave(bool s);
     void setWin(bool w);
+    bool getCondition();
 };
 
 #endif // PORTAL__H

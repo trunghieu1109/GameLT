@@ -301,10 +301,10 @@ void Game::setGameButton()
     object.menu[MAIN_MENU]->AddGameButton(object.actionButton[QUIT_GAME_BUTTON]);
     object.menu[MAIN_MENU]->setBackGround(object.textArr[TEXTURE_MAIN_MENU_BACKGROUND]);
 
-    object.actionButton[BACK_TO_MAIN_MENU_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 110);
+    object.actionButton[BACK_TO_MAIN_MENU_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 230);
     object.actionButton[SELECT_GAME_BUTTON] = new ActionButton("Texture/gamebutton.png", "Select Stage", object.font, "SelectStage", object.renderer);
-    object.actionButton[SELECT_GAME_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 195);
-    object.actionButton[RESTART_GAME_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 280);
+    object.actionButton[SELECT_GAME_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 325);
+    object.actionButton[RESTART_GAME_BUTTON]->setPos((SCREEN_WIDTH - 300)/2, 420);
     object.actionButton[BACK_BUTTON]->setPos(0, 0);
     object.storeButton[HEALTH_STORE_BUTTON]->setPos(120, 100);
     object.storeButton[MANA_STORE_BUTTON]->setPos(710, 100);
@@ -439,9 +439,9 @@ bool Game::setMap(Tile *tiles[], string path)
         {
             object.mPosPorX[i] = -1, object.mPosPorY[i] = -1;
             string round = "";
-            bool type1, type2, type3;
-            input_map >> object.mPosPorX[i] >> object.mPosPorY[i] >> round >> type1 >> type2 >> type3;
-            Portal *port = new Portal(5000, 5000, round, type1, type2, type3);
+            bool type1, type2, type3, condition;
+            input_map >> object.mPosPorX[i] >> object.mPosPorY[i] >> round >> type1 >> type2 >> type3 >> condition;
+            Portal *port = new Portal(5000, 5000, round, type1, type2, type3, condition);
             object.por.push_back(port);
         }
     }
@@ -482,7 +482,6 @@ bool Game::setMap(Tile *tiles[], string path)
             }
         }
     }
-    if(object.currentMap == "map/FinalMap.map")object.percent = 1;
     object.numberOfDiamondToGoOverPortal = (countPointDiamond * object.percent)/100;
 
     input_map >> object.hasObject[DOORBUTTON];
@@ -652,7 +651,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(checkCollisionBox(object.x.getBox(), object.thorn[i]->getBox()))
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 10);
+                    object.x.setHealth(charHealth - 6);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -672,7 +671,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(checkCollisionBox(object.x.getBox(), object.gun[i]->getBox()))
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 10);
+                    object.x.setHealth(charHealth - 6);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -681,7 +680,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(checkCollisionBox(object.x.getBox(), bul->getBox()) && !behurted && !isAppearing)
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 10);
+                    object.x.setHealth(charHealth - 6);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -755,7 +754,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(checkCollisionBox(fire->getBox(), object.x.getBox()) && !behurted && !isAppearing)
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 10);
+                    object.x.setHealth(charHealth - 6);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -775,7 +774,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(checkCollisionBox(lazerRect, object.x.getBox()))
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 10);
+                    object.x.setHealth(charHealth - 6);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -795,7 +794,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(checkCollisionBox(creepRect, object.x.getBox()))
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 10);
+                    object.x.setHealth(charHealth - 6);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -807,7 +806,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                     if(checkCollisionBox(creepBulletRect, object.x.getBox()) && !behurted && !isAppearing)
                     {
                         int charHealth = object.x.getHealth();
-                        object.x.setHealth(charHealth - 10);
+                        object.x.setHealth(charHealth - 6);
                         object.x.setHurt(true);
                         Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                         startTime = SDL_GetTicks();
@@ -859,7 +858,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(checkCollisionBox(sawRect, object.x.getBox()))
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 10);
+                    object.x.setHealth(charHealth - 6);
                     object.x.setHurt(true);
                     Mix_PlayChannel(-1, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -956,7 +955,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                     else
                     {
                         int dragonHealth = object.boss->getHealth();
-                        object.boss->setHealth(dragonHealth - 30);
+                        object.boss->setHealth(dragonHealth - 20);
                         startTime = SDL_GetTicks();
                     }
                 }
@@ -1007,7 +1006,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(object.x.getGiga() && checkCollisionBox(object.x.getBox(), object.robot->getBox()))
                 {
                     int robotHealth = object.robot->getHealth();
-                    object.robot->setHealth(robotHealth - 30);
+                    object.robot->setHealth(robotHealth - 20);
                     startTime = SDL_GetTicks();
                 }
             }
@@ -1064,7 +1063,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(st > 0 && !object.x.getGiga() && !behurted && !isAppearing)
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 5);
+                    object.x.setHealth(charHealth - st);
                     object.x.setHurt(true);
                     Mix_PlayChannel(01, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -1075,7 +1074,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                     if(checkCollisionBox(object.lavaboss->getBox(), object.x.getBox()))
                     {
                         int lavaBossHealth = object.lavaboss->getHealth();
-                        object.lavaboss->setHealth(lavaBossHealth - 30);
+                        object.lavaboss->setHealth(lavaBossHealth - 20);
                         if(lavaBossHealth - 50 <= 0)
                         {
                             SDL_Rect lavaBossRect = object.lavaboss->getBox();
@@ -1119,7 +1118,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                 if(st > 0 && !object.x.getGiga() && !behurted && !isAppearing)
                 {
                     int charHealth = object.x.getHealth();
-                    object.x.setHealth(charHealth - 5);
+                    object.x.setHealth(charHealth - st);
                     object.x.setHurt(true);
                     Mix_PlayChannel(01, object.chunkArr[MIX_HURT], 0);
                     startTime = SDL_GetTicks();
@@ -1130,7 +1129,7 @@ bool Game::collision(int &startTime, SDL_Rect &camera, vector < Tile* > &tile)
                     if(checkCollisionBox(object.sigma->getBox(), object.x.getBox()))
                     {
                         int sigmaHealth = object.sigma->getHealth();
-                        object.sigma->setHealth(sigmaHealth - 30);
+                        object.sigma->setHealth(sigmaHealth - 20);
                         if(sigmaHealth - 30 <= 0)
                         {
                             SDL_Rect sigmaRect = object.sigma->getBox();
@@ -1993,16 +1992,16 @@ void Game::winGame()
     credit.setRenderer(object.renderer);
     if(!credit.loadTextureFromImage("Texture/credit_word.png"))logIMGError(cout, "Load credit", true);
     bool quit = false;
-    double sX = 84, sY = SCREEN_HEIGHT;
+    double sX = 164, sY = SCREEN_HEIGHT;
     while(!quit)
     {
-        SDL_SetRenderDrawColor(object.renderer, 0, 0, 0, 0);
+        SDL_SetRenderDrawColor(object.renderer, 0xFF, 0xFF, 0xFF, 0);
         SDL_RenderClear(object.renderer);
-        object.textArr[TEXTURE_THUMB].render(80, 0, NULL);
+        object.textArr[TEXTURE_THUMB].render(0, 0, NULL);
         credit.render(sX, sY, nullptr);
-        sY -= 0.75;
+        sY -= 0.5;
         SDL_RenderPresent(object.renderer);
-        if(sY == 0)
+        if(sY == 100.d)
         {
             SDL_Delay(5000);
             quit = true;

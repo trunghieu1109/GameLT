@@ -116,10 +116,10 @@ void ManaDiamond::checkCollision(Character *crt)
     {
 
         int m = crt->getMana();
-        crt->setMana(min(m + 5, DEFAULT_MANA));
-        if(m + 7 > DEFAULT_MANA)
+        crt->setMana(min(m + 15, DEFAULT_MANA));
+        if(m + 15 > DEFAULT_MANA)
         {
-            int pb = m + 5 - DEFAULT_MANA;
+            int pb = m + 15 - DEFAULT_MANA;
             if(crt->getHasManaStored())crt->setManaStored(pb);
         }
         mBox.x = -60;

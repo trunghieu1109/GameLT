@@ -32,11 +32,15 @@ Tile::Tile(int x, int y, int type)
     {
         mCollisionBox.x = mCollisionBox.x + 20;
         mCollisionBox.w = TILE_WIDTH - 40;
+        mCollisionBox.y = mCollisionBox.y + 20;
+        mCollisionBox.h = TILE_HEIGHT - 40;
     }
     if(mType == 37 || mType == 38 || mType == 52 || mType == 53)
     {
         mCollisionBox.y = mCollisionBox.y + 20;
         mCollisionBox.h = TILE_HEIGHT - 40;
+        mCollisionBox.x = mCollisionBox.x + 20;
+        mCollisionBox.w = TILE_WIDTH - 40;
     }
     if(mType == 45)
     {
