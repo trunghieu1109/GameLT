@@ -13,6 +13,9 @@ In this game, the character need collecting the diamond, combat against all the 
 
 ![Imgur](https://i.imgur.com/LDrTV7I.png)
 
+**Video Demo**
+
+https://youtu.be/qI-oeIXQkYo
 
 **Prerequisites**
 
